@@ -1,0 +1,387 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Baltica";
+  src: url("/fonts/Baltica KZ.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Vivaldi";
+  src: url("/fonts/KZ Vivaldi.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Boyarsky";
+  src: url("/fonts/KZ Boyarsky.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Taurus";
+  src: url("/fonts/KZ Taurus.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cooper";
+  src: url("/fonts/KZ Cooper.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "RosaMarena";
+  src: url("/fonts/KZ_Rosa_Marena.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Downtown";
+  src: url("/fonts/KZ_Downtown.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mon";
+  src: url("/fonts/KZ_Mon_Amour_One.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balmoral";
+  src: url("/fonts/KZ_Balmoral.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Academy";
+  src: url("/fonts/vAcade.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TimpaniStars";
+  src: url("/fonts/vTimpsb.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Blondie";
+  src: url("/fonts/vsBlondie.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poster";
+  src: url("/fonts/KZ Poster.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Bernn";
+  src: url("/fonts/vBernn.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Handel";
+  src: url("/fonts/Handel.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("/fonts/Roboto-Regular.ttf");
+  font-display: swap;
+}
+
+@keyframes fade-in-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes invitation-float {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+}
+
+@keyframes music-bar {
+
+  0%,
+  100% {
+    height: 8px;
+  }
+
+  50% {
+    height: 20px;
+  }
+}
+
+@theme {
+  --animate-fade-in-down: fade-in-down 0.6s ease-out;
+  --animate-fade-in-up: fade-in-up 0.6s ease-out;
+  --animate-invitation-float: invitation-float 6s ease-in-out infinite;
+
+  --background-image-hero-pattern: linear-gradient(270deg, #fafafa 0, hsla(0, 0%, 98%, 0));
+  --background-image-hero-pattern-l: linear-gradient(0.25turn, #ffffff 0, #c7c7c7, hsla(0, 0%, 102%, 0));
+
+  --font-family-academy: "Academy", sans-serif;
+  --font-family-mon: "Mon", sans-serif;
+  --font-family-balmoral: "Balmoral", sans-serif;
+  --font-family-marena: "RosaMarena", sans-serif;
+  --font-family-baltica: "Baltica", sans-serif;
+  --font-family-vivaldi: "Vivaldi", sans-serif;
+  --font-family-boyarsky: "Boyarsky", sans-serif;
+  --font-family-taurus: "Taurus", sans-serif;
+  --font-family-cooper: "Cooper", sans-serif;
+  --font-family-downtown: "Downtown", sans-serif;
+  --font-family-stars: "TimpaniStars", sans-serif;
+  --font-family-blondie: "Blondie", sans-serif;
+  --font-family-poster: "Poster", sans-serif;
+  --font-family-bernn: "Bernn", sans-serif;
+  --font-family-handel: "Handel", sans-serif;
+  --font-family-roboto: "Roboto-Regular", sans-serif;
+
+  --color-light-blue: #396195;
+  --color-strong-blue: #0c1c56;
+  --color-theme-primary: rgb(2, 132, 199);
+  --color-theme-secondary: #CB997E;
+  --color-theme-grayish-blue: #9194A1;
+  --color-theme-dark-blue: rgb(37, 43, 70);
+  --color-theme-dark-blue-tp: rgba(37, 43, 70, 0.9);
+}
+
+html,
+body {
+  font-family: 'Roboto', sans-serif;
+  /* background-color: #f9f9f9; */
+}
+
+.font-roboto {
+  font-family: var(--font-family-roboto);
+}
+
+.font-baltica {
+  font-family: var(--font-family-baltica);
+}
+
+.font-academy {
+  font-family: var(--font-family-academy);
+}
+
+.font-mon {
+  font-family: var(--font-family-mon);
+}
+
+.font-vivaldi {
+  font-family: var(--font-family-vivaldi);
+}
+
+.bg-invitation {
+  background-color: #fdfbf7;
+  min-height: 100vh;
+}
+
+@layer utilities {
+  .animate-music-bar-1 {
+    animation: music-bar 0.8s ease-in-out infinite;
+  }
+
+  .animate-music-bar-2 {
+    animation: music-bar 0.6s ease-in-out infinite 0.1s;
+  }
+
+  .animate-music-bar-3 {
+    animation: music-bar 1s ease-in-out infinite 0.2s;
+  }
+
+  .animate-invitation-float {
+    animation: invitation-float 6s ease-in-out infinite;
+  }
+}
+
+.right-part:after {
+  content: "";
+  width: 256px;
+  height: 550px;
+  background-image: linear-gradient(270deg, #fff 0, hsla(0, 0%, 98%, 0));
+  position: absolute;
+  right: 0;
+  top: 0;
+  border: none;
+}
+
+.bg-hero-pattern-l {
+  background-image: var(--background-image-hero-pattern-l);
+}
+
+.ql-size-large {
+  font-size: 1.5em;
+}
+
+.ql-size-huge {
+  font-size: 2.5em;
+}
+
+.ql-font-Academy {
+  font-family: var(--font-family-academy);
+}
+
+.ql-font-vAcade {
+  font-family: var(--font-family-academy);
+}
+
+.ql-font-Mon {
+  font-family: var(--font-family-mon);
+}
+
+.ql-font-Balmoral {
+  font-family: var(--font-family-balmoral);
+}
+
+.ql-font-RosaMarena {
+  font-family: var(--font-family-marena);
+}
+
+.ql-font-Baltica {
+  font-family: var(--font-family-baltica);
+}
+
+.ql-font-Vivaldi {
+  font-family: var(--font-family-vivaldi);
+}
+
+.ql-font-Boyarsky {
+  font-family: var(--font-family-boyarsky);
+}
+
+.ql-font-Taurus {
+  font-family: var(--font-family-taurus);
+}
+
+.ql-font-Cooper {
+  font-family: var(--font-family-cooper);
+}
+
+.ql-font-Downtown {
+  font-family: var(--font-family-downtown);
+}
+
+.ql-font-Poster {
+  font-family: var(--font-family-poster);
+}
+
+.ql-font-Bernn {
+  font-family: var(--font-family-bernn);
+}
+
+.ql-font-Handel {
+  font-family: var(--font-family-handel);
+}
+
+.ql-editor {
+  font-family: 'Mon';
+  font-size: 24px;
+}
+
+.ql-picker.ql-font {
+
+  .ql-picker-label[data-value=vAcade]::before,
+  .ql-picker-item[data-value=vAcade]::before {
+    content: "Academy";
+    font-family: Academy;
+  }
+
+  .ql-picker-label[data-value=Mon]::before,
+  .ql-picker-item[data-value=Mon]::before {
+    content: "Mon";
+    font-family: Mon;
+  }
+
+  .ql-picker-label[data-value=Balmoral]::before,
+  .ql-picker-item[data-value=Balmoral]::before {
+    content: "Balmoral";
+    font-family: Balmoral;
+  }
+
+  .ql-picker-label[data-value=RosaMarena]::before,
+  .ql-picker-item[data-value=RosaMarena]::before {
+    content: "RosaMarena";
+    font-family: RosaMarena;
+  }
+
+  .ql-picker-label[data-value=Baltica]::before,
+  .ql-picker-item[data-value=Baltica]::before {
+    content: "Baltica";
+    font-family: Baltica;
+  }
+
+  .ql-picker-label[data-value=Vivaldi]::before,
+  .ql-picker-item[data-value=Vivaldi]::before {
+    content: "Vivaldi";
+    font-family: Vivaldi;
+  }
+
+  .ql-picker-label[data-value=Boyarsky]::before,
+  .ql-picker-item[data-value=Boyarsky]::before {
+    content: "Boyarsky";
+    font-family: Boyarsky;
+  }
+
+  .ql-picker-label[data-value=Taurus]::before,
+  .ql-picker-item[data-value=Taurus]::before {
+    content: "Taurus";
+    font-family: Taurus;
+  }
+
+  .ql-picker-label[data-value=Cooper]::before,
+  .ql-picker-item[data-value=Cooper]::before {
+    content: "Cooper";
+    font-family: Cooper;
+  }
+
+  .ql-picker-label[data-value=Downtown]::before,
+  .ql-picker-item[data-value=Downtown]::before {
+    content: "Downtown";
+    font-family: Downtown;
+  }
+
+  .ql-picker-label[data-value=Poster]::before,
+  .ql-picker-item[data-value=Poster]::before {
+    content: "Poster";
+    font-family: Poster;
+  }
+
+  .ql-picker-label[data-value=Bernn]::before,
+  .ql-picker-item[data-value=Bernn]::before {
+    content: "Bernn";
+    font-family: Bernn;
+  }
+}

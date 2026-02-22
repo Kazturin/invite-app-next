@@ -1,0 +1,71 @@
+services:
+    backend:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        depends_on:
+            - mysql
+            - redis
+        ports:
+            - "8000:8000"
+        environment:
+            - SERVER_NAME=:8000
+            - APP_ENV=${APP_ENV:-local}
+            - APP_DEBUG=${APP_DEBUG:-true}
+            - OCTANE_SERVER=frankenphp
+            - DB_HOST=mysql
+            - DB_PORT=3306
+            - DB_DATABASE=${DB_DATABASE:-app_db}
+            - DB_USERNAME=${DB_USERNAME:-sail}
+            - DB_PASSWORD=${DB_PASSWORD:-password}
+            - REDIS_HOST=redis
+        volumes:
+            - .:/app
+            - ./Caddyfile.local:/etc/caddy/Caddyfile
+        command: frankenphp run --config /etc/caddy/Caddyfile
+        networks:
+            - app-network
+
+    frontend:
+        image: node:22-alpine
+        working_dir: /app
+        ports:
+            - "3000:3000"
+        environment:
+            - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+        volumes:
+            - ./frontend:/app
+        command: npm run dev
+        networks:
+            - app-network
+
+    mysql:
+        image: mysql:8.0
+        ports:
+            - "${FORWARD_DB_PORT:-3306}:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-rootpassword}
+            MYSQL_DATABASE: ${DB_DATABASE:-app_db}
+            MYSQL_USER: ${DB_USERNAME:-sail}
+            MYSQL_PASSWORD: ${DB_PASSWORD:-password}
+        volumes:
+            - mysql_data:/var/lib/mysql
+        networks:
+            - app-network
+
+    redis:
+        image: redis:alpine
+        ports:
+            - "${FORWARD_REDIS_PORT:-6379}:6379"
+        volumes:
+            - redis_data:/data
+        networks:
+            - app-network
+
+networks:
+    app-network:
+        driver: bridge
+
+volumes:
+    mysql_data:
+    redis_data:

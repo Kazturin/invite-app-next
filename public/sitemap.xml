@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+		<!--	created with www.mysitemapgenerator.com	-->
+		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+	<loc>https://toi-invite.kz/</loc>
+	<lastmod>2024-01-12T10:17:53+01:00</lastmod>
+	<priority>0.6</priority>
+</url>
+<url>
+	<loc>https://toi-invite.kz/app/my-invitations</loc>
+	<lastmod>2024-01-12T10:17:53+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://toi-invite.kz/feedback</loc>
+	<lastmod>2024-01-12T10:17:53+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://toi-invite.kz/blog</loc>
+	<lastmod>2024-01-12T10:17:53+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://toi-invite.kz/login</loc>
+	<lastmod>2024-01-12T10:17:53+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://toi-invite.kz/register</loc>
+	<lastmod>2024-01-12T10:17:53+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://toi-invite.kz/forgot-password</loc>
+	<lastmod>2024-01-12T10:17:53+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+</urlset>

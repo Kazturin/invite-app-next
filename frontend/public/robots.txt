@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /toi/
+Disallow: /login/
+Disallow: /feedback/

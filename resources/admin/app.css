@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+
+.italic{
+    font-style: italic;
+}

@@ -1,0 +1,31 @@
+{
+	frankenphp {
+		worker {
+			file public/frankenphp-worker.php
+		}
+	}
+	order php_server before file_server
+}
+
+:8000 {
+	@static {
+		path /storage/* /images/* /fonts/* /build/* /css/* /js/*
+	}
+	header @static Access-Control-Allow-Origin "*"
+
+	log {
+		level DEBUG
+	}
+
+	# Enable compression
+	encode zstd gzip
+
+	# Handle static files
+	root * public/
+	file_server
+
+	# FrankenPHP/Octane
+	php_server {
+		resolve_root_symlink
+	}
+}

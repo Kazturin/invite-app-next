@@ -1,0 +1,1 @@
+import{_ as t}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{q as r,f as o,ad as s}from"./vendor-vue-BcvRxASC.js";import"./vendor-BoxHjOd3.js";const n={},c={class:"flex items-center justify-between py-3 px-5 bg-red-500 text-white rounded"};function a(e,d){return o(),r("div",c,[s(e.$slots,"default")])}const _=t(n,[["render",a]]);export{_ as default};

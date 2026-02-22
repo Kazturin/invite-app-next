@@ -1,0 +1,1 @@
+import{c as t}from"./app-BjUiReq9.js";import"./vendor-vue-BcvRxASC.js";import"./vendor-BoxHjOd3.js";const{app:e,router:o,store:p}=t();window.__INITIAL_STATE__&&p.replaceState(window.__INITIAL_STATE__);o.isReady().then(()=>{e.mount("#app")});

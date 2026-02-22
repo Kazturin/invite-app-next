@@ -1,0 +1,39 @@
+{
+	frankenphp {
+		worker {
+			file public/frankenphp-worker.php
+		}
+	}
+	order php_server before file_server
+}
+
+# Frontend
+toi-invite.kz {
+	encode zstd gzip
+	reverse_proxy frontend:3000
+	
+	log {
+		output file /var/log/caddy/frontend_access.log
+	}
+}
+
+# Backend (API)
+api.toi-invite.kz {
+	root * public/
+	encode zstd gzip
+	
+	@static {
+		path /storage/* /images/* /fonts/* /build/* /css/* /js/*
+	}
+	header @static Access-Control-Allow-Origin "https://toi-invite.kz"
+	
+	file_server
+	
+	php_server {
+		resolve_root_symlink
+	}
+	
+	log {
+		output file /var/log/caddy/backend_access.log
+	}
+}
