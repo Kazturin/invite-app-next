@@ -24,6 +24,8 @@ RUN composer install --no-autoloader --no-scripts
 # Копируем код
 COPY . .
 
+
+
 # Установка Node.js и сборка ассетов (для админки/Vite)
 RUN apk add --no-cache nodejs npm \
     && npm install \
@@ -34,6 +36,9 @@ RUN rm -rf bootstrap/cache/*.php
 
 # Финализируем автозагрузку
 RUN composer dump-autoload --optimize
+
+# Настройка Octane для FrankenPHP
+RUN php artisan octane:install --server=frankenphp --force
 
 # Права и кеш
 RUN chmod -R 775 storage bootstrap/cache \

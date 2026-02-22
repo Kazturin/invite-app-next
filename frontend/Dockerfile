@@ -10,7 +10,7 @@ RUN npm ci
 # Copy source and build
 COPY . .
 # Set build environment variables if needed
-ARG NEXT_PUBLIC_API_URL=https://api.toi-invite.kz
+ARG NEXT_PUBLIC_API_URL=https://admin.toi-invite.kz
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
 RUN npm run build

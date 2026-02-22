@@ -1,41 +1,36 @@
 {
-	frankenphp {
-		worker {
-			file public/frankenphp-worker.php
+    frankenphp {
+        worker {
+            file /app/public/frankenphp-worker.php
+        }
+    }
+    order php_server before file_server
+    auto_https off
+}
+:80 {
+	# --- ФРОНТЕНД ---
+	@frontend host toi-invite.kz www.toi-invite.kz
+	handle @frontend {
+		encode zstd gzip
+		reverse_proxy frontend:3000
+	}
+
+	# --- БЭКЕНД (API) ---
+	@backend host admin.toi-invite.kz
+	handle @backend {
+		# Используем абсолютный путь для надежности
+		root * /app/public
+		encode zstd gzip
+		
+		php_server {
+			resolve_root_symlink
 		}
+		file_server
 	}
-	order php_server before file_server
-	auto_https off
-}
 
-# --- ФРОНТЕНД ---
-toi-invite.kz, www.toi-invite.kz {
-	encode zstd gzip
-	reverse_proxy frontend:3000
-	
-	log {
-		output file /var/log/caddy/frontend_access.log
-	}
-}
-
-# --- БЭКЕНД (API) ---
-api.toi-invite.kz {
-	root * public/
-	encode zstd gzip
-	
-	# Статика бэкенда
-	@static {
-		path /storage/* /images/* /fonts/* /build/* /css/* /js/*
-	}
-	header @static Access-Control-Allow-Origin "https://toi-invite.kz"
-	
-	file_server
-	
-	php_server {
-		resolve_root_symlink
-	}
-	
-	log {
-		output file /var/log/caddy/backend_access.log
+	# --- ЛОВУШКА ДЛЯ ДЕБАГА ---
+	# Если Nginx передает неправильный хост, мы увидим этот текст:
+	handle {
+		respond "Caddy debug: получен запрос к хосту [{host}], но маршрут не найден!" 404
 	}
 }
