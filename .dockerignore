@@ -9,5 +9,6 @@ storage/framework/views/*
 storage/logs/*
 bootstrap/cache/*.php
 public/build
-public/storage
+/storage/app/public
+/public/storage
 .phpunit.result.cache

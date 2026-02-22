@@ -5,9 +5,7 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
+      - "8081:80"
     env_file:
       - .env
     environment:
@@ -21,7 +19,7 @@ services:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       OCTANE_SERVER: frankenphp
-      SERVER_NAME: api.toi-invite.kz
+      SERVER_NAME: http://api.toi-invite.kz
     depends_on:
       db:
         condition: service_healthy

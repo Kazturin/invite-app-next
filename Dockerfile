@@ -24,13 +24,20 @@ RUN composer install --no-autoloader --no-scripts
 # Копируем код
 COPY . .
 
+# Установка Node.js и сборка ассетов (для админки/Vite)
+RUN apk add --no-cache nodejs npm \
+    && npm install \
+    && npm run build \
+    && rm -rf node_modules # Удаляем node_modules после сборки для уменьшения размера
+
 RUN rm -rf bootstrap/cache/*.php
 
 # Финализируем автозагрузку
 RUN composer dump-autoload --optimize
 
 # Права и кеш
-RUN chmod -R 775 storage bootstrap/cache
+RUN chmod -R 775 storage bootstrap/cache \
+    && php artisan storage:link
 
 # 1. Берем за основу production-конфиг (рекомендуется для безопасности и производительности)
 RUN cp $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
