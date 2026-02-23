@@ -58,6 +58,8 @@ class EventService
 
             if (isset($data['audioFile']) && $data['audioFile'] instanceof \Illuminate\Http\UploadedFile) {
                 $data['audio'] = $data['audioFile']->store('audio', 'public');
+            } elseif (isset($data['audio'])) {
+                $data['audio'] = $this->normalizeAudioPath($data['audio']);
             }
 
             $event = Event::create($data);
@@ -117,6 +119,8 @@ class EventService
     {
         if (isset($data['audioFile']) && $data['audioFile'] instanceof \Illuminate\Http\UploadedFile) {
             $data['audio'] = $data['audioFile']->store('audio', 'public');
+        } elseif (isset($data['audio'])) {
+            $data['audio'] = $this->normalizeAudioPath($data['audio']);
         }
 
         $event->update($data);
@@ -172,5 +176,23 @@ class EventService
         }
 
         $event->delete();
+    }
+
+    /**
+     * Normalize audio path by removing storage URL prefix if present.
+     *
+     * @param string|null $audio
+     * @return string|null
+     */
+    protected function normalizeAudioPath(?string $audio): ?string
+    {
+        if (!$audio) return null;
+
+        $storageUrl = \Illuminate\Support\Facades\URL::to('/storage/');
+        if (str_starts_with($audio, $storageUrl)) {
+            return str_replace($storageUrl, '', $audio);
+        }
+
+        return $audio;
     }
 }

@@ -132,14 +132,14 @@ const Header: React.FC = () => {
                         </div>
                         <ul className="uppercase text-white text-md tracking-widest items-center flex flex-col mt-14">
                             <li className="hover:text-amber-500 transition duration-200 py-4 border-t border-b border-gray-700 w-full text-center">
-                                <Link href="/blog" onClick={toggleMobileNav}>Блог</Link>
+                                <Link href="#" onClick={toggleMobileNav}>Блог</Link>
                             </li>
                             <li className="hover:text-amber-500 transition duration-200 py-4 border-b border-gray-700 w-full text-center">
-                                <Link href="/app/my-invitations" onClick={toggleMobileNav}>Менің шақыруларым</Link>
+                                <Link href="/app/events" onClick={toggleMobileNav}>Менің шақыруларым</Link>
                             </li>
-                            <li className="hover:text-amber-500 transition duration-200 py-4 border-b border-gray-700 w-full text-center">
+                            {/* <li className="hover:text-amber-500 transition duration-200 py-4 border-b border-gray-700 w-full text-center">
                                 <Link href="/feedback" onClick={toggleMobileNav}>Кері байланыс</Link>
-                            </li>
+                            </li> */}
                             {token ? (
                                 <li className="hover:text-amber-500 transition duration-200 py-4 border-b border-gray-700 w-full text-center">
                                     <a onClick={handleLogout} className="cursor-pointer">Аккаунттан шығу</a>

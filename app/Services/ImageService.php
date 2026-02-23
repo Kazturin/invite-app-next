@@ -118,9 +118,9 @@ class ImageService
 
         $image = $this->manager->read($fullPath);
 
-        $image->text('Tolem jasalmagan', 120, 550, function (FontFactory $font) {
-            $font->file(public_path('/fonts/Baltica KZ.ttf'));
-            $font->size(100);
+        $image->text('Tolem jasalmagan', 120, 900, function (FontFactory $font) {
+            $font->file(public_path('/fonts/Baltica_KZ.ttf'));
+            $font->size(200);
             $font->color('rgba(0, 0, 0, 0.3)');
             $font->align('center');
             $font->valign('bottom');

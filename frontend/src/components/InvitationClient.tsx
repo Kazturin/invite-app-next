@@ -16,7 +16,6 @@ import Modal from '@/components/Modal';
 import Questionnaire from '@/components/Questionnaire';
 import AudioPlayer from '@/components/AudioPlayer';
 import Image from 'next/image';
-import { mon, baltica, academy, vivaldi } from '@/app/fonts';
 
 interface InvitationClientProps {
     event: any;
@@ -60,7 +59,7 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
     const videoId = event.video_link ? event.video_link.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|&v=|shorts\/))([^#&?]*)/)?.[1] : null;
 
     return (
-        <div className={`bg-[#fdfbf7] min-h-screen ${mon.variable} ${baltica.variable} ${academy.variable} ${vivaldi.variable}`}>
+        <div className="bg-[#fdfbf7] min-h-screen">
             {/* Action Buttons */}
             <div className="max-w-screen-xl mx-auto fixed top-0 left-0 right-0 z-50 bg-white backdrop-blur-sm border-b border-stone-100 px-4 py-4 sm:static sm:border-none">
                 <div className="flex justify-center items-center gap-3 sm:gap-6 max-w-2xl mx-auto">

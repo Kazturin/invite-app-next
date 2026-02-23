@@ -147,7 +147,7 @@ const PreviewPage = ({ params }: PageProps) => {
                 {/* Hero Section with Invitation Preview */}
                 <div
                     style={{ backgroundImage: `url(${eventDetails.invitation?.bg_img})` }}
-                    className="bg-no-repeat bg-cover bg-center w-full aspect-[4/3] sm:aspect-auto sm:h-[600px] flex items-center justify-center relative overflow-hidden"
+                    className="bg-no-repeat bg-cover bg-center w-full sm:h-[600px] flex items-center justify-center relative overflow-hidden"
                 >
                     {/* Glass Overlay for depth */}
                     <div className="absolute inset-0 bg-black/5 backdrop-blur-[2px]"></div>
@@ -155,7 +155,7 @@ const PreviewPage = ({ params }: PageProps) => {
                     <div className="relative w-full max-w-[650px] h-full flex items-center justify-center p-4">
                         {eventDetails.invitation?.template?.envelope_img && (
                             <img
-                                className="w-[80%] max-w-[384px] absolute top-[10%] left-[5%] -rotate-12 opacity-90 transition-all duration-1000 animate-in fade-in slide-in-from-left-8"
+                                className="hidden md:block w-[80%] max-w-[384px] absolute top-[10%] left-[5%] -rotate-12 opacity-90 transition-all duration-1000 animate-in fade-in slide-in-from-left-8"
                                 src={eventDetails.invitation.template.envelope_img}
                                 alt="Envelope"
                             />

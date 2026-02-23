@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\URL;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Illuminate\Support\Facades\Storage;
@@ -62,7 +63,11 @@ class Event extends Model
     }
 
     public function getAudio(){
-        return $this->audio? asset('storage/'.$this->audio) : null;
+        if (!$this->audio) return null;
+        if (filter_var($this->audio, FILTER_VALIDATE_URL)) {
+            return $this->audio;
+        }
+        return URL::to('/storage/'.$this->audio);
     }
 
     public function images()
