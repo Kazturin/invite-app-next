@@ -10,7 +10,7 @@ services:
       - .env
     environment:
       APP_ENV: production
-      APP_DEBUG: true
+      APP_DEBUG: false
       APP_KEY: ${APP_KEY}
       APP_URL: https://admin.toi-invite.kz
       DB_CONNECTION: mysql

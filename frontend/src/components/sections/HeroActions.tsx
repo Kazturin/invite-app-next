@@ -34,7 +34,7 @@ const HeroActions: React.FC<HeroActionsProps> = ({ screenshot2Url, guestsScreenU
                     Онлайн шақырту сайты (
                     <a
                         className="underline text-sm text-gray-600 hover:text-blue-500 transition-colors"
-                        href="https://toi-invite.kz/toi/aslan-men-erkezannyn-toiy/kk"
+                        href="https://toi-invite.kz/toi/aslan-men-erkezannyn-toiy"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
