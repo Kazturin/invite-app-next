@@ -1,20 +1,11 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
-import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
     plugins: [
-        laravel(['resources/admin/app.js', 'resources/admin/app.css', 'resources/js/app.js']),
-        vue({
-            template: {
-                transformAssetUrls: {
-                    base: null,
-                    includeAbsolute: false,
-                },
-            },
-        }),
+        laravel(['resources/admin/app.js', 'resources/admin/app.css']),
         tailwindcss(),
     ],
     build: {
@@ -30,9 +21,6 @@ export default defineConfig({
                         }
                         if (id.includes('chart')) {
                             return 'charts';
-                        }
-                        if (id.includes('vue') || id.includes('router') || id.includes('vuex') || id.includes('i18n')) {
-                            return 'vendor-vue';
                         }
                         if (id.includes('@headlessui') || id.includes('@heroicons')) {
                             return 'vendor-ui';

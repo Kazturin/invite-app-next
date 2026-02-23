@@ -36,27 +36,8 @@ Route::prefix('blog')->group(function () {
     Route::get('/{post:slug}', [PostController::class, 'show'])->name('view');
 });
 //});
-Route::get('/toi/{event:slug}/{guest?}/{lang?}', function (\App\Models\Event $event, ?string $lang = 'kk') {
-  //dd(GuestInvite::where('invite_code', '5ea86ddb-8407-459b-8fd5-20de430bf3d5')->first());
-    return view('app', [
-        'lang' => $lang, 
-        'title' => $event->title, 
-        'image' => $event->invitation->invitation_img
-    ]);
-});
-
-Route::get('{any}', function () {
-    $path = request()->path();
-    $validPrefixes = ['app', 'auth', 'toi', 'feedback', 'forbidden'];
-
-    if (!in_array(explode('/', $path)[0], $validPrefixes) && $path !== '/') {
-        return response()->view('welcome', [], 404);
-    }
-    return view('welcome');
-})->where('any', '.*');
-
 Route::get('/404', function () {
-    return response()->view('app', [], 404);
+    return response('Not Found', 404);
 })->name('not-found');
 
 //require __DIR__.'/auth.php';
