@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import MainLayout from "@/components/layout/MainLayout";
-import { roboto, mon, baltica, academy, vivaldi } from "./fonts";
+import { roboto } from "./fonts";
 
 export const metadata: Metadata = {
   title: "Toi-Invite - Онлайн шақыру",
@@ -14,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="kk" className={`${roboto.variable} ${mon.variable} ${baltica.variable} ${academy.variable} ${vivaldi.variable}`}>
+    <html lang="kk" className={`${roboto.variable}`}>
       <body
         className={`antialiased font-roboto`}
       >

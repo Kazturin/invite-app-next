@@ -23,7 +23,8 @@
 		encode zstd gzip
 		
                 @static {
-			path /storage/* /images/* /fonts/* /build/* /css/* /js/*
+			path /storage/* /images/* /fonts/* /build/* /css/* /js/* /video/*
+			path *.ico *.png *.jpg *.jpeg *.svg *.mp4 *.webp *.woff2 *.ttf
 		}
 		header @static {
 			Access-Control-Allow-Origin "https://toi-invite.kz"

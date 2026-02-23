@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
                     {/* Logo and About */}
                     <div className="flex flex-col items-center md:items-start space-y-4">
                         <Link href="/">
-                            <Image src="/logo.png" alt="Logo" width={208} height={50} className="w-52" />
+                            <Image src="/logo.png" alt="Logo" width={208} height={50} />
                         </Link>
                         <p className="text-gray-400 text-sm max-w-xs">
                             Online шақыру билеттерін жасауға арналған заманауи сервис.

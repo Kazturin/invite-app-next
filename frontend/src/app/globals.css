@@ -2,36 +2,8 @@
 
 /* Fonts are now handled via next/font in layout.tsx */
 
-@font-face {
-  font-family: "Boyarsky";
-  src: url("/fonts/KZ_Boyarsky.ttf");
-  font-display: swap;
-}
+/* Fonts are now handled via next/font in layout.tsx and InvitationClient.tsx */
 
-@font-face {
-  font-family: "Taurus";
-  src: url("/fonts/KZ_Taurus.ttf");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Cooper";
-  src: url("/fonts/KZ_Cooper.ttf");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "vAcade";
-  src: url("/fonts/vAcade.ttf");
-  font-display: swap;
-}
-
-
-@font-face {
-  font-family: "Roboto";
-  src: url("/fonts/Roboto-Regular.ttf");
-  font-display: swap;
-}
 
 
 @keyframes fade-in-down {
