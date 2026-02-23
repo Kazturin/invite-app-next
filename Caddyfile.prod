@@ -25,7 +25,10 @@
                 @static {
 			path /storage/* /images/* /fonts/* /build/* /css/* /js/*
 		}
-		header @static Access-Control-Allow-Origin "https://toi-invite.kz"
+		header @static {
+			Access-Control-Allow-Origin "https://toi-invite.kz"
+			Cache-Control "public, max-age=31536000, immutable"
+		}
 
 		php_server {
 			resolve_root_symlink

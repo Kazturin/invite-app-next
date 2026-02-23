@@ -1,100 +1,21 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: "Baltica";
-  src: url("/fonts/Baltica KZ.ttf");
-  font-display: swap;
-}
+/* Fonts are now handled via next/font in layout.tsx */
+
 
 @font-face {
-  font-family: "Vivaldi";
-  src: url("/fonts/KZ Vivaldi.ttf");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Boyarsky";
-  src: url("/fonts/KZ Boyarsky.ttf");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Taurus";
-  src: url("/fonts/KZ Taurus.ttf");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Cooper";
-  src: url("/fonts/KZ Cooper.ttf");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "RosaMarena";
-  src: url("/fonts/KZ_Rosa_Marena.ttf");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Downtown";
-  src: url("/fonts/KZ_Downtown.ttf");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Mon";
-  src: url("/fonts/KZ_Mon_Amour_One.ttf");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Balmoral";
-  src: url("/fonts/KZ_Balmoral.ttf");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Academy";
+  font-family: "vAcade";
   src: url("/fonts/vAcade.ttf");
   font-display: swap;
 }
 
-@font-face {
-  font-family: "TimpaniStars";
-  src: url("/fonts/vTimpsb.ttf");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Blondie";
-  src: url("/fonts/vsBlondie.ttf");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Poster";
-  src: url("/fonts/KZ Poster.ttf");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Bernn";
-  src: url("/fonts/vBernn.ttf");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Handel";
-  src: url("/fonts/Handel.ttf");
-  font-display: swap;
-}
 
 @font-face {
   font-family: "Roboto";
   src: url("/fonts/Roboto-Regular.ttf");
   font-display: swap;
 }
+
 
 @keyframes fade-in-down {
   0% {
@@ -152,12 +73,12 @@
   --background-image-hero-pattern: linear-gradient(270deg, #fafafa 0, hsla(0, 0%, 98%, 0));
   --background-image-hero-pattern-l: linear-gradient(0.25turn, #ffffff 0, #c7c7c7, hsla(0, 0%, 102%, 0));
 
-  --font-family-academy: "Academy", sans-serif;
-  --font-family-mon: "Mon", sans-serif;
+  --font-family-academy: var(--font-academy), "Academy", sans-serif;
+  --font-family-mon: var(--font-mon), "Mon", sans-serif;
   --font-family-balmoral: "Balmoral", sans-serif;
   --font-family-marena: "RosaMarena", sans-serif;
-  --font-family-baltica: "Baltica", sans-serif;
-  --font-family-vivaldi: "Vivaldi", sans-serif;
+  --font-family-baltica: var(--font-baltica), "Baltica", sans-serif;
+  --font-family-vivaldi: var(--font-vivaldi), "Vivaldi", sans-serif;
   --font-family-boyarsky: "Boyarsky", sans-serif;
   --font-family-taurus: "Taurus", sans-serif;
   --font-family-cooper: "Cooper", sans-serif;
@@ -167,7 +88,7 @@
   --font-family-poster: "Poster", sans-serif;
   --font-family-bernn: "Bernn", sans-serif;
   --font-family-handel: "Handel", sans-serif;
-  --font-family-roboto: "Roboto-Regular", sans-serif;
+  --font-family-roboto: var(--font-roboto), "Roboto-Regular", sans-serif;
 
   --color-light-blue: #396195;
   --color-strong-blue: #0c1c56;

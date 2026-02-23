@@ -23,7 +23,7 @@ const HeroSection: React.FC = () => {
             <div className="container mx-auto relative h-full">
                 <div className="absolute top-7 z-20 flex w-full">
                     <div className="w-full lg:w-[740px] flex flex-col items-start text-center px-5">
-                        <h1 className="text-left font-semibold text-3xl md:text-4xl mb-7 text-gray-600 animate-fade-in-up">
+                        <h1 className="text-left font-semibold text-3xl md:text-4xl mb-7 text-gray-600">
                             Іс-шараңызға арналған онлайн шақыруды өзіңіз жасаңыз
                         </h1>
                         <div className="bg-yellow-500 h-[5px] w-[74px]"></div>
