@@ -13,7 +13,7 @@ export const roboto = localFont({
 });
 
 export const baltica = localFont({
-    src: '../../public/fonts/Baltica KZ.ttf',
+    src: '../../public/fonts/Baltica_KZ.ttf',
     variable: '--font-baltica',
     display: 'swap',
 });
