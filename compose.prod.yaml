@@ -41,7 +41,8 @@ services:
         NEXT_PUBLIC_API_URL: https://admin.toi-invite.kz
     restart: unless-stopped
     environment:
-      NODE_ENV: production
+      - NODE_ENV=production
+      - INTERNAL_API_URL=http://app/api
     networks:
       - app-network
 

@@ -3,12 +3,16 @@ import apiClient from '@/lib/api-client';
 import InvitationClient from '@/components/InvitationClient';
 
 async function getInvitation(slug: string, inviteCode?: string) {
+    const url = `/event-by-slug/${slug}${inviteCode ? `?invite_code=${inviteCode}` : ''}`;
     try {
-        const url = `/event-by-slug/${slug}${inviteCode ? `?invite_code=${inviteCode}` : ''}`;
         const res = await apiClient.get(url);
         return res.data;
     } catch (error: any) {
-        console.error("API Error:", error.response?.status, error.response?.data || error.message);
+        console.error(`[SSR] API Error fetching invitation (${slug}):`,
+            error.response?.status,
+            error.response?.data || error.message,
+            "URL:", (apiClient.defaults.baseURL || '') + url
+        );
         return null;
     }
 }

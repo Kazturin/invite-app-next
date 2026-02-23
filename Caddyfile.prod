@@ -16,12 +16,17 @@
 	}
 
 	# --- БЭКЕНД (API) ---
-	@backend host admin.toi-invite.kz
+	@backend host admin.toi-invite.kz app
 	handle @backend {
 		# Используем абсолютный путь для надежности
 		root * /app/public
 		encode zstd gzip
 		
+                @static {
+			path /storage/* /images/* /fonts/* /build/* /css/* /js/*
+		}
+		header @static Access-Control-Allow-Origin "https://toi-invite.kz"
+
 		php_server {
 			resolve_root_symlink
 		}

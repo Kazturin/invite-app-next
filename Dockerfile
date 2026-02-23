@@ -38,7 +38,7 @@ RUN rm -rf bootstrap/cache/*.php
 RUN composer dump-autoload --optimize
 
 # Настройка Octane для FrankenPHP
-RUN php artisan octane:install --server=frankenphp --force
+RUN php artisan octane:install --server=frankenphp
 
 # Права и кеш
 RUN chmod -R 775 storage bootstrap/cache \
