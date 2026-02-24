@@ -4,7 +4,10 @@ import MainLayout from "@/components/layout/MainLayout";
 import { roboto } from "./fonts";
 
 export const metadata: Metadata = {
-  title: "Toi-Invite - Онлайн шақыру",
+  title: {
+    template: "%s | toi-invite.kz",
+    default: "Тойға онлайн шақыру жасау | toi-invite.kz",
+  },
   description: "Онлайн шақырту жасау сервисі",
 };
 

@@ -12,8 +12,8 @@ const HeroSection: React.FC = () => {
                             Іс-шараңызға арналған онлайн шақыру жасаңыз
                         </h1>
                         <div className="bg-yellow-500 h-[5px] w-[74px]"></div>
-                        <p className="my-7 text-lg text-left text-gray-700">
-                            Тез әрі оңай жасай аласыз:
+                        <p className="my-7 text-lg text-left text-gray-700 leading-relaxed">
+                            Бірегей дизайнды таңдап, бірнеше минутта стильді электронды шақыру сайт жасаңыз:
                         </p>
 
                         <div className="block-holder bg-white px-5 py-8 text-left shadow-md border border-gray-200 rounded-lg w-full max-w-lg">
