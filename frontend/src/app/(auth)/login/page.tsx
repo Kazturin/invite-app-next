@@ -12,7 +12,13 @@ import { jwtDecode } from 'jwt-decode';
 
 export default function LoginPage() {
     const router = useRouter();
-    const { setToken, setUser } = useUserStore();
+    const { setToken, setUser, token, _hasHydrated } = useUserStore();
+
+    React.useEffect(() => {
+        if (_hasHydrated && token) {
+            router.push('/');
+        }
+    }, [_hasHydrated, token, router]);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

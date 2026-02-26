@@ -33,7 +33,7 @@ const Footer: React.FC = () => {
                                 <Link href="/feedback">Кері байланыс</Link>
                             </li> */}
                             <li className="hover:text-amber-500 transition duration-200">
-                                <Link href="/blog">Блог</Link>
+                                <Link href="#">Блог</Link>
                             </li>
                             <li className="hover:text-amber-500 transition duration-200">
                                 <Link href="/#faq">Сұрақ-жауап</Link>

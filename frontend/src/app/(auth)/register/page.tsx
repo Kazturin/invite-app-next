@@ -10,7 +10,13 @@ import apiClient from '@/lib/api-client';
 
 export default function RegisterPage() {
     const router = useRouter();
-    const { setToken, setUser } = useUserStore();
+    const { setToken, setUser, token, _hasHydrated } = useUserStore();
+
+    React.useEffect(() => {
+        if (_hasHydrated && token) {
+            router.push('/');
+        }
+    }, [_hasHydrated, token, router]);
 
     const [model, setModel] = useState({
         name: '',

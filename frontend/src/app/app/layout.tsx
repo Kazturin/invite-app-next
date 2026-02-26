@@ -6,12 +6,15 @@ import { useUserStore } from '@/store/useUserStore';
 import Spinner from '@/components/Spinner';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-    const { token } = useUserStore();
+    const { token, _hasHydrated } = useUserStore();
     const router = useRouter();
     const pathname = usePathname();
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        // Wait until store is hydrated from localStorage
+        if (!_hasHydrated) return;
+
         const isPublicPath = pathname === '/app/select-template';
 
         if (!token && !isPublicPath) {
@@ -19,7 +22,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         } else {
             setIsLoading(false);
         }
-    }, [token, pathname, router]);
+    }, [token, _hasHydrated, pathname, router]);
 
     if (isLoading) {
         return (

@@ -17,7 +17,21 @@ const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use((config) => {
-    const token = useUserStore.getState().token;
+    let token = useUserStore.getState().token;
+
+    // Fallback if store is not yet hydrated
+    if (!token && typeof window !== 'undefined') {
+        const storage = localStorage.getItem('user-storage') || sessionStorage.getItem('user-storage');
+        if (storage) {
+            try {
+                const parsed = JSON.parse(storage);
+                token = parsed.state?.token;
+            } catch (e) {
+                // Ignore parse errors
+            }
+        }
+    }
+
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }

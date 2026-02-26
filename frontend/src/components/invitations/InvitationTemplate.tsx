@@ -28,7 +28,6 @@ const InvitationTemplate = forwardRef<InvitationTemplateRef, InvitationTemplateP
     onUpdateContent,
     onUpdateBgImg,
 }, ref) => {
-    console.log(content);
     const [editBlock, setEditBlock] = useState<'text' | 'bg' | 'image'>('text');
     const [currentBgImg, setCurrentBgImg] = useState<string | null>(bg_img || null);
 
