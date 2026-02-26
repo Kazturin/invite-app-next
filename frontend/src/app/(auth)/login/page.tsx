@@ -7,6 +7,8 @@ import { LockClosedIcon } from '@heroicons/react/24/solid';
 import { useUserStore } from '@/store/useUserStore';
 import Alert from '@/components/Alert';
 import apiClient from '@/lib/api-client';
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
 
 export default function LoginPage() {
     const router = useRouter();
@@ -39,6 +41,31 @@ export default function LoginPage() {
             setErrorMsg(err.response?.data?.message || 'Қате орын алды');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleGoogleSuccess = async (credentialResponse: any) => {
+        if (credentialResponse.credential) {
+            setLoading(true);
+            setErrorMsg('');
+            try {
+                const decoded: any = jwtDecode(credentialResponse.credential);
+                const { data } = await apiClient.post('/login-google', {
+                    sub: decoded.sub,
+                    email: decoded.email,
+                    name: decoded.name,
+                });
+
+                setToken(data.token);
+                setUser(data.user);
+
+                router.push('/');
+            } catch (err: any) {
+                console.error(err);
+                setErrorMsg(err.response?.data?.message || 'Google арқылы кіру кезінде қате орын алды');
+            } finally {
+                setLoading(false);
+            }
         }
     };
 
@@ -130,6 +157,24 @@ export default function LoginPage() {
                             'Кіру'
                         )}
                     </button>
+                </div>
+
+                <div className="relative my-6">
+                    <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                        <span className="px-2 bg-white text-gray-500">Немесе</span>
+                    </div>
+                </div>
+
+                <div className="flex justify-center">
+                    <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={() => {
+                            setErrorMsg('Google арқылы кіру сәтсіз аяқталды');
+                        }}
+                    />
                 </div>
             </form>
         </>
