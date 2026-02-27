@@ -65,7 +65,7 @@ class EventResource extends Resource
                 TextColumn::make('user.name'),
                 TextColumn::make('title')
                     ->searchable(),
-                TextColumn::make('slug')->url(fn($record)=>"/toi/$record->slug")->openUrlInNewTab(),
+                TextColumn::make('slug')->url(fn($record)=> config('services.frontend_url') . "/toi/$record->slug"),
                 TextColumn::make('date')
                     ->date(),
                 TextColumn::make('guests_count')

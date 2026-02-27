@@ -87,6 +87,30 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "TimpaniStars";
+  src: url("/fonts/vTimpsb.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Blondie";
+  src: url("/fonts/Blondie.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balmoral";
+  src: url("/fonts/KZ_Balmoral.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "RosaMarena";
+  src: url("/fonts/Rosa_Marena.ttf");
+  font-display: swap;
+}
+
 
 
 @keyframes fade-in-down {
