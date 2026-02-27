@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import apiClient from '@/lib/api-client';
 import InvitationClient from '@/components/InvitationClient';
+import '../../editor-fonts.css';
 
 async function getInvitation(slug: string, inviteCode?: string) {
     const url = `/event-by-slug/${slug}${inviteCode ? `?invite_code=${inviteCode}` : ''}`;

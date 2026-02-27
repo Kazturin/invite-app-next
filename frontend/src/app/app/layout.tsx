@@ -1,5 +1,6 @@
 'use client';
 
+import '../editor-fonts.css';
 import React, { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useUserStore } from '@/store/useUserStore';

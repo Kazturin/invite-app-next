@@ -1,5 +1,6 @@
 'use client';
 
+import '../editor-fonts.css';
 import React, { useState } from 'react';
 import apiClient from '@/lib/api-client';
 import Alert from '@/components/Alert';
