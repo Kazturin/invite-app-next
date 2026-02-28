@@ -15,13 +15,14 @@ class Category extends Model
 
     public function posts(): BelongsToMany
     {
-        return $this->belongsToMany(Post::class);
+        return $this->belongsToMany(Post::class)->orderBy('published_at', 'desc');
     }
 
     public function publishedPosts(): BelongsToMany
     {
         return $this->belongsToMany(Post::class)
             ->where('active', '=', 1)
-            ->whereDate('published_at', '<', Carbon::now());
+            ->whereDate('published_at', '<', Carbon::now())
+            ->orderBy('published_at', 'desc');
     }
 }

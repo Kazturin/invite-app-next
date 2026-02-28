@@ -41,3 +41,10 @@
      height: 1.25rem;
      flex-shrink: 0;
  }
+
+ .prose img {
+     max-width: 100%;
+     height: auto;
+     border-radius: 10px;
+     margin: 20px 0;
+ }
