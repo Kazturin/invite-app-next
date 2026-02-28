@@ -9,7 +9,7 @@
 
 :8000 {
 	@static {
-		path /storage/* /images/* /fonts/* /build/* /css/* /js/*
+		path /storage/* /images/* /fonts/* /build/* /css/* /js/* /canvas/*
 	}
 	header @static Access-Control-Allow-Origin "*"
 

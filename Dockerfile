@@ -52,6 +52,7 @@ RUN cp $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
 # 2. Создаем отдельный ini-файл с нашими переопределениями.
 RUN echo "upload_max_filesize = 100M" > $PHP_INI_DIR/conf.d/custom.ini \
     && echo "post_max_size = 100M" >> $PHP_INI_DIR/conf.d/custom.ini \
+    && echo "memory_limit = 512M" >> $PHP_INI_DIR/conf.d/custom.ini \
     && echo "variables_order = EGPCS" >> $PHP_INI_DIR/conf.d/custom.ini \
     && echo "opcache.enable=1" >> $PHP_INI_DIR/conf.d/custom.ini \
     && echo "opcache.enable_cli=1" >> $PHP_INI_DIR/conf.d/custom.ini \

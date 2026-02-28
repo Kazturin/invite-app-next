@@ -37,12 +37,11 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_API_URL: https://admin.toi-invite.kz
     restart: unless-stopped
     environment:
       - NODE_ENV=production
-      - INTERNAL_API_URL=http://app/api
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-https://admin.toi-invite.kz}
+      - INTERNAL_API_URL=${INTERNAL_API_URL:-http://app}
     networks:
       - app-network
 

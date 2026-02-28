@@ -23,7 +23,7 @@
 		encode zstd gzip
 		
                 @static {
-			path /storage/* /images/* /fonts/* /build/* /css/* /js/* /video/*
+			path /storage/* /images/* /fonts/* /build/* /css/* /js/* /video/* /canvas/*
 			path *.ico *.png *.jpg *.jpeg *.svg *.mp4 *.webp *.woff2 *.ttf
 			not path /api/*
 		}
