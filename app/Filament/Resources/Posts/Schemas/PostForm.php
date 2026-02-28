@@ -36,7 +36,10 @@ class PostForm
 
                 Section::make()
                     ->schema([
-                        FileUpload::make('thumbnail'),
+                        FileUpload::make('thumbnail')
+                            ->disk('public')
+                            ->directory('posts')
+                            ->image(),
                         Select::make('categories')
                             ->multiple()
                             ->relationship('categories', 'title')

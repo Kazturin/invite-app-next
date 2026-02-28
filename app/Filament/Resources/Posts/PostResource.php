@@ -23,6 +23,17 @@ class PostResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Блог');
+    }
+
+    protected static ?string $navigationLabel = 'Посттар';
+
+    protected static ?string $modelLabel = 'Пост';
+
+    protected static ?string $pluralModelLabel = 'Посттар';
+
     public static function form(Schema $schema): Schema
     {
         return PostForm::configure($schema);
