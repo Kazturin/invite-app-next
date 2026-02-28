@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7f6342e0ecb5cbfc182f30cb8f789869",
+    "content-hash": "e24718acab08bff1e3b6d7d35b27f066",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -6095,26 +6095,26 @@
         },
         {
             "name": "spatie/laravel-sluggable",
-            "version": "3.7.5",
+            "version": "3.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-sluggable.git",
-                "reference": "e4fdd519e043a2af02b52eec2c3be2dd2e262e27"
+                "reference": "8050bf38a6e03ac4974e1f7bc722983242abfae0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-sluggable/zipball/e4fdd519e043a2af02b52eec2c3be2dd2e262e27",
-                "reference": "e4fdd519e043a2af02b52eec2c3be2dd2e262e27",
+                "url": "https://api.github.com/repos/spatie/laravel-sluggable/zipball/8050bf38a6e03ac4974e1f7bc722983242abfae0",
+                "reference": "8050bf38a6e03ac4974e1f7bc722983242abfae0",
                 "shasum": ""
             },
             "require": {
-                "illuminate/database": "^8.0|^9.0|^10.0|^11.0|^12.0",
-                "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0",
-                "php": "^8.0"
+                "illuminate/database": "^10.0|^11.0|^12.0|^13.0",
+                "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
+                "php": "^8.2"
             },
             "require-dev": {
-                "orchestra/testbench": "^6.23|^7.0|^8.0|^9.0|^10.0",
-                "pestphp/pest": "^1.20|^2.0|^3.7",
+                "orchestra/testbench": "^8.0|^9.0|^10.0|^11.0",
+                "pestphp/pest": "^2.0|^3.7|^4.0",
                 "spatie/laravel-translatable": "^5.0|^6.0"
             },
             "type": "library",
@@ -6142,7 +6142,7 @@
                 "spatie"
             ],
             "support": {
-                "source": "https://github.com/spatie/laravel-sluggable/tree/3.7.5"
+                "source": "https://github.com/spatie/laravel-sluggable/tree/3.8.0"
             },
             "funding": [
                 {
@@ -6150,7 +6150,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-04-24T09:21:00+00:00"
+            "time": "2026-02-21T14:25:10+00:00"
         },
         {
             "name": "spatie/shiki-php",

@@ -39,7 +39,8 @@ class PostForm
                         FileUpload::make('thumbnail'),
                         Select::make('categories')
                             ->multiple()
-                            ->relationship('categories', 'title'),
+                            ->relationship('categories', 'title')
+                            ->preload(),
                     ])->columnSpan(4)
             ])->columns(12);
     }

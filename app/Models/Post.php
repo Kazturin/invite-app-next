@@ -10,16 +10,25 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Post extends Model
 {
-    use HasFactory;
+    use HasFactory, HasSlug;
 
     protected $fillable = ['title', 'slug', 'thumbnail', 'body', 'user_id', 'active', 'published_at', 'meta_title', 'meta_description'];
 
     protected $casts = [
         'published_at' => 'datetime'
     ];
+
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('title')
+            ->saveSlugsTo('slug');
+    }
 
     public function user(): BelongsTo
     {
@@ -94,6 +103,9 @@ class Post extends Model
         if (!$model->published_at) {
             $model->published_at = now();
         }
+
+        $model->user_id = auth()->id();
+
     });
 }
 }

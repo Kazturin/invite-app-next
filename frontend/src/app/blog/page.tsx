@@ -2,6 +2,7 @@ import React from 'react';
 import { Metadata } from 'next';
 import apiClient from '@/lib/api-client';
 import Link from 'next/link';
+import '../post.css';
 
 export const dynamic = 'force-dynamic';
 
