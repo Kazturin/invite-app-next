@@ -109,9 +109,15 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
                 // Filter out existing template images to prevent duplication from older saved states
                 const templateSrc = props.template?.without_text;
                 const filteredObjects = targetContent.objects.map((obj: any) => {
-                    if (obj.src && typeof obj.src === 'string' && obj.src.startsWith('/')) {
-                        const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-                        obj.src = `${baseUrl.replace(/\/+$/, '')}${obj.src}`;
+                    if (obj.src && typeof obj.src === 'string') {
+                        if (obj.src.startsWith('/')) {
+                            const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+                            obj.src = `${baseUrl.replace(/\/+$/, '')}${obj.src}`;
+                        }
+                        // Add cache-buster to prevent iOS Safari from using non-CORS cached images (which leads to transparent Canvas)
+                        if (!obj.src.includes('cb=')) {
+                            obj.src = obj.src + (obj.src.includes('?') ? '&' : '?') + 'cb=' + Date.now();
+                        }
                     }
                     return obj;
                 }).filter((obj: any) => {
@@ -156,7 +162,10 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
 
                 if (!templateFrame) {
                     try {
-                        const frameImg = await fabric.FabricImage.fromURL(props.template.without_text, {
+                        const imgUrl = props.template.without_text;
+                        const corsBypassUrl = imgUrl + (imgUrl.includes('?') ? '&' : '?') + 'cb=' + Date.now();
+
+                        const frameImg = await fabric.FabricImage.fromURL(corsBypassUrl, {
                             crossOrigin: 'anonymous'
                         });
 
