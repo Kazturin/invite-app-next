@@ -13,16 +13,18 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ initialCategories }) =>
     const [activeCategoryId, setActiveCategoryId] = useState<number | null>(null);
 
     useEffect(() => {
-        if (!initialCategories) {
+        if (!initialCategories || initialCategories.length === 0) {
             getTemplateCategories();
         }
     }, [getTemplateCategories, initialCategories]);
 
-    const categories = initialCategories || templateCategories.data || [];
+    const categories = (initialCategories && initialCategories.length > 0)
+        ? initialCategories
+        : (templateCategories?.data || []);
 
     useEffect(() => {
         if (categories && categories.length > 0 && activeCategoryId === null) {
-            setActiveCategoryId(categories[0].id);
+            setActiveCategoryId(categories[0].id); пше
         }
     }, [categories, activeCategoryId]);
 
@@ -91,7 +93,7 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ initialCategories }) =>
                             href="/app/select-template"
                             className="text-lg font-theme-heading font-medium bg-theme-primary px-6 py-2 text-white rounded shadow-md hover:bg-white border-2 border-transparent hover:border-theme-primary hover:text-theme-primary cursor-pointer transition duration-200"
                         >
-                            Шақырту жасау
+                            Барлық шаблондар
                         </Link>
                     </div>
                 </div>
