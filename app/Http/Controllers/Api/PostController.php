@@ -10,73 +10,74 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Support\Facades\Cache;
 
 class PostController extends Controller
 {
     public function home()
     {
-        $latestPost = Post::where('active', '=', 1)
-            ->orderBy('published_at', 'desc')
-            ->limit(1)
-            ->first();
+        $data = Cache::remember('posts.home', 3600, function () {
+            $latestPost = Post::where('active', '=', 1)
+                ->orderBy('published_at', 'desc')
+                ->limit(1)
+                ->first();
 
-        // Show the most popular 3 posts based on upvotes
-        $popularPosts = Post::query()
-            ->leftJoin('post_views', 'posts.id', '=', 'post_views.post_id')
-            ->select('posts.*', DB::raw('COUNT(post_views.id) as view_count'))
-            ->where('active', '=', 1)
-            ->orderByDesc('view_count')
-            ->groupBy([
-                'posts.id',
-                'posts.title',
-                'posts.slug',
-                'posts.thumbnail',
-                'posts.body',
-                'posts.active',
-                'posts.published_at',
-                'posts.user_id',
-                'posts.created_at',
-                'posts.updated_at',
-                'posts.meta_title',
-                'posts.meta_description',
-            ])
-            ->limit(3)
-            ->get();
+            // Show the most popular 3 posts based on upvotes
+            $popularPosts = Post::query()
+                ->leftJoin('post_views', 'posts.id', '=', 'post_views.post_id')
+                ->select('posts.*', DB::raw('COUNT(post_views.id) as view_count'))
+                ->where('active', '=', 1)
+                ->orderByDesc('view_count')
+                ->groupBy([
+                    'posts.id',
+                    'posts.title',
+                    'posts.slug',
+                    'posts.thumbnail',
+                    'posts.body',
+                    'posts.active',
+                    'posts.published_at',
+                    'posts.user_id',
+                    'posts.created_at',
+                    'posts.updated_at',
+                    'posts.meta_title',
+                    'posts.meta_description',
+                ])
+                ->limit(3)
+                ->get();
 
-        // Show recent categories with their latest posts
-        $categories = Category::query()
-            ->whereHas('posts', function ($query) {
-                $query
-                    ->where('active', '=', 1)
-                    ->whereDate('published_at', '<', Carbon::now());
-            })
-            ->with(['posts' => function ($query) {
-                // Limit to 5 posts per category to optimize payload
-                $query->where('active', '=', 1)
-                      ->whereDate('published_at', '<', Carbon::now())
-                      ->orderByDesc('published_at')
-                      ->limit(5);
-            }])
-            ->select('categories.*')
-            ->selectRaw('MAX(posts.published_at) as max_date')
-            ->leftJoin('category_post', 'categories.id', '=', 'category_post.category_id')
-            ->leftJoin('posts', 'posts.id', '=', 'category_post.post_id')
-            ->orderByDesc('max_date')
-            ->groupBy([
-                'categories.id',
-                'categories.title',
-                'categories.slug',
-                'categories.created_at',
-                'categories.updated_at',
-            ])
-            ->limit(5)
-            ->get();
+            // Show recent categories with their latest posts
+            $categories = Category::query()
+                ->whereHas('posts', function ($query) {
+                    $query
+                        ->where('active', '=', 1);
+                })
+                ->with(['posts' => function ($query) {
+                    // Limit to 5 posts per category to optimize payload
+                    $query->where('active', '=', 1);
+                }])
+                ->select('categories.*')
+                ->selectRaw('MAX(posts.published_at) as max_date')
+                ->leftJoin('category_post', 'categories.id', '=', 'category_post.category_id')
+                ->leftJoin('posts', 'posts.id', '=', 'category_post.post_id')
+                ->orderByDesc('max_date')
+                ->groupBy([
+                    'categories.id',
+                    'categories.title',
+                    'categories.slug',
+                    'categories.created_at',
+                    'categories.updated_at',
+                ])
+                ->limit(5)
+                ->get();
 
-        return response()->json([
-            'latestPost' => $latestPost,
-            'popularPosts' => $popularPosts,
-            'categories' => $categories
-        ]);
+            return [
+                'latestPost' => $latestPost,
+                'popularPosts' => $popularPosts,
+                'categories' => $categories
+            ];
+        });
+
+        return response()->json($data);
     }
 
     public function show(Post $post, Request $request)

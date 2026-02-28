@@ -96,16 +96,23 @@ class Post extends Model
     }
 
     protected static function boot()
-{
-    parent::boot();
+    {
+        parent::boot();
 
-    static::creating(function ($model) {
-        if (!$model->published_at) {
-            $model->published_at = now();
-        }
+        static::creating(function ($model) {
+            if (!$model->published_at) {
+                $model->published_at = now();
+            }
 
-        $model->user_id = auth()->id();
+            $model->user_id = auth()->id();
+        });
 
-    });
-}
+        $clearCache = function () {
+            \Illuminate\Support\Facades\Cache::forget('posts.home');
+        };
+
+        static::created($clearCache);
+        static::updated($clearCache);
+        static::deleted($clearCache);
+    }
 }

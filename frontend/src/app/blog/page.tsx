@@ -20,6 +20,7 @@ export const metadata: Metadata = {
 async function getBlogHomeData() {
     try {
         const res = await apiClient.get('/blog');
+        console.log(res.data);
         return res.data;
     } catch (err) {
         console.error('Error fetching blog home:', err);
