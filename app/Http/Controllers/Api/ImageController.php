@@ -14,7 +14,7 @@ class ImageController extends Controller
         ]);
 
         $imageName = time().'.'.$request->image->extension();  
-        $request->image->move(public_path('canvas'), $imageName);
-        return response()->json(['url'=> '/canvas/'.$imageName]);
+        $request->image->move(storage_path('app/public/canvas'), $imageName);
+        return response()->json(['url'=> '/storage/canvas/'.$imageName]);
     }
 }

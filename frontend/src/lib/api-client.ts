@@ -2,14 +2,16 @@ import axios from 'axios';
 import { useUserStore } from '@/store/useUserStore';
 
 const getBaseURL = () => {
-    // For SSR (Server-Side Rendering) inside Docker
+    // If not in a browser, use the internal Docker network URL or public URL
+    // In NextJS 15 + App Router (Node.js runtime), 'window' is undefined for server components.
     if (typeof window === 'undefined') {
-        const internalUrl = process.env.INTERNAL_API_URL || 'http://backend:8000';
-        return internalUrl.replace(/\/api$/, '') + '/api';
+        const internalUrl = process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+        return `${internalUrl.replace(/\/+$/, '')}/api`;
     }
-    // For Client-side (Browser)
+
+    // In browser, use the public URL
     const publicUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    return publicUrl.replace(/\/api$/, '') + '/api';
+    return `${publicUrl.replace(/\/+$/, '')}/api`;
 };
 
 const apiClient = axios.create({
@@ -43,6 +45,7 @@ apiClient.interceptors.response.use(
     (error) => {
         if (error.response?.status === 401) {
             useUserStore.getState().logout();
+
             if (typeof window !== 'undefined') {
                 window.location.href = '/login';
             }

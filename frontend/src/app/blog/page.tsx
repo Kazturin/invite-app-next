@@ -3,6 +3,8 @@ import { Metadata } from 'next';
 import apiClient from '@/lib/api-client';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
     title: 'Блог | toi-invite.kz',
     description: 'Тойға шақыруға арналған қызықты мақалалар мен жаңалықтар',

@@ -35,14 +35,26 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
     const [selectedObject, setSelectedObject] = useState<fabric.Object | null>(null);
 
     const isLoadingRef = useRef(false);
+    const propsRef = useRef(props);
+
+    useEffect(() => {
+        propsRef.current = props;
+    }, [props]);
 
     const saveCanvasState = useCallback(() => {
         if (isLoadingRef.current) return;
         const canvas = canvasRef.current;
         if (canvas) {
-            const canvasData = (canvas as any).toJSON(['isTemplateFrame', 'isUserImage']);
+            const canvasData = (canvas as any).toJSON(['isTemplateFrame', 'isUserImage', 'src']);
+
+            const templateSrc = propsRef.current.template?.without_text;
+
             // Filter out the template frame from the saved data
-            canvasData.objects = (canvasData.objects || []).filter((obj: any) => !obj.isTemplateFrame);
+            canvasData.objects = (canvasData.objects || []).filter((obj: any) => {
+                if (obj.isTemplateFrame) return false;
+                if (templateSrc && obj.src && obj.src === templateSrc) return false;
+                return true;
+            });
             emit.onUpdateContent(canvasData);
         }
     }, [emit]);
@@ -64,19 +76,22 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
         const canvas = canvasRef.current;
         if (!canvas) return;
         const objects = canvas.getObjects();
-        const userImage = objects.find((o: any) => o.isUserImage === true);
+        const userImage = objects.find((o: any) =>
+            o.isUserImage === true ||
+            ((['image', 'Image'].includes(o.type) || o instanceof fabric.Image) && o.isTemplateFrame !== true)
+        );
         const templateFrame = objects.find((o: any) => o.isTemplateFrame === true);
 
+        // 1. Move templateFrame to the absolute back
+        if (templateFrame) {
+            canvas.sendObjectToBack(templateFrame);
+        }
+
+        // 2. Move userImage to the absolute back (pushes templateFrame forward by 1 index to cover the userImage)
         if (userImage) {
             canvas.sendObjectToBack(userImage);
         }
-        if (templateFrame) {
-            if (userImage) {
-                canvas.moveObjectTo(templateFrame, 1);
-            } else {
-                canvas.sendObjectToBack(templateFrame);
-            }
-        }
+
         canvas.requestRenderAll();
     }, []);
 
@@ -87,9 +102,27 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
         if (!canvas || !canvas.contextContainer || isLoadingRef.current) return;
 
         isLoadingRef.current = true;
-        const targetContent = contentToLoad || props.content;
+        let targetContent = contentToLoad || props.content;
 
         try {
+            if (targetContent && targetContent.objects) {
+                // Filter out existing template images to prevent duplication from older saved states
+                const templateSrc = props.template?.without_text;
+                const filteredObjects = targetContent.objects.map((obj: any) => {
+                    if (obj.src && typeof obj.src === 'string' && obj.src.startsWith('/')) {
+                        const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+                        obj.src = `${baseUrl.replace(/\/+$/, '')}${obj.src}`;
+                    }
+                    return obj;
+                }).filter((obj: any) => {
+                    if (obj.isTemplateFrame) return false;
+                    if (templateSrc && obj.src && obj.src === templateSrc) return false;
+                    return true;
+                });
+
+                targetContent = { ...targetContent, objects: filteredObjects };
+            }
+
             if (targetContent && targetContent.objects) {
                 const fontsToLoad = [
                     ...new Set(
@@ -387,9 +420,22 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            return response.data.url;
-        } catch (error) {
+            let url = response.data.url;
+            if (url && url.startsWith('/')) {
+                const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+                url = `${baseUrl.replace(/\/+$/, '')}${url}`;
+            }
+            return url;
+        } catch (error: any) {
             console.error('Error uploading image:', error);
+            if (error.response?.data?.errors) {
+                const errorMessages = Object.values(error.response.data.errors).flat().join('\n');
+                alert(errorMessages);
+            } else if (error.response?.data?.message) {
+                alert(error.response.data.message);
+            } else {
+                alert('Қателік орын алды. Файлды жүктеу мүмкін емес.');
+            }
             return null;
         }
     };
@@ -401,10 +447,11 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
             const imageUrl = await uploadImageToServer(file);
             if (!imageUrl) return;
 
-            const oldImage = canvas.getObjects().find((o: any) => o.isUserImage === true);
-            if (oldImage) {
-                canvas.remove(oldImage);
-            }
+            // Удаляем как любые предыдущие загруженные пользователем картинки, так и картинки-заглушки из самого шаблона
+            const oldImages = canvas.getObjects().filter((o: any) => {
+                return o.isUserImage === true || ((['image', 'Image'].includes(o.type) || o instanceof fabric.Image) && o.isTemplateFrame !== true);
+            });
+            oldImages.forEach((img: any) => canvas.remove(img));
 
             const imgEl = await fabric.FabricImage.fromURL(imageUrl, {
                 crossOrigin: 'anonymous'
@@ -516,7 +563,7 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
         return canvas.toDataURL({
             format: 'png',
             quality: 1,
-            multiplier: (BASE_WIDTH * 2) / canvas.getWidth()
+            multiplier: (BASE_WIDTH * 1.5) / canvas.getWidth()
         });
     };
 
