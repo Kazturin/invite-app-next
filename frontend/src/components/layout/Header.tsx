@@ -77,7 +77,7 @@ const Header: React.FC = () => {
                                 <Link href="/feedback">Кері байланыс</Link>
                             </li> */}
                             <li className="uppercase bg-theme-primary px-6 py-2 text-white rounded shadow-md hover:bg-white border-2 border-transparent hover:border-amber-600 hover:text-amber-600 cursor-pointer transition duration-200">
-                                <Link href="#">Блог</Link>
+                                <Link href="/blog">Блог</Link>
                             </li>
                             <li>
                                 <div className="w-20">

@@ -24,7 +24,7 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ initialCategories }) =>
 
     useEffect(() => {
         if (categories && categories.length > 0 && activeCategoryId === null) {
-            setActiveCategoryId(categories[0].id); пше
+            setActiveCategoryId(categories[0].id);
         }
     }, [categories, activeCategoryId]);
 

@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\TemplateCategoryController;
 use App\Http\Controllers\Api\TemplateController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use App\Http\Controllers\Api\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,6 +53,11 @@ Route::post('/login-google', [AuthController::class, 'googleLogin']);
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.reset');
 Route::post('/upload-image',[ImageController::class, 'upload']);
+
+Route::get('/blog', [PostController::class, 'home']);
+Route::get('/blog/search', [PostController::class, 'search']);
+Route::get('/blog/category/{category:slug}', [PostController::class, 'byCategory']);
+Route::get('/blog/{post:slug}', [PostController::class, 'show']);
 
 Route::get('/nominatim/search', function (Request $request) {
     // Получаем все параметры запроса от Vue (q, format, email и т.д.)

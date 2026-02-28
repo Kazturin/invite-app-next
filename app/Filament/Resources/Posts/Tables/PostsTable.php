@@ -21,6 +21,10 @@ class PostsTable
                 TextColumn::make('title')->searchable(['title', 'body'])->sortable(),
                 IconColumn::make('active')
                     ->boolean(),
+                TextColumn::make('views_count')
+                    ->counts('views')
+                    ->label('Просмотры')
+                    ->sortable(),
                 TextColumn::make('published_at')
                     ->sortable()
                     ->dateTime(),
@@ -32,10 +36,6 @@ class PostsTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('meta_title')
-                    ->searchable(),
-                TextColumn::make('meta_description')
-                    ->searchable(),
             ])
             ->filters([
                 //
