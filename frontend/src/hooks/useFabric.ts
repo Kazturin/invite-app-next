@@ -27,6 +27,17 @@ interface UseFabricEmit {
     onUpdateContent: (content: any) => void;
 }
 
+const isSameImageSrc = (src1: string | null | undefined, src2: string | null | undefined) => {
+    if (!src1 || !src2) return false;
+    try {
+        const url1 = new URL(src1, 'http://localhost');
+        const url2 = new URL(src2, 'http://localhost');
+        return url1.pathname === url2.pathname;
+    } catch {
+        return src1 === src2;
+    }
+};
+
 export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
     const fabricCanvasRef = useRef<HTMLCanvasElement>(null);
     const canvasWrapperRef = useRef<HTMLDivElement>(null);
@@ -52,7 +63,7 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
             // Filter out the template frame from the saved data
             canvasData.objects = (canvasData.objects || []).filter((obj: any) => {
                 if (obj.isTemplateFrame) return false;
-                if (templateSrc && obj.src && obj.src === templateSrc) return false;
+                if (isSameImageSrc(obj.src, templateSrc)) return false;
                 return true;
             });
             emit.onUpdateContent(canvasData);
@@ -122,7 +133,7 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
                     return obj;
                 }).filter((obj: any) => {
                     if (obj.isTemplateFrame) return false;
-                    if (templateSrc && obj.src && obj.src === templateSrc) return false;
+                    if (isSameImageSrc(obj.src, templateSrc)) return false;
                     return true;
                 });
 
