@@ -85,6 +85,10 @@ body {
   min-height: 100vh;
 }
 
+.bg-left {
+  background-image: url('/images/left.jpg');
+}
+
 @layer utilities {
   .animate-music-bar-1 {
     animation: music-bar 0.8s ease-in-out infinite;
