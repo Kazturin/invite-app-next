@@ -31,7 +31,10 @@ export async function generateMetadata(props: {
     const guestInvite = data.guestInvite;
 
     const guestName = guestInvite?.guest?.fullname;
-    const pageTitle = guestName ? `${guestName}, сізге шақыру!` : 'Тойға шақыру';
+    const isParty = event.type === 'party';
+
+    const defaultTitle = isParty ? 'Мерекелік іс-шараға шақыру' : 'Тойға шақыру';
+    const pageTitle = guestName ? `${guestName}, сізге шақыру!` : defaultTitle;
     const eventTitle = event.title || '';
     const invitation_img = event.invitation?.data?.invitation_img || event.invitation?.invitation_img || '';
 

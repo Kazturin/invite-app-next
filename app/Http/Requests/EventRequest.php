@@ -24,6 +24,7 @@ class EventRequest extends FormRequest
     {
         return [
             'title' => 'required|string:max:255',
+            'type' => 'required|string|in:wedding,party',
             'description' => 'nullable|string',
             'place' => 'required|string',
             'address' => 'required|array',

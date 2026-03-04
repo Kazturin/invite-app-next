@@ -128,8 +128,10 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                             </div>
                             <div className="h-px flex-1 bg-gradient-to-l from-transparent to-yellow-300"></div>
                         </div>
-                        <span className="bg-white px-6 py-1 text-sm font-bold text-yellow-700 uppercase tracking-[0.2em] relative z-10">
-                            {isEventPast ? 'Той өтті' : 'Тойға дейін қалды'}
+                        <span className="bg-white px-6 py-1 text-sm font-bold text-yellow-700 uppercase tracking-[0.2em] relative z-10 text-center">
+                            {isEventPast
+                                ? (event.type === 'party' ? 'Мереке өтті' : 'Той өтті')
+                                : (event.type === 'party' ? 'Мерекеге дейін қалды' : 'Тойға дейін қалды')}
                         </span>
                         <div className="mt-6">
                             <Countdown deadline={event.date} />
@@ -247,7 +249,7 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                         Құрметті {guestInvite?.guest?.fullname || 'қонақ!'}
                     </p>
                     <p className="text-gray-600 mb-8 max-w-xs mx-auto">
-                        Жоғарыдағы «Барамын» және «Бара алмаймын» батырмалары арқылы той иесіне жауап беруіңізді сұраймыз
+                        Жоғарыдағы «Барамын» және «Бара алмаймын» батырмалары арқылы {event.type === 'party' ? 'іс-шара' : 'той'} ұйымдастырушысына жауап беруіңізді сұраймыз
                     </p>
                     <button
                         onClick={closeModal}

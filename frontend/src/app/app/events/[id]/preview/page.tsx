@@ -199,7 +199,9 @@ const PreviewPage = ({ params }: PageProps) => {
 
                             <div className="space-y-4">
                                 <span className="text-xs font-bold text-amber-800 uppercase tracking-[0.3em]">
-                                    Тойға дейін қалды
+                                    {eventDetails
+                                        ? (eventDetails.type === 'party' ? 'Мереке өтті' : 'Той өтті')
+                                        : (eventDetails.type === 'party' ? 'Мерекеге дейін қалды' : 'Тойға дейін қалды')}
                                 </span>
                                 <Countdown deadline={eventDetails.date} />
                             </div>

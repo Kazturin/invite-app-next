@@ -30,6 +30,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
 
     const [model, setModel] = useState({
         title: initialData?.title || '',
+        type: initialData?.type || 'wedding',
         description: initialData?.description || '<p><span class="ql-font-Mon" style="color: rgb(178, 107, 0);">Тойымыздың қадірлі қонағы болыңыз</span></p>',
         photos_link: initialData?.photos_link || '',
         place: initialData?.place || '',
@@ -132,6 +133,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
 
         const formData = new FormData();
         formData.append('title', model.title);
+        formData.append('type', model.type);
         formData.append('description', model.description);
         formData.append('place', model.place);
         formData.append('address[address]', model.address_link);
@@ -174,7 +176,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
                     <div className="mt-10">
                         <div>
                             <label htmlFor="title" className="text-left block text-sm font-medium leading-6 text-gray-900">
-                                Той атауы <span className="text-red-500">*</span>
+                                Іс-шара атауы <span className="text-red-500">*</span>
                             </label>
                             <div className="mt-2">
                                 <input
@@ -187,6 +189,36 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
                                     placeholder="Әлібек пен Аружанның тойы"
                                 />
                                 {validationErrors.title && <p className="mt-1 text-sm text-red-600">{validationErrors.title}</p>}
+                            </div>
+                        </div>
+
+                        <div className="mt-4">
+                            <label className="text-left block text-sm font-medium leading-6 text-gray-900">
+                                Шара түрі <span className="text-red-500">*</span>
+                            </label>
+                            <div className="mt-2 flex items-center space-x-6">
+                                <label className="flex items-center">
+                                    <input
+                                        type="radio"
+                                        name="type"
+                                        value="wedding"
+                                        checked={model.type === 'wedding'}
+                                        onChange={handleChange}
+                                        className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                    />
+                                    <span className="ml-2 block text-sm text-gray-900">Той</span>
+                                </label>
+                                <label className="flex items-center">
+                                    <input
+                                        type="radio"
+                                        name="type"
+                                        value="party"
+                                        checked={model.type === 'party'}
+                                        onChange={handleChange}
+                                        className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                    />
+                                    <span className="ml-2 block text-sm text-gray-900">Мерекелік іс-шара</span>
+                                </label>
                             </div>
                         </div>
 
