@@ -279,9 +279,6 @@ const PreviewPage = ({ params }: PageProps) => {
                             <div className="relative pt-8 border-t border-gray-50 space-y-6">
                                 {eventDetails.address.address.startsWith('http') ? (
                                     <div className="space-y-6">
-                                        <p className="text-gray-400 text-sm font-medium">
-                                            Картаны ашу үшін төмендегі батырманы басыңыз
-                                        </p>
                                         <a
                                             href={eventDetails.address.address}
                                             target="_blank"

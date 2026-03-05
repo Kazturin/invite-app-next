@@ -40,7 +40,7 @@ export async function generateMetadata(props: {
 
     // Get filename for OG image
     const imageName = invitation_img.split('/').pop() || '';
-    const ogImageUrl = imageName ? `https://toi-invite.kz/storage/images/invitations/620x640/${imageName}` : '';
+    const ogImageUrl = imageName ? `https://admin.toi-invite.kz/storage/images/invitations/620x640/${imageName}` : '';
 
     return {
         title: pageTitle,

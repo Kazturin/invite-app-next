@@ -193,9 +193,6 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                                 <div className="w-full">
                                     <div className="w-full h-px bg-gray-100 my-4"></div>
                                     <div className="text-center">
-                                        <p className="text-lg text-gray-700 bg-gray-50 px-6 py-3 rounded-xl border border-gray-100 mb-6">
-                                            {event.address.address}
-                                        </p>
                                         <a href={event.address.address.startsWith('http') ? event.address.address : `https://maps.google.com/?q=${encodeURIComponent(event.address.address)}`}
                                             target="_blank"
                                             className="inline-flex items-center px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg gap-2 group"

@@ -27,7 +27,7 @@ export default function RegisterPage() {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<Record<string, string[]>>({});
 
-    const register = async (e: React.FormEvent) => {
+    const register = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         setLoading(true);
         setErrors({});
@@ -58,7 +58,7 @@ export default function RegisterPage() {
                 </Link>
             </p>
 
-            <form className="mt-8 space-y-6" onSubmit={register}>
+            <form className="mt-8 space-y-6" onSubmit={register} noValidate>
                 {Object.keys(errors).length > 0 && (
                     <Alert className="flex-col items-stretch text-sm">
                         {Object.keys(errors).map((field) => (
@@ -75,7 +75,6 @@ export default function RegisterPage() {
                     <div>
                         <input
                             type="text"
-                            required
                             className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                             placeholder="Толық аты-жөніңіз"
                             value={model.name}
@@ -85,7 +84,6 @@ export default function RegisterPage() {
                     <div>
                         <input
                             type="email"
-                            required
                             className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                             placeholder="Email address"
                             value={model.email}
@@ -95,7 +93,6 @@ export default function RegisterPage() {
                     <div>
                         <input
                             type="password"
-                            required
                             className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                             placeholder="Құпия сөз"
                             value={model.password}
@@ -105,7 +102,6 @@ export default function RegisterPage() {
                     <div>
                         <input
                             type="password"
-                            required
                             className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                             placeholder="Құпия сөзді қайталаңыз"
                             value={model.password_confirmation}
