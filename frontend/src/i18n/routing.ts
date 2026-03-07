@@ -9,7 +9,11 @@ export const routing = defineRouting({
     defaultLocale: 'kk',
 
     // Optional: You can configure locale prefixing based on your preference
-    localePrefix: 'as-needed'
+    localePrefix: 'as-needed',
+
+    // Disable automatic locale detection to ensure the defaultLocale is always 
+    // used for the root path regardless of browser settings or previous visits.
+    localeDetection: false
 });
 
 // Lightweight wrappers around Next.js' navigation APIs
