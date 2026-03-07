@@ -10,14 +10,17 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const t = await getTranslations({ locale, namespace: 'Navigation' }); // Using Navigation namespace for common site-wide titles if possible or a general site namespace
 
   return {
+    metadataBase: new URL('https://toi-invite.kz'),
     title: {
       template: "%s | toi-invite.kz",
       default: "toi-invite.kz",
     },
     alternates: {
+      canonical: `/${locale}`,
       languages: {
         'kk': '/kk',
         'ru': '/ru',
+        'x-default': '/',
       },
     },
   };
