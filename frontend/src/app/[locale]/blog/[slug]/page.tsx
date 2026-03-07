@@ -81,8 +81,34 @@ export default async function BlogPostPage({ params }: Props) {
 
     const { post, next, prev } = data;
 
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": post.title,
+        "image": getImageUrl(post.thumbnail),
+        "datePublished": post.published_at,
+        "author": {
+            "@type": "Organization",
+            "name": "Toi-Invite",
+            "url": "https://toi-invite.kz"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Toi-Invite",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://toi-invite.kz/logo.png"
+            }
+        },
+        "description": post.meta_description || post.title
+    };
+
     return (
         <main className="min-h-screen bg-white pb-20">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <div className="bg-gray-50 border-b">
                 <div className="container mx-auto px-5 py-8">
                     <Link href="/blog" className="text-gray-500 hover:text-amber-500 inline-flex items-center text-sm font-medium transition">

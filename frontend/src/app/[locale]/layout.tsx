@@ -16,9 +16,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       default: "toi-invite.kz",
     },
     alternates: {
-      canonical: `/${locale}`,
+      canonical: locale === 'kk' ? '/' : `/${locale}`,
       languages: {
-        'kk': '/kk',
+        'kk': '/',
         'ru': '/ru',
         'x-default': '/',
       },

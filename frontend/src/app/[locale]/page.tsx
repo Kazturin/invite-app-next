@@ -47,11 +47,38 @@ async function getTemplateCategories() {
   }
 }
 
-export default async function Home() {
+export default async function Home({ params }: Props) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'Index' });
   const categories = await getTemplateCategories();
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Toi-Invite",
+    "url": "https://toi-invite.kz",
+    "operatingSystem": "All",
+    "applicationCategory": "DesignApplication",
+    "browserRequirements": "Requires JavaScript and a modern web browser.",
+    "description": t('description'),
+    "offers": {
+      "@type": "Offer",
+      "price": "1990",
+      "priceCurrency": "KZT"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "1250"
+    }
+  };
 
   return (
     <main className="min-h-screen bg-white overflow-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <HeroSection />
 
       <div className="bg-gradient-to-b from-transparent to-gray-50">
