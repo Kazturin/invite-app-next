@@ -103,7 +103,10 @@
         "dear_guest": "Құрметті {name}",
         "please_respond": "Жоғарыдағы «Барамын» және «Бара алмаймын» батырмалары арқылы {type} ұйымдастырушысына жауап беруіңізді сұраймыз",
         "ok_button": "Жаксы",
-        "service_footer": "Toi-Invite шақыру сервисі"
+        "service_footer": "Toi-Invite шақыру сервисі",
+        "party": "мерекелік іс-шара",
+        "wedding": "той",
+        "guest": "қонақ"
     },
     "InvitationPage": {
         "not_found_title": "Шақыру табылмады",

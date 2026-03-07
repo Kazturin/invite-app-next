@@ -103,7 +103,10 @@
         "dear_guest": "Уважаемый/ая {name}",
         "please_respond": "Просим ответить организатору {type}, нажав на кнопки «Да, я приду» или «Не смогу прийти»",
         "ok_button": "Хорошо",
-        "service_footer": "Сервис приглашений Toi-Invite"
+        "service_footer": "Сервис приглашений Toi-Invite",
+        "party": "мероприятие",
+        "wedding": "мероприятие",
+        "guest": "гость"
     },
     "InvitationPage": {
         "not_found_title": "Приглашение не найдено",

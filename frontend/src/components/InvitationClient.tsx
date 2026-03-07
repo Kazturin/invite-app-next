@@ -246,10 +246,10 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                         <InformationCircleIcon className="text-blue-500 w-12 h-12" />
                     </div>
                     <p className="text-xl text-amber-800 font-roboto font-semibold mb-4">
-                        {t('dear_guest', { name: guestInvite?.guest?.fullname || '' })}
+                        {t('dear_guest', { name: guestInvite?.guest?.fullname || t('guest') })}
                     </p>
                     <p className="text-gray-600 mb-8 max-w-xs mx-auto">
-                        {t('please_respond', { type: event.type === 'party' ? t('party').toLowerCase() : t('wedding').toLowerCase() })}
+                        {t('please_respond', { type: event.type === 'party' ? t('party') : t('wedding') })}
                     </p>
                     <button
                         onClick={closeModal}

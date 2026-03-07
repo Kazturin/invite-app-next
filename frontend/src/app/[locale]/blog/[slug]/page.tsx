@@ -4,7 +4,7 @@ import apiClient from '@/lib/api-client';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { headers } from 'next/headers';
-import '../../post.css';
+import "@/app/post.css";
 
 
 type Props = {
