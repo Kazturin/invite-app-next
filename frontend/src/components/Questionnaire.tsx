@@ -6,6 +6,7 @@ import Alert from './Alert';
 import ChildEditor from './ChildEditor';
 import { useAppStore } from '@/store/useAppStore';
 import { PlusIcon } from '@heroicons/react/24/outline';
+import { useTranslations } from 'next-intl';
 
 interface Child {
     key: string;
@@ -32,6 +33,8 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [loadingPost, setLoadingPost] = useState(false);
     const saveGuest = useAppStore((state) => state.saveGuest);
+    const t = useTranslations('Questionnaire');
+    const tp = useTranslations('InvitationPreview');
 
     const [model, setModel] = useState({
         fullname: '',
@@ -92,8 +95,14 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({
         } catch (err: any) {
             setLoadingPost(false);
             console.error(err);
-            setErrorMsg(err.response?.data?.message || 'Қате орын алды');
+            setErrorMsg(err.response?.data?.message || t('error_message'));
         }
+    };
+
+    const renderSubmitButtonText = () => {
+        if (status === 1) return tp('yes_going');
+        if (status === 0) return tp('no_going');
+        return t('save_button');
     };
 
     return (
@@ -107,7 +116,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({
                 <div className="px-5 pb-5 pt-1">
                     <div className="mt-2 text-left">
                         <label htmlFor="fullname" className="block text-sm font-medium leading-6 text-gray-900 mb-2">
-                            {labels.fullname || 'Сіздің аты-жөніңіз'}
+                            {labels.fullname || t('fullname_label')}
                         </label>
                         <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-amber-600">
                             <input
@@ -123,7 +132,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({
 
                     <div className="mt-2 text-left">
                         <label htmlFor="relative" className="block text-sm font-medium leading-6 text-gray-900 mb-2">
-                            {labels.relative || 'Туыстық қатынас'}
+                            {labels.relative || t('relative_label')}
                         </label>
                         <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-amber-600">
                             <input
@@ -132,7 +141,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({
                                 type="text"
                                 id="relative"
                                 className="block flex-1 border-0 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                                placeholder={placeholders.relative || 'Мысалы: Досы, Әріптесі'}
+                                placeholder={placeholders.relative || t('relative_placeholder')}
                             />
                         </div>
                     </div>
@@ -145,7 +154,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({
                                     onClick={addChild}
                                     className="flex items-center text-sm mt-2 py-1 px-4 rounded-sm text-white bg-gray-600 hover:bg-gray-700 transition-colors"
                                 >
-                                    {labels.addChild || 'Тағы адам қосу'}
+                                    {labels.addChild || t('add_child')}
                                     <PlusIcon className="h-4 w-4 ml-1" />
                                 </button>
                             </div>
@@ -173,7 +182,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({
                         {loadingPost && (
                             <span className="w-5 h-5 mr-2 rounded-full animate-spin border-2 border-solid border-white border-t-transparent"></span>
                         )}
-                        {status === 1 ? 'Барамын' : status === 0 ? 'Бара алмаймын' : 'Сақтау'}
+                        {renderSubmitButtonText()}
                     </button>
                 </div>
             </form>

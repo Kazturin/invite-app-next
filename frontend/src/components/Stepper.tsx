@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { CheckIcon } from '@heroicons/react/24/solid';
+import { useLocale, useTranslations } from 'next-intl';
 
 export interface StepTab {
     title_kk: string;
@@ -46,12 +47,17 @@ const Stepper: React.FC<StepperProps> = ({
     onNext,
     onBack,
     onComplete,
-    nextText = 'Келесі қадам',
-    backText = 'Артқа',
-    doneText = 'Соңы',
+    nextText,
+    backText,
+    doneText,
     loading = false,
     children,
 }) => {
+    const locale = useLocale();
+    const t = useTranslations('Common');
+    const actualNextText = nextText || t('next');
+    const actualBackText = backText || t('back');
+    const actualDoneText = doneText || t('done');
     const progress = ((step - 1) / (tabs.length - 1)) * 100;
 
     return (
@@ -87,10 +93,10 @@ const Stepper: React.FC<StepperProps> = ({
                                     )}
                                 </div>
                                 <span
-                                    className={`absolute -bottom-10 text-center text-xs sm:text-sm font-medium w-32 transition-colors duration-500 ${isCurrent ? 'text-gray-900' : isCompleted ? 'text-theme-secondary' : 'text-gray-400'
+                                    className={`absolute -bottom-10 text-center text-xs sm:text-sm font-medium transition-colors duration-500 ${isCurrent ? 'text-gray-900' : isCompleted ? 'text-theme-secondary' : 'text-gray-400'
                                         }`}
                                 >
-                                    {tab.title_kk}
+                                    {locale === 'kk' ? tab.title_kk : tab.title_ru}
                                 </span>
                             </div>
                         );
@@ -105,7 +111,7 @@ const Stepper: React.FC<StepperProps> = ({
                         onClick={onBack}
                         className="px-6 py-3 text-sm bg-white border-2 border-gray-200 text-gray-600 font-bold rounded-full hover:bg-gray-50 transition-all cursor-pointer"
                     >
-                        {backText}
+                        {actualBackText}
                     </button>
                 )}
                 <div className="ml-auto">
@@ -121,7 +127,7 @@ const Stepper: React.FC<StepperProps> = ({
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
                             )}
-                            {nextText}
+                            {actualNextText}
                         </button>
                     ) : (
                         <button
@@ -135,7 +141,7 @@ const Stepper: React.FC<StepperProps> = ({
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
                             )}
-                            {doneText}
+                            {actualDoneText}
                         </button>
                     )}
                 </div>
@@ -145,10 +151,9 @@ const Stepper: React.FC<StepperProps> = ({
             <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200 sm:p-10 mb-8 min-h-[400px]">
                 {children}
             </div>
-
-
         </div>
     );
 };
 
 export default Stepper;
+

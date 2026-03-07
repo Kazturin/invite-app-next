@@ -1,10 +1,10 @@
 'use client';
-
 import React, { useState, use, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 import { useAppStore } from '@/store/useAppStore';
 import Stepper from '@/components/Stepper';
 import EventForm, { EventFormRef } from '@/components/events/EventForm';
+import { useTranslations } from 'next-intl';
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -13,6 +13,7 @@ interface PageProps {
 const EventCreatePage = ({ params }: PageProps) => {
     const { id } = use(params);
     const router = useRouter();
+    const t = useTranslations('InvitationCreate');
     const { saveEvent, invitation, deleteEventImage } = useAppStore();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -48,7 +49,7 @@ const EventCreatePage = ({ params }: PageProps) => {
             }
         } catch (err: any) {
             console.error('Failed to save event', err);
-            setError(err.response?.data?.message || 'Серверде қате орын алды');
+            setError(err.response?.data?.message || t('server_error'));
         } finally {
             setLoading(false);
         }

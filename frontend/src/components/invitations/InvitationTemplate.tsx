@@ -3,6 +3,7 @@ import { PhotoIcon, ArrowUturnLeftIcon, ArrowUturnRightIcon } from '@heroicons/r
 import { useFabric } from '@/hooks/useFabric';
 import { FONTS, BACKGROUND_IMAGES } from '@/data/invitation-constants';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 import TextToolbar from './TextToolbar';
 import BackgroundToolbar from './BackgroundToolbar';
 import ImageToolbar from './ImageToolbar';
@@ -105,6 +106,8 @@ const InvitationTemplate = forwardRef<InvitationTemplateRef, InvitationTemplateP
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [undo, redo]);
 
+    const t = useTranslations('InvitationCreate');
+
     return (
         <div className="relative">
             <div className="flex space-x-4 justify-center items-center py-4">
@@ -121,7 +124,7 @@ const InvitationTemplate = forwardRef<InvitationTemplateRef, InvitationTemplateP
                             d="M22 0h-20v6h1.999c0-1.174.397-3 2.001-3h4v16.874c0 1.174-.825 2.126-2 2.126h-1v2h9.999v-2h-.999c-1.174 0-2-.952-2-2.126v-16.874h4c1.649 0 2.02 1.826 2.02 3h1.98v-6z"
                         />
                     </svg>
-                    <p>Текст</p>
+                    <p>{t('text_tab')}</p>
                 </div>
                 <div
                     onClick={() => setEditBlock('bg')}
@@ -131,7 +134,7 @@ const InvitationTemplate = forwardRef<InvitationTemplateRef, InvitationTemplateP
                     )}
                 >
                     <PhotoIcon className="w-7 h-7 mx-auto" />
-                    <p>Фон</p>
+                    <p>{t('bg_tab')}</p>
                 </div>
 
                 <div className="border-l border-gray-300 h-10 mx-2" />
@@ -140,7 +143,7 @@ const InvitationTemplate = forwardRef<InvitationTemplateRef, InvitationTemplateP
                     onClick={undo}
                     disabled={!canUndo}
                     className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                    title="Артқа қайтару (Ctrl+Z)"
+                    title={t('undo_title')}
                 >
                     <ArrowUturnLeftIcon className="w-5 h-5" />
                 </button>
@@ -148,7 +151,7 @@ const InvitationTemplate = forwardRef<InvitationTemplateRef, InvitationTemplateP
                     onClick={redo}
                     disabled={!canRedo}
                     className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                    title="Қайта орындау (Ctrl+Shift+Z)"
+                    title={t('redo_title')}
                 >
                     <ArrowUturnRightIcon className="w-5 h-5" />
                 </button>

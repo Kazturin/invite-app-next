@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { TrashIcon } from '@heroicons/react/24/outline';
+import { useTranslations } from 'next-intl';
 
 interface Child {
     key: string;
@@ -17,6 +18,7 @@ interface ChildEditorProps {
 
 const ChildEditor: React.FC<ChildEditorProps> = ({ child, index, onChange, deleteChild }) => {
     const [fullname, setFullname] = useState(child.fullname);
+    const t = useTranslations('Questionnaire');
 
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newName = e.target.value;
@@ -34,7 +36,7 @@ const ChildEditor: React.FC<ChildEditorProps> = ({ child, index, onChange, delet
                             name={`child_${index}`}
                             value={fullname}
                             onChange={handleNameChange}
-                            placeholder="Толық аты-жөні"
+                            placeholder={t('child_name_placeholder')}
                             className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md py-1.5 px-3 border outline-none"
                             required
                         />

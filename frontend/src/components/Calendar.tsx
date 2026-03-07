@@ -1,13 +1,17 @@
 'use client';
 
 import React from 'react';
+import { useLocale } from 'next-intl';
 
 interface CalendarProps {
     date: string;
     locale?: string;
 }
 
-const Calendar: React.FC<CalendarProps> = ({ date, locale = 'kk' }) => {
+const Calendar: React.FC<CalendarProps> = ({ date, locale: providedLocale }) => {
+    const currentLocale = useLocale();
+    const locale = providedLocale || currentLocale;
+
     const days = {
         kk: ['дс', 'сс', 'ср', 'бс', 'жм', 'сб', 'жб'],
         ru: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'],

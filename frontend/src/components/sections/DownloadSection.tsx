@@ -1,22 +1,23 @@
 import React from 'react';
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 const DownloadSection: React.FC = () => {
+    const t = useTranslations('Index');
     const advantages = [
         {
             icon: '/icons/computer.png',
-            title: 'Ақпараттар',
-            description: 'Сайт арқылы қонақтарыңызға қажетті ақпараттармен бөлісіңіз.'
+            title: t('advantage_info_title'),
+            description: t('advantage_info_desc')
         },
         {
             icon: '/icons/information.png',
-            title: 'Қонақтар',
-            description: 'Келетін және келмейтін қонақтарыңыз туралы мәлімет алыңыз.'
+            title: t('advantage_guests_title'),
+            description: t('advantage_guests_desc')
         },
         {
             icon: '/icons/profits.png',
-            title: 'Тиімді',
-            description: 'Қағазбен салыстырғанда арзан әрі тез дайындалады.'
+            title: t('advantage_efficient_title'),
+            description: t('advantage_efficient_desc')
         }
     ];
 
@@ -25,10 +26,10 @@ const DownloadSection: React.FC = () => {
             <section className="py-16">
                 <div className="w-full md:w-4/5 lg:w-3/5 mx-auto">
                     <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900">
-                        Біздің сервисті қолданудың артықшылықтары!
+                        {t('advantages_title')}
                     </h2>
                     <p className="text-gray-500 text-center text-lg mt-7">
-                        Сіз форманы толтыру арқылы тез әрі оңай шақыру сайтын жасай аласыз
+                        {t('advantages_subtitle')}
                     </p>
                 </div>
 
@@ -56,3 +57,4 @@ const DownloadSection: React.FC = () => {
 };
 
 export default DownloadSection;
+

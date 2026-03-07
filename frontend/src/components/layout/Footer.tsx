@@ -17,7 +17,7 @@ const Footer: React.FC = () => {
                             <Image src="/logo.png" alt="Logo" width={208} height={50} />
                         </Link>
                         <p className="text-gray-400 text-sm max-w-xs">
-                            Online шақыру билеттерін жасауға арналған заманауи сервис.
+                            Online шақыру билеттерін жасауға арналған сервис.
                             Бізбен бірге ең маңызды сәттеріңізді ерекше етіңіз.
                         </p>
                     </div>

@@ -1,17 +1,22 @@
 'use client';
 
 import React, { useState, useEffect, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
+import { useSearchParams } from 'next/navigation';
 import { useAppStore } from '@/store/useAppStore';
 import Stepper from '@/components/Stepper';
 import Spinner from '@/components/Spinner';
 import Pagination from '@/components/Pagination';
 import Modal from '@/components/Modal';
 import { PlayIcon } from '@heroicons/react/24/outline';
+import { useTranslations, useLocale } from 'next-intl';
 
 const SelectTemplateContent = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
+    const t = useTranslations('SelectTemplate');
+    const tCommon = useTranslations('Common');
+    const locale = useLocale();
     const { templateCategories, getTemplateCategories } = useAppStore();
 
     const [selectedCategory, setSelectedCategory] = useState<number>(1);
@@ -84,30 +89,29 @@ const SelectTemplateContent = () => {
                     <section className="py-8 sm:py-16">
                         <div className="w-full md:w-4/5 lg:w-3/5 mx-auto">
                             <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900">
-                                Алдағы іс-шараңызға арналған шаблонды таңдаңыз!
+                                {t('title')}
                             </h2>
                             <p className="text-gray-500 text-center my-7 text-lg">
-                                Әр түрлі іс-шараларға арналған шаблондар дайындап қойдық. Онлайн шақырту жасау енді оңай!
+                                {t('subtitle')}
                             </p>
 
                             <div className="flex justify-center space-x-4">
                                 <button
-                                    onClick={() => openModal('Үлгі', '/video/Instructions.mp4')}
+                                    onClick={() => openModal(t('example_button'), '/video/Instructions.mp4')}
                                     className="flex items-center bg-theme-primary cursor-pointer px-6 py-2 text-white rounded-lg hover:bg-white border-2 border-transparent hover:border-theme-primary hover:text-theme-primary transition-all font-bold shadow-md"
                                 >
                                     <PlayIcon className="w-6 h-6 mr-2" />
-                                    <span>Үлгі</span>
+                                    <span>{t('example_button')}</span>
                                 </button>
                                 <button
-                                    onClick={() => openModal('Жеке шақыру', '/video/preview.mp4')}
+                                    onClick={() => openModal(t('personal_invite_button'), '/video/preview.mp4')}
                                     className="flex items-center bg-theme-primary cursor-pointer px-6 py-2 text-white rounded-lg hover:bg-white border-2 border-transparent hover:border-theme-primary hover:text-theme-primary transition-all font-bold shadow-md"
                                 >
                                     <PlayIcon className="w-6 h-6 mr-2" />
-                                    <span>Жеке шақыру</span>
+                                    <span>{t('personal_invite_button')}</span>
                                 </button>
                             </div>
                         </div>
-
                         <div className="mt-12 overflow-x-auto">
                             <ul className="flex flex-nowrap md:flex-wrap justify-start md:justify-center border-b border-gray-100 min-w-max">
                                 {categories.map((category: any) => (
@@ -119,7 +123,7 @@ const SelectTemplateContent = () => {
                                             }`}
                                         onClick={() => selectCategory(category.id)}
                                     >
-                                        {category.title_kk || category.name}
+                                        {locale === 'kk' ? category.title_kk : category.title_ru}
                                     </li>
                                 ))}
                             </ul>
@@ -138,7 +142,7 @@ const SelectTemplateContent = () => {
                                                 className="relative cursor-pointer group rounded-2xl overflow-hidden hover:shadow-2xl transition duration-500 bg-white"
                                             >
                                                 <div className="absolute right-4 top-4 z-10 bg-indigo-600 text-white px-4 py-1 rounded-full text-xs font-bold opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition duration-500">
-                                                    Таңдау
+                                                    {tCommon('select')}
                                                 </div>
                                                 <div className="absolute left-4 bottom-4 z-10 font-bold text-green-600 bg-white/90 px-3 py-1 rounded-lg shadow-sm">
                                                     {template.price} тг
@@ -165,6 +169,7 @@ const SelectTemplateContent = () => {
                     </section>
                 </div>
             </Stepper>
+
 
             <Modal modal={modal} title={modalTitle} onClose={closeModal}>
                 <div className="w-full aspect-[9/16] max-w-[320px] mx-auto overflow-hidden rounded-2xl shadow-2xl">

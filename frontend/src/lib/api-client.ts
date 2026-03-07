@@ -37,6 +37,15 @@ apiClient.interceptors.request.use((config) => {
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
+
+    // Pass current locale to the server
+    if (typeof window !== 'undefined') {
+        const locale = window.location.pathname.split('/')[1];
+        if (locale === 'kk' || locale === 'ru') {
+            config.headers['Accept-Language'] = locale;
+        }
+    }
+
     return config;
 });
 

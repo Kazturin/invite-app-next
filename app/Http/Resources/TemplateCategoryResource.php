@@ -17,8 +17,8 @@ class TemplateCategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'title_kk' => $this->title_kk,
-            'title_ru' => $this->title_kk,
-            'templates' =>  TemplateSimpleResource::collection($this->templates),
+            'title_ru' => $this->title_ru,
+            'templates' =>  TemplateSimpleResource::collection($this->whenLoaded('templates')),
         ];
     }
 }

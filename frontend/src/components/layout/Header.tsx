@@ -6,12 +6,8 @@ import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useUserStore } from '@/store/useUserStore';
 import { UserCircleIcon, ArrowRightStartOnRectangleIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-function cn(...inputs: ClassValue[]) {
-    return twMerge(clsx(inputs));
-}
+import LanguageSwitcher from '../LanguageSwitcher';
+import { useTranslations } from 'next-intl';
 
 const Header: React.FC = () => {
     const [mobileNav, setMobileNav] = useState(false);
@@ -19,6 +15,7 @@ const Header: React.FC = () => {
     const { user, token, logout } = useUserStore();
     const router = useRouter();
     const pathname = usePathname();
+    const t = useTranslations('Navigation');
 
     const toggleMobileNav = () => setMobileNav(!mobileNav);
 
@@ -53,10 +50,7 @@ const Header: React.FC = () => {
                     <nav className="flex justify-end flex-row items-center">
                         {/* Language Toggler (Mobile) */}
                         <div className="w-20 md:hidden mr-2">
-                            <select className="mt-1 block w-full py-2 px-3 border-0 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm">
-                                <option value="kk">KAZ</option>
-                                <option value="ru">RUS</option>
-                            </select>
+                            <LanguageSwitcher />
                         </div>
 
                         <button onClick={toggleMobileNav} type="button" className="flex md:hidden focus:outline-none">
@@ -71,7 +65,7 @@ const Header: React.FC = () => {
                                 </a>
                             </li>
                             <li className="uppercase hover:text-theme-secondary transition duration-200">
-                                <Link href="/app/events">Менің шақыруларым</Link>
+                                <Link href="/app/events">{t('my_invites')}</Link>
                             </li>
                             {/* <li className="uppercase hover:text-theme-secondary transition duration-200">
                                 <Link href="/feedback">Кері байланыс</Link>
@@ -80,12 +74,7 @@ const Header: React.FC = () => {
                                 <Link href="/blog">Блог</Link>
                             </li>
                             <li>
-                                <div className="w-20">
-                                    <select className="mt-1 block w-full py-2 px-3 border-0 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm">
-                                        <option value="kk">KAZ</option>
-                                        <option value="ru">RUS</option>
-                                    </select>
-                                </div>
+                                <LanguageSwitcher />
                             </li>
 
                             {token ? (
@@ -102,7 +91,7 @@ const Header: React.FC = () => {
                                             />
                                             <div className="absolute shadow-lg border w-48 rounded py-1 px-2 text-sm mt-4 bg-white z-10 right-0">
                                                 <a onClick={handleLogout} className="block px-4 py-2 text-sm text-gray-700 cursor-pointer">
-                                                    Шығу
+                                                    {t('logout')}
                                                 </a>
                                             </div>
                                         </>
@@ -135,18 +124,18 @@ const Header: React.FC = () => {
                                 <Link href="/blog" onClick={toggleMobileNav}>Блог</Link>
                             </li>
                             <li className="hover:text-amber-500 transition duration-200 py-4 border-b border-gray-700 w-full text-center">
-                                <Link href="/app/events" onClick={toggleMobileNav}>Менің шақыруларым</Link>
+                                <Link href="/app/events" onClick={toggleMobileNav}>{t('my_invites')}</Link>
                             </li>
                             {/* <li className="hover:text-amber-500 transition duration-200 py-4 border-b border-gray-700 w-full text-center">
                                 <Link href="/feedback" onClick={toggleMobileNav}>Кері байланыс</Link>
                             </li> */}
                             {token ? (
                                 <li className="hover:text-amber-500 transition duration-200 py-4 border-b border-gray-700 w-full text-center">
-                                    <a onClick={handleLogout} className="cursor-pointer">Аккаунттан шығу</a>
+                                    <a onClick={handleLogout} className="cursor-pointer">{t('logout')}</a>
                                 </li>
                             ) : (
                                 <li className="bg-transparent border-2 rounded px-6 py-2 mt-6 w-full text-center cursor-pointer hover:text-amber-500 transition duration-200">
-                                    <Link href="/login" onClick={toggleMobileNav}>Аккаунтқа кіру</Link>
+                                    <Link href="/login" onClick={toggleMobileNav}>{t('login')}</Link>
                                 </li>
                             )}
                         </ul>

@@ -1,14 +1,17 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { useAppStore } from '@/store/useAppStore';
+import { useTranslations, useLocale } from 'next-intl';
 
 interface FeatureSectionProps {
     initialCategories?: any[];
 }
 
 const FeatureSection: React.FC<FeatureSectionProps> = ({ initialCategories }) => {
+    const t = useTranslations('Index');
+    const locale = useLocale();
     const { templateCategories, getTemplateCategories } = useAppStore();
     const [activeCategoryId, setActiveCategoryId] = useState<number | null>(null);
 
@@ -33,10 +36,10 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ initialCategories }) =>
             <section className="py-16">
                 <div className="w-full md:w-4/5 lg:w-3/5 mx-auto">
                     <h2 className="text-3xl md:text-4xl font-semibold text-center text-gray-900">
-                        Сайт шақыртуыңызға шаблон таңдаңыз!
+                        {t('features_title')}
                     </h2>
                     <p className="text-gray-500 text-center mt-7 text-lg">
-                        Әр түрлі іс-шараларға арналған шаблондар дайындап қойдық. Онлайн шақырту жасау енді оңай
+                        {t('features_subtitle')}
                     </p>
                 </div>
 
@@ -53,7 +56,7 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ initialCategories }) =>
                                     className={`py-5 w-full text-center font-medium cursor-pointer ${activeCategoryId === category.id ? 'text-theme-secondary' : 'text-gray-600 hover:text-gray-900'
                                         }`}
                                 >
-                                    {category.title_kk || category.title_ru || category.name}
+                                    {locale === 'kk' ? (category.title_kk || category.name) : (category.title_ru || category.name)}
                                 </button>
                             </li>
                         ))}
@@ -78,7 +81,7 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ initialCategories }) =>
                                             />
                                             <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-20 transition duration-500 flex items-center justify-center">
                                                 <span className="opacity-0 group-hover:opacity-100 bg-white text-indigo-600 px-6 py-2 rounded-full font-bold transform translate-y-4 group-hover:translate-y-0 transition duration-500 shadow-lg">
-                                                    Таңдау
+                                                    {t('select_button')}
                                                 </span>
                                             </div>
                                         </Link>
@@ -93,7 +96,7 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ initialCategories }) =>
                             href="/app/select-template"
                             className="text-lg font-theme-heading font-medium bg-theme-primary px-6 py-2 text-white rounded shadow-md hover:bg-white border-2 border-transparent hover:border-theme-primary hover:text-theme-primary cursor-pointer transition duration-200"
                         >
-                            Барлық шаблондар
+                            {t('all_templates_button')}
                         </Link>
                     </div>
                 </div>
@@ -103,3 +106,4 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ initialCategories }) =>
 };
 
 export default FeatureSection;
+

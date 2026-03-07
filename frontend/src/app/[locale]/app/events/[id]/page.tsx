@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, use } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 import { useAppStore } from '@/store/useAppStore';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import Spinner from '@/components/Spinner';
@@ -20,6 +20,7 @@ import {
     UsersIcon,
     ShareIcon
 } from '@heroicons/react/24/outline';
+import { useTranslations } from 'next-intl';
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -28,6 +29,8 @@ interface PageProps {
 const MyEventPage = ({ params }: PageProps) => {
     const { id } = use(params);
     const router = useRouter();
+    const t = useTranslations('EventDetails');
+    const tm = useTranslations('MyEvents');
     const { getEvent, getGuests, event, guests, deleteEvent, deleteGuest } = useAppStore();
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState(1);
@@ -59,7 +62,7 @@ const MyEventPage = ({ params }: PageProps) => {
     }, 0);
 
     const handleDeleteEvent = async () => {
-        if (confirm('Өшіруге сенімдісіз бе? Өшірілгеннен кейін қайта қалпына келмейді!!')) {
+        if (confirm(t('confirm_delete_event'))) {
             try {
                 await deleteEvent(id);
                 router.push('/app/events');
@@ -70,7 +73,7 @@ const MyEventPage = ({ params }: PageProps) => {
     };
 
     const handleDeleteGuest = async (guestId: number) => {
-        if (confirm('Өшіруге сенімдісіз бе?')) {
+        if (confirm(t('confirm_delete_guest'))) {
             try {
                 await deleteGuest(guestId);
                 await getGuests(id);
@@ -97,8 +100,8 @@ const MyEventPage = ({ params }: PageProps) => {
             <div className="mb-6">
                 <Breadcrumbs
                     links={[
-                        { name: 'Менің іс-шараларым', href: '/app/events' },
-                        { name: myEvent?.title || 'Іс-шара' }
+                        { name: tm('title'), href: '/app/events' },
+                        { name: myEvent?.title || t('event_breadcrumb') }
                     ]}
                 />
             </div>
@@ -107,9 +110,9 @@ const MyEventPage = ({ params }: PageProps) => {
             <div className="flex justify-center mb-8">
                 <div className="bg-white p-1.5 rounded-2xl shadow-sm border border-gray-100 flex gap-1">
                     {[
-                        { id: 1, name: 'Ақпарат', icon: InformationCircleIcon },
-                        { id: 2, name: 'Қонақтар', icon: UsersIcon },
-                        { id: 3, name: 'Шақыру', icon: ShareIcon },
+                        { id: 1, name: t('tab_info'), icon: InformationCircleIcon },
+                        { id: 2, name: t('tab_guests'), icon: UsersIcon },
+                        { id: 3, name: t('tab_invitation'), icon: ShareIcon },
                     ].map((tab) => (
                         <button
                             key={tab.id}
@@ -165,7 +168,7 @@ const MyEventPage = ({ params }: PageProps) => {
                                             <button
                                                 onClick={() => router.push(`/app/events/${id}/update`)}
                                                 className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all cursor-pointer"
-                                                title="Өңдеу"
+                                                title={tm('edit_button')}
                                             >
                                                 <PencilIcon className="w-6 h-6" />
                                             </button>
@@ -173,7 +176,7 @@ const MyEventPage = ({ params }: PageProps) => {
                                         <button
                                             onClick={handleDeleteEvent}
                                             className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all cursor-pointer"
-                                            title="Өшіру"
+                                            title={tm('delete_button')}
                                         >
                                             <TrashIcon className="w-6 h-6" />
                                         </button>
@@ -184,7 +187,7 @@ const MyEventPage = ({ params }: PageProps) => {
                                 <div className="mb-8">
                                     <span className={`inline-flex items-center px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest ${myEvent.order?.status === 2 ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
                                         }`}>
-                                        {myEvent.order?.statusLabel || (myEvent.order?.status === 2 ? 'Төленген' : 'Күтілуде')}
+                                        {myEvent.order?.statusLabel || (myEvent.order?.status === 2 ? tm('status_paid') : tm('status_pending'))}
                                     </span>
                                 </div>
 
@@ -193,21 +196,21 @@ const MyEventPage = ({ params }: PageProps) => {
                                     <div className="p-4 bg-green-50 rounded-2xl border border-green-100">
                                         <div className="flex items-center gap-2 text-green-700 font-bold text-xs uppercase tracking-wider mb-1">
                                             <CheckIcon className="w-4 h-4" />
-                                            <span>Келеді</span>
+                                            <span>{t('stat_accepted')}</span>
                                         </div>
                                         <div className="text-2xl font-black text-green-900">{acceptedCount}</div>
                                     </div>
                                     <div className="p-4 bg-red-50 rounded-2xl border border-red-100">
                                         <div className="flex items-center gap-2 text-red-700 font-bold text-xs uppercase tracking-wider mb-1">
                                             <XMarkIcon className="w-4 h-4" />
-                                            <span>Келмейді</span>
+                                            <span>{t('stat_rejected')}</span>
                                         </div>
                                         <div className="text-2xl font-black text-red-900">{rejectedCount}</div>
                                     </div>
                                     <div className="p-4 bg-indigo-50 rounded-2xl border border-indigo-100 col-span-2 lg:col-span-1">
                                         <div className="flex items-center gap-2 text-indigo-700 font-bold text-xs uppercase tracking-wider mb-1">
                                             <UserGroupIcon className="w-4 h-4" />
-                                            <span>Жалпы қонақ</span>
+                                            <span>{t('stat_total_guests')}</span>
                                         </div>
                                         <div className="text-2xl font-black text-indigo-900">{totalCount}</div>
                                     </div>
@@ -223,7 +226,7 @@ const MyEventPage = ({ params }: PageProps) => {
                                             className="flex items-center gap-2 px-5 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-gray-800 transition-all shadow-lg shadow-gray-200"
                                         >
                                             <GlobeAltIcon className="w-5 h-5" />
-                                            Сайтты ашу
+                                            {t('open_website')}
                                         </a>
                                     )}
                                     <a
@@ -232,7 +235,7 @@ const MyEventPage = ({ params }: PageProps) => {
                                         className="flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl text-sm font-bold hover:bg-gray-50 transition-all"
                                     >
                                         <ArrowDownOnSquareIcon className="w-5 h-5" />
-                                        Жүктеп алу
+                                        {t('download_invitation')}
                                     </a>
                                 </div>
                             </div>
@@ -259,22 +262,22 @@ const MyEventPage = ({ params }: PageProps) => {
                             <section className="space-y-4">
                                 <div className="flex items-center gap-2">
                                     <div className="h-8 w-1 bg-indigo-600 rounded-full"></div>
-                                    <h2 className="text-lg font-black text-gray-900 uppercase tracking-tight italic">Жалпы шақыру сілтемесі</h2>
+                                    <h2 className="text-lg font-black text-gray-900 uppercase tracking-tight italic">{t('general_invite_link')}</h2>
                                 </div>
                                 <div className="p-6 bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-3xl text-white shadow-xl shadow-indigo-100">
                                     <p className="text-indigo-100 text-sm mb-4 font-medium opacity-80">
-                                        Осы сілтемені кез келген адамға немесе топтық чаттарға жіберуге болады
+                                        {t('invite_link_desc')}
                                     </p>
                                     <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/20">
                                         <span className="text-sm font-medium truncate grow opacity-90">{shareUrl}</span>
                                         <button
                                             onClick={() => {
                                                 navigator.clipboard.writeText(shareUrl);
-                                                alert('Көшірілді!');
+                                                alert(t('copied_alert'));
                                             }}
                                             className="bg-white text-indigo-600 text-xs font-bold px-4 py-2 rounded-xl active:scale-95 transition-all shadow-sm"
                                         >
-                                            КӨШІРУ
+                                            {t('copy_button')}
                                         </button>
                                     </div>
 
@@ -305,7 +308,7 @@ const MyEventPage = ({ params }: PageProps) => {
                             <section className="space-y-4">
                                 <div className="flex items-center gap-2">
                                     <div className="h-8 w-1 bg-amber-500 rounded-full"></div>
-                                    <h2 className="text-lg font-black text-gray-900 uppercase tracking-tight italic">Жеке шақыру</h2>
+                                    <h2 className="text-lg font-black text-gray-900 uppercase tracking-tight italic">{t('personal_invite')}</h2>
                                 </div>
                                 <div className="p-8 bg-white border border-gray-100 rounded-3xl shadow-sm">
                                     <PersonallyInviteGuest

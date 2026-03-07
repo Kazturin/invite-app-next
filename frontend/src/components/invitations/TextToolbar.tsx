@@ -4,6 +4,7 @@ import React from 'react';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 interface TextToolbarProps {
     selectedObject: any;
@@ -34,12 +35,13 @@ const TextToolbar: React.FC<TextToolbarProps> = ({
     onDeleteSelected,
     onChangeTextCase,
 }) => {
+    const t = useTranslations('InvitationCreate');
     const isTextSelected = selectedObject && (selectedObject.type === 'i-text' || selectedObject.type === 'IText');
 
     return (
         <div className="flex flex-wrap items-center justify-center gap-2">
-            <button onClick={onAddText} title="Добавить текст">
-                <Image src="/icons/add_text.svg" alt="Добавить текст" width={40} height={40} className="w-7 h-7 md:w-10 md:h-10" />
+            <button onClick={onAddText} title={t('add_text')}>
+                <Image src="/icons/add_text.svg" alt={t('add_text')} width={40} height={40} className="w-7 h-7 md:w-10 md:h-10" />
             </button>
 
             {isTextSelected ? (
@@ -116,7 +118,7 @@ const TextToolbar: React.FC<TextToolbarProps> = ({
                     <button
                         className="text-gray-500 border-r border-gray-600 pr-3 md:pr-6"
                         onClick={onCenterText}
-                        title="Центрировать текст"
+                        title={t('center_text')}
                     >
                         <svg className="mx-auto w-7 h-7 md:w-10 md:h-10 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
                             <path
@@ -143,7 +145,7 @@ const TextToolbar: React.FC<TextToolbarProps> = ({
                     <TrashIcon onClick={onDeleteSelected} className="text-red-500 w-7 h-7 md:w-10 md:h-10 cursor-pointer" />
                 </>
             ) : (
-                <p className="text-2xl md:text-3xl font-baltica">Текст таңдаңыз</p>
+                <p className="text-2xl md:text-3xl font-baltica">{t('select_text_to_edit')}</p>
             )}
         </div>
     );

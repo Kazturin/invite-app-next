@@ -19,11 +19,15 @@ class Order extends Model
         'price',
     ];
 
-    public function statusLabel():string{
-        switch ($this->status){
-            case 0: return 'Төлем жасалмаған';
-            case 1: return 'Төлем жасалған';
-            case 2: return 'Уақытша';
+    public function statusLabel(): string
+    {
+        switch ($this->status) {
+            case 0:
+                return trans('order.not_paid');
+            case 1:
+                return trans('order.paid');
+            case 2:
+                return trans('order.temporary');
         }
         return 'null';
     }

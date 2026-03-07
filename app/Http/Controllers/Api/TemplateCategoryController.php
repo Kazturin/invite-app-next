@@ -13,7 +13,7 @@ class TemplateCategoryController extends Controller
     public function __invoke()
     {
         return Cache::remember('template_categories', now()->addDay(), function () {
-            return TemplateCategoryResource::collection(TemplateCategory::all());
+            return TemplateCategoryResource::collection(TemplateCategory::query()->with('templates')->get());
         });
     }
 }

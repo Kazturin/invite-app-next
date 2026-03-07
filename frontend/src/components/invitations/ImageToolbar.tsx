@@ -2,6 +2,7 @@
 
 import React, { useRef } from 'react';
 import { TrashIcon } from '@heroicons/react/24/outline';
+import { useTranslations } from 'next-intl';
 
 interface ImageToolbarProps {
     selectedObject: any;
@@ -14,6 +15,7 @@ const ImageToolbar: React.FC<ImageToolbarProps> = ({
     onAddImage,
     onDeleteSelected,
 }) => {
+    const t = useTranslations('InvitationCreate');
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const triggerFileInput = () => {
@@ -35,7 +37,7 @@ const ImageToolbar: React.FC<ImageToolbarProps> = ({
                 onClick={triggerFileInput}
                 className="bg-blue-500 text-white px-6 py-3 rounded-lg text-2xl hover:bg-blue-600 transition-colors"
             >
-                Суретті өзгерту
+                {t('change_image')}
             </button>
 
             {isUserImageSelected && (

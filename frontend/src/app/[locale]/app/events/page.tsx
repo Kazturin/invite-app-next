@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { useAppStore } from '@/store/useAppStore';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import Spinner from '@/components/Spinner';
@@ -12,10 +12,12 @@ import {
     EyeIcon,
     PlusIcon
 } from '@heroicons/react/24/outline';
+import { useTranslations } from 'next-intl';
 
 const MyEventsPage = () => {
     const { getEvents, events, deleteEvent } = useAppStore();
     const [loading, setLoading] = useState(true);
+    const t = useTranslations('MyEvents');
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -32,7 +34,7 @@ const MyEventsPage = () => {
     }, [getEvents]);
 
     const handleDelete = async (id: string) => {
-        if (confirm('Өшіруге сенімдісіз бе? Өшірілгеннен кейін қайта қалпына келмейді!!')) {
+        if (confirm(t('confirm_delete'))) {
             try {
                 await deleteEvent(id);
                 // Refresh events list
@@ -54,17 +56,17 @@ const MyEventsPage = () => {
     return (
         <div className="max-w-[850px] mx-auto px-4 py-8">
             <div className="mb-6">
-                <Breadcrumbs links={[{ name: 'Менің іс-шараларым' }]} />
+                <Breadcrumbs links={[{ name: t('title') }]} />
             </div>
 
             {/* <div className="flex justify-between items-center mb-8">
-                <h1 className="text-2xl font-bold text-gray-900">Менің іс-шараларым</h1>
+                <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
                 <Link
                     href="/app/select-template"
                     className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150"
                 >
                     <PlusIcon className="w-4 h-4 mr-2" />
-                    Жаңа шақырту
+                    {t('new_invitation')}
                 </Link>
             </div> */}
 
@@ -104,10 +106,10 @@ const MyEventsPage = () => {
                                 </div>
 
                                 <div className="mb-6">
-                                    <span className="text-sm text-gray-500 mr-2">Статус:</span>
+                                    <span className="text-sm text-gray-500 mr-2">{t('status_label')}</span>
                                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${item.order?.status === 2 ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'
                                         }`}>
-                                        {item.order?.statusLabel || (item.order?.status === 2 ? 'Төленген' : 'Күтілуде')}
+                                        {item.order?.statusLabel}
                                     </span>
                                 </div>
 
@@ -119,7 +121,7 @@ const MyEventsPage = () => {
                                                 className="inline-flex items-center px-4 py-2 bg-theme-secondary text-white rounded-lg text-sm font-bold hover:bg-theme-secondary/80 transition-colors gap-2"
                                             >
                                                 <PencilSquareIcon className="w-4 h-4" />
-                                                Жалғастыру
+                                                {t('continue_button')}
                                             </Link>
                                         </>
                                     ) : (
@@ -130,7 +132,7 @@ const MyEventsPage = () => {
                                                     className="inline-flex items-center px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-bold hover:bg-gray-50 transition-colors gap-2"
                                                 >
                                                     <PencilSquareIcon className="w-4 h-4" />
-                                                    Өңдеу
+                                                    {t('edit_button')}
                                                 </Link>
                                             )}
                                             <Link
@@ -138,7 +140,7 @@ const MyEventsPage = () => {
                                                 className="inline-flex items-center px-4 py-2 bg-theme-secondary text-white rounded-lg text-sm font-bold hover:bg-theme-secondary/80 transition-colors gap-2"
                                             >
                                                 <EyeIcon className="w-4 h-4" />
-                                                Толығырақ
+                                                {t('details_button')}
                                             </Link>
                                         </>
                                     )}
@@ -147,7 +149,7 @@ const MyEventsPage = () => {
                                         className="inline-flex items-center px-4 py-2 bg-white border border-red-100 text-red-600 rounded-lg text-sm font-bold hover:bg-red-50 transition-colors gap-2"
                                     >
                                         <TrashIcon className="w-4 h-4" />
-                                        Өшіру
+                                        {t('delete_button')}
                                     </button>
                                 </div>
                             </div>
@@ -159,12 +161,12 @@ const MyEventsPage = () => {
                     <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
                         <PlusIcon className="w-10 h-10 text-gray-300" />
                     </div>
-                    <p className="text-gray-500 mb-8 text-lg">Сізде әлі іс-шаралар жоқ</p>
+                    <p className="text-gray-500 mb-8 text-lg">{t('no_events')}</p>
                     <Link
                         href="/app/select-template"
                         className="inline-flex items-center px-8 py-4 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition-all hover:-translate-y-1 shadow-lg shadow-indigo-100"
                     >
-                        Шақырту жасау
+                        {t('create_first_invitation')}
                     </Link>
                 </div>
             )}

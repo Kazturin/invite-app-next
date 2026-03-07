@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, use } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 import Link from 'next/link';
 import { useAppStore } from '@/store/useAppStore';
 import {
@@ -17,6 +17,7 @@ import Spinner from '@/components/Spinner';
 import Countdown from '@/components/Countdown';
 import Calendar from '@/components/Calendar';
 import Gallery from '@/components/Gallery';
+import { useTranslations } from 'next-intl';
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -25,6 +26,7 @@ interface PageProps {
 const PreviewPage = ({ params }: PageProps) => {
     const { id } = use(params);
     const router = useRouter();
+    const t = useTranslations('InvitationPreview');
     const { getEvent, getWatermarkInvitation, event } = useAppStore();
     const [loading, setLoading] = useState(true);
     const [watermarkInvitation, setWatermarkInvitation] = useState<string | null>(null);
@@ -127,7 +129,7 @@ const PreviewPage = ({ params }: PageProps) => {
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                         </div>
-                        <span className="text-xs sm:text-sm font-bold text-gray-400 uppercase tracking-widest">Preview Mode</span>
+                        <span className="text-xs sm:text-sm font-bold text-gray-400 uppercase tracking-widest">{t('preview_mode')}</span>
                     </div>
                     <div className="flex gap-2 sm:gap-4">
                         <Link
@@ -135,14 +137,14 @@ const PreviewPage = ({ params }: PageProps) => {
                             className="group relative inline-flex items-center px-4 sm:px-6 py-2 border-2 border-gray-100 text-gray-600 text-sm font-bold rounded-lg transition-all duration-300 hover:border-theme-secondary/20 hover:text-theme-secondary active:scale-95 gap-2 cursor-pointer"
                         >
                             <PencilSquareIcon className="w-4 h-4 transition-transform group-hover:rotate-12" />
-                            <span className="hidden sm:inline">Өңдеу</span>
+                            <span className="hidden sm:inline">{t('edit_button')}</span>
                         </Link>
                         <button
                             onClick={finishBtn}
                             className="group relative inline-flex items-center px-6 sm:px-8 py-2 bg-theme-secondary text-white text-sm font-bold rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-theme-secondary/20 active:scale-95 gap-2 cursor-pointer"
                         >
                             <CheckCircleIcon className="w-4 h-4 relative z-10" />
-                            <span className="relative z-10">Аяқтау</span>
+                            <span className="relative z-10">{t('finish_button')}</span>
                         </button>
                     </div>
                 </div>
@@ -203,8 +205,8 @@ const PreviewPage = ({ params }: PageProps) => {
                             <div className="space-y-4">
                                 <span className="text-xs font-bold text-amber-800 uppercase tracking-[0.3em]">
                                     {isEventPast
-                                        ? (eventDetails.type === 'party' ? 'Мереке өтті' : 'Той өтті')
-                                        : (eventDetails.type === 'party' ? 'Мерекеге дейін қалды' : 'Тойға дейін қалды')}
+                                        ? (eventDetails.type === 'party' ? t('event_past_party') : t('event_past_wedding'))
+                                        : (eventDetails.type === 'party' ? t('left_until_party') : t('left_until_wedding'))}
                                 </span>
                                 <Countdown deadline={eventDetails.date} />
                             </div>
@@ -230,8 +232,8 @@ const PreviewPage = ({ params }: PageProps) => {
                                         <PhotoIcon className="w-7 h-7 text-amber-600" />
                                     </div>
                                     <div>
-                                        <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">ФОТО ГАЛЕРЕЯ</span>
-                                        <span className="block text-lg font-bold text-gray-800">Фотоларды көру</span>
+                                        <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{t('photo_gallery')}</span>
+                                        <span className="block text-lg font-bold text-gray-800">{t('view_photos')}</span>
                                     </div>
                                 </div>
                                 <div className="bg-gray-100 p-2 rounded-full group-hover:bg-amber-600 group-hover:text-white transition-all">
@@ -248,7 +250,7 @@ const PreviewPage = ({ params }: PageProps) => {
                                 <div className="bg-red-50 p-2 rounded-lg">
                                     <VideoCameraIcon className="w-6 h-6 text-red-600" />
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-800">Бейнеролик</h3>
+                                <h3 className="text-xl font-bold text-gray-800">{t('video')}</h3>
                             </div>
                             <div className="aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl ring-1 ring-gray-200">
                                 <iframe
@@ -272,7 +274,7 @@ const PreviewPage = ({ params }: PageProps) => {
                             <div className="bg-indigo-50 w-16 h-16 rounded-3xl flex items-center justify-center mx-auto mb-6 transform rotate-3">
                                 <MapPinIcon className="w-8 h-8 text-indigo-600" />
                             </div>
-                            <h2 className="text-3xl font-black text-gray-900 tracking-tight">Мекен-жайымыз</h2>
+                            <h2 className="text-3xl font-black text-gray-900 tracking-tight">{t('our_address')}</h2>
                             <p className="text-xl text-gray-500 font-medium">
                                 {eventDetails.place}
                             </p>
@@ -288,7 +290,7 @@ const PreviewPage = ({ params }: PageProps) => {
                                             rel="noopener noreferrer"
                                             className="inline-flex items-center px-10 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl transition-all duration-300 shadow-xl shadow-indigo-100 hover:shadow-indigo-200 active:scale-95 gap-3 group"
                                         >
-                                            <span>Картаны ашу</span>
+                                            <span>{t('open_map')}</span>
                                             <ArrowTopRightOnSquareIcon className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                                         </a>
                                     </div>

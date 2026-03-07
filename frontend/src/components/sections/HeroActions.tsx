@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import Modal from '../Modal';
+import { useTranslations } from 'next-intl';
 
 interface HeroActionsProps {
     screenshot2Url: string;
@@ -10,6 +11,7 @@ interface HeroActionsProps {
 }
 
 const HeroActions: React.FC<HeroActionsProps> = ({ screenshot2Url, guestsScreenUrl }) => {
+    const t = useTranslations('Index');
     const [modal, setModal] = useState(false);
     const [modalImgUrl, setModalImgUrl] = useState<string | null>(null);
     const [modalTitle, setModalTitle] = useState('');
@@ -31,14 +33,14 @@ const HeroActions: React.FC<HeroActionsProps> = ({ screenshot2Url, guestsScreenU
                     </svg>
                 </div>
                 <div className="text-gray-800">
-                    Онлайн шақырту сайты (
+                    {t('hero_title')} (
                     <a
                         className="underline text-sm text-gray-600 hover:text-blue-500 transition-colors"
                         href="https://toi-invite.kz/toi/aslan-men-erkezannyn-toiy"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        Мысал
+                        {t('example_link')}
                     </a>)
                 </div>
             </li>
@@ -50,10 +52,10 @@ const HeroActions: React.FC<HeroActionsProps> = ({ screenshot2Url, guestsScreenU
                     </svg>
                 </div>
                 <button
-                    onClick={() => openModal('Әлеуметтік желілер арқылы қонақтарды шақыру', screenshot2Url)}
+                    onClick={() => openModal(t('social_invite_title'), screenshot2Url)}
                     className="flex items-center text-left hover:text-blue-500 transition-colors w-full group cursor-pointer"
                 >
-                    <span className="grow">Әлеуметтік желілер арқылы қонақтарды шақыру</span>
+                    <span className="grow">{t('social_invite_title')}</span>
                     <PhotoIcon className="w-6 h-6 ml-2 text-gray-400 group-hover:text-blue-500" />
                 </button>
             </li>
@@ -65,10 +67,10 @@ const HeroActions: React.FC<HeroActionsProps> = ({ screenshot2Url, guestsScreenU
                     </svg>
                 </div>
                 <button
-                    onClick={() => openModal('Келетін қонақтар туралы ақпарт алу', guestsScreenUrl)}
+                    onClick={() => openModal(t('guest_info_title'), guestsScreenUrl)}
                     className="flex items-center text-left hover:text-blue-500 transition-colors w-full group cursor-pointer"
                 >
-                    <span className="grow">Келетін қонақтар туралы ақпарт алу</span>
+                    <span className="grow">{t('guest_info_title')}</span>
                     <PhotoIcon className="w-6 h-6 ml-2 text-gray-400 group-hover:text-blue-500" />
                 </button>
             </li>
@@ -83,3 +85,4 @@ const HeroActions: React.FC<HeroActionsProps> = ({ screenshot2Url, guestsScreenU
 };
 
 export default HeroActions;
+

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface CountdownProps {
     deadline: string;
@@ -8,6 +9,7 @@ interface CountdownProps {
 }
 
 const Countdown: React.FC<CountdownProps> = ({ deadline, speed = 1000 }) => {
+    const t = useTranslations('Countdown');
     const calculateTimeLeft = useCallback(() => {
         const difference = Date.parse(deadline) - Date.parse(new Date().toString());
         return difference > 0 ? difference : null;
@@ -47,7 +49,7 @@ const Countdown: React.FC<CountdownProps> = ({ deadline, speed = 1000 }) => {
                             <span className="z-10">{days}</span>
                             <div className="absolute inset-0 bg-yellow-400 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
                         </div>
-                        <span className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400 font-semibold">күн</span>
+                        <span className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400 font-semibold">{t('days')}</span>
                     </div>
                 )}
 
@@ -58,7 +60,7 @@ const Countdown: React.FC<CountdownProps> = ({ deadline, speed = 1000 }) => {
                             <span className="z-10">{hours}</span>
                             <div className="absolute inset-0 bg-yellow-400 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
                         </div>
-                        <span className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400 font-semibold">сағат</span>
+                        <span className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400 font-semibold">{t('hours')}</span>
                     </div>
                 )}
 
@@ -68,7 +70,7 @@ const Countdown: React.FC<CountdownProps> = ({ deadline, speed = 1000 }) => {
                         <span className="z-10">{minutes}</span>
                         <div className="absolute inset-0 bg-yellow-400 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
                     </div>
-                    <span className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400 font-semibold">минут</span>
+                    <span className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400 font-semibold">{t('minutes')}</span>
                 </div>
 
                 {/* Seconds */}
@@ -77,7 +79,7 @@ const Countdown: React.FC<CountdownProps> = ({ deadline, speed = 1000 }) => {
                         <span className="z-10 text-yellow-600">{seconds}</span>
                         <div className="absolute inset-0 bg-yellow-400 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
                     </div>
-                    <span className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400 font-semibold">секунд</span>
+                    <span className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400 font-semibold">{t('seconds')}</span>
                 </div>
             </div>
         </div>

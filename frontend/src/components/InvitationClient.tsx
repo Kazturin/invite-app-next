@@ -16,6 +16,7 @@ import Modal from '@/components/Modal';
 import Questionnaire from '@/components/Questionnaire';
 import AudioPlayer from '@/components/AudioPlayer';
 import Image from 'next/image';
+import { useTranslations, useLocale } from 'next-intl';
 
 interface InvitationClientProps {
     event: any;
@@ -28,6 +29,8 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
     const [modalOpen, setModalOpen] = useState(false);
     const [messageModalOpen, setMessageModalOpen] = useState(false);
     const [questionnaireStatus, setQuestionnaireStatus] = useState<number>(1);
+    const t = useTranslations('InvitationPreview');
+    const locale = useLocale();
 
     const isEventPast = event.date ? new Date(event.date) < new Date(new Date().setHours(0, 0, 0, 0)) : true;
 
@@ -53,7 +56,7 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
 
     const handleSaved = () => {
         setModalOpen(false);
-        alert('Жауабыңыз қабылданды! Рахмет!');
+        alert(t('response_accepted'));
     };
 
     const videoId = event.video_link ? event.video_link.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|&v=|shorts\/))([^#&?]*)/)?.[1] : null;
@@ -68,14 +71,14 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                         onClick={() => openModal(1)}
                         className="group relative flex-1 max-w-[200px] py-2.5 px-4 rounded-full bg-emerald-700 text-white font-semibold text-sm uppercase tracking-wider shadow-md transition-all hover:bg-emerald-800 hover:shadow-lg active:scale-95 disabled:opacity-50"
                     >
-                        Иә, барамын
+                        {t('yes_going')}
                     </button>
                     <button
                         disabled={isEventPast}
                         onClick={() => openModal(0)}
                         className="group relative flex-1 max-w-[200px] py-2.5 px-4 rounded-full border border-stone-300 text-stone-500 font-semibold text-sm uppercase tracking-wider hover:border-rose-300 hover:text-rose-500 hover:bg-rose-50 transition-all active:scale-95 disabled:opacity-50"
                     >
-                        Бара алмаймын
+                        {t('no_going')}
                     </button>
                 </div>
             </div>
@@ -130,8 +133,8 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                         </div>
                         <span className="bg-white px-6 py-1 text-sm font-bold text-yellow-700 uppercase tracking-[0.2em] relative z-10 text-center">
                             {isEventPast
-                                ? (event.type === 'party' ? 'Мереке өтті' : 'Той өтті')
-                                : (event.type === 'party' ? 'Мерекеге дейін қалды' : 'Тойға дейін қалды')}
+                                ? (event.type === 'party' ? t('event_past_party') : t('event_past_wedding'))
+                                : (event.type === 'party' ? t('left_until_party') : t('left_until_wedding'))}
                         </span>
                         <div className="mt-6">
                             <Countdown deadline={event.date} />
@@ -139,7 +142,7 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                     </div>
 
                     <div className="max-w-md mx-auto px-4">
-                        <Calendar date={event.date} locale="kk" />
+                        <Calendar date={event.date} locale={locale} />
                     </div>
 
                     {event.photos_link && (
@@ -150,8 +153,8 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                                         <PhotoIcon className="w-7 h-7 text-amber-600" />
                                     </div>
                                     <div className="text-left">
-                                        <span className="block text-sm font-semibold text-gray-400 uppercase tracking-wider">Галлерея</span>
-                                        <span className="block text-lg font-bold text-gray-800">Суреттерді көру</span>
+                                        <span className="block text-sm font-semibold text-gray-400 uppercase tracking-wider">{t('photo_gallery')}</span>
+                                        <span className="block text-lg font-bold text-gray-800">{t('view_photos')}</span>
                                     </div>
                                 </div>
                                 <div className="bg-gray-50 p-2 rounded-full group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
@@ -167,7 +170,7 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                                 <div className="bg-red-50 p-2 rounded-lg">
                                     <VideoCameraIcon className="w-6 h-6 text-red-600" />
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-800 text-left">Видео</h3>
+                                <h3 className="text-xl font-bold text-gray-800 text-left">{t('video')}</h3>
                             </div>
                             <div className="rounded-xl overflow-hidden shadow-inner bg-black aspect-video">
                                 <iframe
@@ -186,7 +189,7 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                             <div className="bg-blue-50 p-3 rounded-full mb-4">
                                 <MapPinIcon className="w-8 h-8 text-blue-600" />
                             </div>
-                            <h2 className="text-2xl font-bold text-center mb-1">Мекен-жайы</h2>
+                            <h2 className="text-2xl font-bold text-center mb-1">{t('our_address')}</h2>
                             <p className="text-xl text-gray-600 text-center mb-4 font-medium italic">{event.place}</p>
 
                             {event.address?.address && (
@@ -197,7 +200,7 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                                             target="_blank"
                                             className="inline-flex items-center px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg gap-2 group"
                                         >
-                                            <span>Картаны ашу</span>
+                                            <span>{t('open_map')}</span>
                                             <ArrowTopRightOnSquareIcon className="w-5 h-5 group-hover:scale-110 transition-transform" />
                                         </a>
                                     </div>
@@ -218,7 +221,7 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                     <a href="/" className="flex flex-col items-center justify-center">
                         <img className="w-32 inline mb-1" src="/logo.png" alt="logo" />
                         <span className="text-xs font-taurus text-yellow-700 uppercase tracking-widest opacity-60">
-                            Toi-Invite шақыру сервисі
+                            {t('service_footer')}
                         </span>
                     </a>
                 </div>
@@ -228,7 +231,7 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
             {music && <AudioPlayer src={music} />}
 
             {/* Modals */}
-            <Modal modal={modalOpen} title="Қонақ сауалнамасы" onClose={closeModal}>
+            <Modal modal={modalOpen} title={t('guest_questionnaire')} onClose={closeModal}>
                 <Questionnaire
                     event_id={event.id}
                     status={questionnaireStatus}
@@ -243,17 +246,17 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                         <InformationCircleIcon className="text-blue-500 w-12 h-12" />
                     </div>
                     <p className="text-xl text-amber-800 font-roboto font-semibold mb-4">
-                        Құрметті {guestInvite?.guest?.fullname || 'қонақ!'}
+                        {t('dear_guest', { name: guestInvite?.guest?.fullname || '' })}
                     </p>
                     <p className="text-gray-600 mb-8 max-w-xs mx-auto">
-                        Жоғарыдағы «Барамын» және «Бара алмаймын» батырмалары арқылы {event.type === 'party' ? 'іс-шара' : 'той'} ұйымдастырушысына жауап беруіңізді сұраймыз
+                        {t('please_respond', { type: event.type === 'party' ? t('party').toLowerCase() : t('wedding').toLowerCase() })}
                     </p>
                     <button
                         onClick={closeModal}
                         className="w-full sm:w-auto flex mx-auto items-center justify-center rounded-full shadow-lg text-white py-4 px-12 bg-emerald-600 hover:bg-emerald-700 transition-all font-bold text-lg active:scale-95"
                     >
                         <HandThumbUpIcon className="w-6 h-6 mr-2" />
-                        Жақсы
+                        {t('ok_button')}
                     </button>
                 </div>
             </Modal>

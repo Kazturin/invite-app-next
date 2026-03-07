@@ -1,21 +1,23 @@
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 const StepsSection: React.FC = () => {
+    const t = useTranslations('Index');
     const steps = [
         {
             id: 1,
-            title: 'Шаблон таңдаңыз',
-            description: 'Таңдалған шаблонның мәтінін өз қалауыңызша өзгертіңіз'
+            title: t('step_1_title'),
+            description: t('step_1_desc')
         },
         {
             id: 2,
-            title: 'Форманы толтырыңыз',
-            description: 'Қонақтарға көрсеткіңіз келетін ақпаратты енгізіңіз'
+            title: t('step_2_title'),
+            description: t('step_2_desc')
         },
         {
             id: 3,
-            title: 'Қонақтарға шақырту жіберіңіз',
-            description: 'Жеке кабинетте әлеуметтік желілер арқылы қонақтарды шақырыңыз'
+            title: t('step_3_title'),
+            description: t('step_3_desc')
         }
     ];
 
@@ -23,10 +25,10 @@ const StepsSection: React.FC = () => {
         <div className="container mx-auto px-5 py-20 lg:py-28">
             <div className="max-w-xl mb-16 md:mx-auto text-center lg:max-w-2xl">
                 <h2 className="mb-6 text-3xl font-bold leading-tight tracking-tight text-gray-900 sm:text-4xl">
-                    Бұл сіз ойлағаннан да оңай
+                    {t('steps_title')}
                 </h2>
                 <p className="text-lg text-gray-600">
-                    Интуитивті түсінікті интерфейс
+                    {t('steps_subtitle')}
                 </p>
             </div>
 
@@ -51,3 +53,4 @@ const StepsSection: React.FC = () => {
 };
 
 export default StepsSection;
+

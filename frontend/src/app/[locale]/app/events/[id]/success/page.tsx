@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, use } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 import { useAppStore } from '@/store/useAppStore';
 import {
     CheckIcon,
@@ -14,6 +14,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Spinner from '@/components/Spinner';
 import Modal from '@/components/Modal';
+import { useTranslations } from 'next-intl';
 
 
 interface PageProps {
@@ -23,6 +24,7 @@ interface PageProps {
 const SuccessPage = ({ params }: PageProps) => {
     const { id } = use(params);
     const router = useRouter();
+    const t = useTranslations('SuccessPage');
     const { getEvent, getWatermarkInvitation, deleteEvent, event } = useAppStore();
     const [loading, setLoading] = useState(true);
     const [watermarkInvitation, setWatermarkInvitation] = useState<string | null>(null);
@@ -37,7 +39,6 @@ const SuccessPage = ({ params }: PageProps) => {
             try {
                 const eventData = await getEvent(id);
                 if (eventData.invitation?.invitation_img_path) {
-                    console.log(eventData.invitation.invitation_img_path)
                     const watermarkData = await getWatermarkInvitation(eventData.invitation.invitation_img_path);
                     setWatermarkInvitation(watermarkData);
                 }
@@ -58,7 +59,7 @@ const SuccessPage = ({ params }: PageProps) => {
     };
 
     const handleDelete = async () => {
-        if (confirm('Өшіруге сенімдісіз бе?')) {
+        if (confirm(t('confirm_delete'))) {
             try {
                 await deleteEvent(id);
                 router.push('/app/events');
@@ -120,14 +121,14 @@ const SuccessPage = ({ params }: PageProps) => {
                             <button
                                 onClick={() => router.push(`/app/events/${id}/update`)}
                                 className="p-2 text-gray-400 hover:text-indigo-600 transition-colors bg-gray-50 rounded-full"
-                                title="Өңдеу"
+                                title={t('edit_title')}
                             >
                                 <PencilIcon className="w-5 h-5" />
                             </button>
                             <button
                                 onClick={handleDelete}
                                 className="p-2 text-gray-400 hover:text-red-600 transition-colors bg-gray-50 rounded-full"
-                                title="Өшіру"
+                                title={t('delete_title')}
                             >
                                 <TrashIcon className="w-5 h-5" />
                             </button>
@@ -144,7 +145,7 @@ const SuccessPage = ({ params }: PageProps) => {
                             <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
                                 <h3 className="text-gray-900 font-semibold mb-4 flex items-center">
                                     <div className="w-2 h-2 bg-indigo-600 rounded-full mr-2"></div>
-                                    Төлемнен кейін қолжетімді:
+                                    {t('available_after_payment')}
                                 </h3>
                                 <div className="space-y-4">
                                     <button
@@ -155,33 +156,33 @@ const SuccessPage = ({ params }: PageProps) => {
                                             <div className="bg-green-100 p-1.5 rounded-lg text-green-600">
                                                 <CheckIcon className="w-4 h-4" />
                                             </div>
-                                            <span className="text-gray-700 font-medium">Шақыру сайты</span>
+                                            <span className="text-gray-700 font-medium">{t('invitation_website')}</span>
                                         </div>
                                         <EyeIcon className="w-5 h-5 text-gray-400 group-hover:text-indigo-600" />
                                     </button>
 
                                     <div
-                                        onClick={() => openModal('Әлеуметтік желі арқылы шақыру', '/images/screenshot_2.jpeg')}
+                                        onClick={() => openModal(t('social_invite'), '/images/screenshot_2.jpeg')}
                                         className="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm hover:shadow-md transition-all group cursor-pointer"
                                     >
                                         <div className="flex items-center space-x-3">
                                             <div className="bg-green-100 p-1.5 rounded-lg text-green-600">
                                                 <CheckIcon className="w-4 h-4" />
                                             </div>
-                                            <span className="text-gray-700 font-medium">Әлеуметтік желі арқылы шақыру</span>
+                                            <span className="text-gray-700 font-medium">{t('social_invite')}</span>
                                         </div>
                                         <PhotoIcon className="w-5 h-5 text-gray-400 group-hover:text-indigo-600" />
                                     </div>
 
                                     <div
-                                        onClick={() => openModal('Қонақтар туралы ақпарат', '/images/guests_screen.png')}
+                                        onClick={() => openModal(t('guest_info'), '/images/guests_screen.png')}
                                         className="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm hover:shadow-md transition-all group cursor-pointer"
                                     >
                                         <div className="flex items-center space-x-3">
                                             <div className="bg-green-100 p-1.5 rounded-lg text-green-600">
                                                 <CheckIcon className="w-4 h-4" />
                                             </div>
-                                            <span className="text-gray-700 font-medium">Қонақтар туралы ақпарат</span>
+                                            <span className="text-gray-700 font-medium">{t('guest_info')}</span>
                                         </div>
                                         <PhotoIcon className="w-5 h-5 text-gray-400 group-hover:text-indigo-600" />
                                     </div>
@@ -191,15 +192,15 @@ const SuccessPage = ({ params }: PageProps) => {
 
                             <div className="pt-4 space-y-4">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-gray-500 font-medium text-lg">Бағасы:</span>
-                                    <span className="text-green-600 font-bold text-2xl">{eventDetails.order.price} тг</span>
+                                    <span className="text-gray-500 font-medium text-lg">{t('price_label')}</span>
+                                    <span className="text-green-600 font-bold text-2xl">{eventDetails.order.price} {t('currency')}</span>
                                 </div>
                                 <button
-                                    onClick={() => toWhatsapp(`Заказ номері - ${id}`)}
+                                    onClick={() => toWhatsapp(t('order_number', { id }))}
                                     className="w-full flex items-center justify-center space-x-3 bg-[#25D366] hover:bg-[#20bd5c] text-white py-4 px-6 rounded-2xl font-bold shadow-lg shadow-green-100 transition-all hover:-translate-y-0.5 cursor-pointer"
                                 >
                                     <img className="w-6 h-6" src="/icons/whatsapp-icon.png" alt="WA" />
-                                    <span>Төлем жасау үшін байланысу</span>
+                                    <span>{t('contact_to_pay')}</span>
                                 </button>
                             </div>
                         </div>
@@ -208,13 +209,13 @@ const SuccessPage = ({ params }: PageProps) => {
                             <div className="bg-green-100 text-green-600 p-4 rounded-full mb-4">
                                 <CheckIcon className="w-10 h-10" />
                             </div>
-                            <p className="text-2xl font-bold text-green-800 mb-6">Төлем қабылданды</p>
+                            <p className="text-2xl font-bold text-green-800 mb-6">{t('payment_accepted')}</p>
                             <button
                                 onClick={() => router.push(`/app/events/${id}`)}
                                 className="flex items-center justify-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-10 rounded-xl font-bold transition-all shadow-lg shadow-indigo-100"
                             >
                                 <EyeIcon className="w-5 h-5" />
-                                <span>Толығырақ</span>
+                                <span>{t('more_details')}</span>
                             </button>
                         </div>
                     )}
@@ -226,18 +227,18 @@ const SuccessPage = ({ params }: PageProps) => {
                 <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
                     <div className="text-center md:text-left">
                         <ChatBubbleLeftEllipsisIcon className="w-12 h-12 mb-4 opacity-50" />
-                        <h2 className="text-2xl font-bold mb-4">Құрметті қолданушы!</h2>
+                        <h2 className="text-2xl font-bold mb-4">{t('dear_user')}</h2>
                         <p className="text-indigo-100 max-w-lg leading-relaxed">
-                            Біздің веб-сервиске қош келдіңіз. Егер сізде қандай да бір идеялар, өтініштер немесе қателіктер туындаса, бізге хабарлаңыз! Сіздің пікіріңіз біздің қызметімізді жақсартуға көмектеседі.
+                            {t('support_text')}
                         </p>
                     </div>
                     <div className="flex flex-col gap-4 min-w-[200px]">
                         <button
-                            onClick={() => toWhatsapp('Кері байланыс')}
+                            onClick={() => toWhatsapp(t('feedback'))}
                             className="flex items-center justify-center space-x-2 bg-white text-indigo-600 py-3 px-6 rounded-xl font-bold hover:bg-indigo-50 transition-colors shadow-xl cursor-pointer"
                         >
                             <img className="w-5 h-5" src="/icons/whatsapp-icon.png" alt="WA" />
-                            <span>Кері байланыс</span>
+                            <span>{t('feedback')}</span>
                         </button>
                     </div>
                 </div>

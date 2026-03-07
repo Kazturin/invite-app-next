@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState, useEffect, useRef } from 'react';
 import { BuildingLibraryIcon, GlobeAltIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import Alert from '@/components/Alert';
@@ -8,6 +6,7 @@ import { useUserStore } from '@/store/useUserStore';
 import dynamic from 'next/dynamic';
 import 'react-quill-new/dist/quill.snow.css';
 import { toolbarOptions } from '@/lib/quillConfig';
+import { useTranslations } from 'next-intl';
 
 const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
 
@@ -26,12 +25,13 @@ interface EventFormProps {
 
 const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData, onSubmit, onDeleteImage, onPreview, loading, errors }, ref) => {
     const { user } = useUserStore();
+    const t = useTranslations('EventForm');
     const [validationErrors, setValidationErrors] = useState<any>({});
 
     const [model, setModel] = useState({
         title: initialData?.title || '',
         type: initialData?.type || 'wedding',
-        description: initialData?.description || '<p><span class="ql-font-Mon" style="color: rgb(178, 107, 0);">Тойымыздың қадірлі қонағы болыңыз</span></p>',
+        description: initialData?.description || `<p><span class="ql-font-Mon" style="color: rgb(178, 107, 0);">${t('additional_info_placeholder')}</span></p>`,
         photos_link: initialData?.photos_link || '',
         place: initialData?.place || '',
         address_link: initialData?.address?.address || initialData?.address_link || '',
@@ -113,15 +113,15 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
         e.preventDefault();
 
         const errors: any = {};
-        if (!model.title) errors.title = 'Той атауын толтырыңыз';
-        if (!model.place) errors.place = 'Өтетін жерін толтырыңыз';
-        if (!model.address_link) errors.address_link = 'Картаға сілтемені көрсетіңіз';
-        if (!model.date) errors.date = 'Басталу уақытын көрсетіңіз';
+        if (!model.title) errors.title = t('errors.title_required');
+        if (!model.place) errors.place = t('errors.place_required');
+        if (!model.address_link) errors.address_link = t('errors.address_required');
+        if (!model.date) errors.date = t('errors.date_required');
 
         if (model.video_link) {
             const ytRegex = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))((\w|-){11})(?:\S+)?$/;
             if (!model.video_link.match(ytRegex)) {
-                errors.video_link = 'YouTube сілтемесі қате';
+                errors.video_link = t('errors.youtube_invalid');
             }
         }
 
@@ -166,17 +166,17 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
     }));
 
     return (
-        <form onSubmit={(e) => e.preventDefault()} className="border border-gray-200 rounded-lg mt-10 w-full md:w-2/3 mx-auto p-4 bg-white">
+        <form onSubmit={(e) => e.preventDefault()} className="border border-gray-200 rounded-lg mt-10 w-full md:w-2/3 mx-auto p-4 bg-white text-left">
             <div className="space-y-6">
                 <div className="border-b border-gray-900/10 pb-6">
-                    <h2 className="text-base font-semibold leading-7 text-gray-900">Іс-шара туралы ақпарат</h2>
+                    <h2 className="text-base font-semibold leading-7 text-gray-900">{t('event_info')}</h2>
 
                     {errors && <Alert className="mb-4">{errors}</Alert>}
 
                     <div className="mt-10">
                         <div>
                             <label htmlFor="title" className="text-left block text-sm font-medium leading-6 text-gray-900">
-                                Іс-шара атауы <span className="text-red-500">*</span>
+                                {t('event_name')} <span className="text-red-500">*</span>
                             </label>
                             <div className="mt-2">
                                 <input
@@ -186,7 +186,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
                                     value={model.title}
                                     onChange={handleChange}
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
-                                    placeholder="Әлібек пен Аружанның тойы"
+                                    placeholder={t('event_name_placeholder')}
                                 />
                                 {validationErrors.title && <p className="mt-1 text-sm text-red-600">{validationErrors.title}</p>}
                             </div>
@@ -194,7 +194,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
 
                         <div className="mt-4">
                             <label className="text-left block text-sm font-medium leading-6 text-gray-900">
-                                Шара түрі <span className="text-red-500">*</span>
+                                {t('event_type')} <span className="text-red-500">*</span>
                             </label>
                             <div className="mt-2 flex items-center space-x-6">
                                 <label className="flex items-center">
@@ -206,7 +206,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
                                         onChange={handleChange}
                                         className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                                     />
-                                    <span className="ml-2 block text-sm text-gray-900">Той</span>
+                                    <span className="ml-2 block text-sm text-gray-900">{t('wedding')}</span>
                                 </label>
                                 <label className="flex items-center">
                                     <input
@@ -217,14 +217,14 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
                                         onChange={handleChange}
                                         className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                                     />
-                                    <span className="ml-2 block text-sm text-gray-900">Мерекелік іс-шара</span>
+                                    <span className="ml-2 block text-sm text-gray-900">{t('party')}</span>
                                 </label>
                             </div>
                         </div>
 
                         <div className="mt-4">
                             <label htmlFor="description" className="text-left block text-sm font-medium leading-6 text-gray-900">
-                                Қосымша ақпарат:
+                                {t('additional_info')}
                             </label>
                             <div className="mt-2 text-black">
                                 <ReactQuill
@@ -233,14 +233,14 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
                                     onChange={(content) => setModel(prev => ({ ...prev, description: content }))}
                                     modules={{ toolbar: toolbarOptions }}
                                     className="min-h-[10rem] mb-12"
-                                    placeholder="Тойымыздың қадірлі қонағы болыңыздар"
+                                    placeholder={t('additional_info_placeholder')}
                                 />
                             </div>
                         </div>
 
                         <div className="mt-4">
                             <label htmlFor="photos_link" className="text-left block text-sm font-medium leading-6 text-gray-900">
-                                Фотоларға сілтеме
+                                {t('photos_link')}
                             </label>
                             <div className="mt-2">
                                 <input
@@ -257,7 +257,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
 
                         <div className="mt-4">
                             <label className="text-left block text-sm font-medium leading-6 text-gray-900">
-                                Фотогалерея (макс. 5 фото)
+                                {t('gallery')}
                             </label>
                             <div className="mt-2">
                                 <div className="flex flex-wrap gap-4">
@@ -289,7 +289,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
                     <div className="mt-5">
                         <div>
                             <label htmlFor="place" className="text-left block text-sm font-medium leading-6 text-gray-900">
-                                Мейрамхана атауы <span className="text-red-500">*</span>
+                                {t('restaurant_name')} <span className="text-red-500">*</span>
                             </label>
                             <div className="mt-2">
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
@@ -303,7 +303,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
                                         value={model.place}
                                         onChange={handleChange}
                                         className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                                        placeholder="Ресторан 'Алтын орман'"
+                                        placeholder={t('restaurant_placeholder')}
                                     />
                                 </div>
                                 {validationErrors.place && <p className="mt-1 text-sm text-red-600">{validationErrors.place}</p>}
@@ -312,7 +312,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
 
                         <div className="mt-4">
                             <label htmlFor="address_link" className="text-left block text-sm font-medium leading-6 text-gray-900">
-                                Картаға сілтеме <span className="text-red-500">*</span>
+                                {t('map_link')} <span className="text-red-500">*</span>
                             </label>
                             <div className="mt-2">
                                 <input
@@ -330,7 +330,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
 
                         <div className="mt-4">
                             <label htmlFor="video_link" className="text-left block text-sm font-medium leading-6 text-gray-900">
-                                Видео (YouTube сілтеме)
+                                {t('video_link')}
                             </label>
                             <div className="mt-2">
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
@@ -361,7 +361,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
                                     />
                                     <div className="peer h-6 w-11 rounded-full border bg-slate-200 after:absolute after:left-[2px] after:top-0.5 after:h-5 after:w-5 after:rounded-full after:border after:bg-white after:transition-all after:content-[''] peer-checked:bg-green-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:ring-green-300"></div>
                                 </label>
-                                <span>Музыка</span>
+                                <span>{t('music')}</span>
                             </div>
 
                             {model.audioToggle && (
@@ -369,7 +369,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
                                     <audio className="mb-2 sm:mb-0 w-full" controls ref={audioPlayerRef} src={model.audio}></audio>
                                     <button type="button" className="relative overflow-hidden ml-4 w-fit bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50">
                                         <input type="file" accept=".mp3" onChange={handleAudioUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
-                                        Өзгерту
+                                        {t('change_button')}
                                     </button>
                                 </div>
                             )}
@@ -377,7 +377,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
 
                         <div className="mt-4">
                             <label htmlFor="date" className="text-left block text-sm font-medium text-gray-700">
-                                Басталу уақыты <span className="text-red-500">*</span>
+                                {t('start_time')} <span className="text-red-500">*</span>
                             </label>
                             <input
                                 type="datetime-local"
@@ -400,7 +400,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
                     disabled={!onPreview || loading}
                     className="disabled:opacity-25 disabled:cursor-not-allowed bg-gray-500 hover:bg-gray-600 px-4 py-2 text-white rounded font-medium transition-colors cursor-pointer"
                 >
-                    Алдын ала қарау
+                    {t('preview_button')}
                 </button>
                 <button
                     type="button"
@@ -411,7 +411,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
                     {loading && (
                         <span className="w-4 h-4 mr-2 rounded-full animate-spin border-2 border-solid border-white border-t-transparent"></span>
                     )}
-                    Сақтау
+                    {t('save_button')}
                 </button>
                 <button
                     type="button"
@@ -419,7 +419,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
                     disabled={loading}
                     className="bg-indigo-600 px-4 py-2 text-white rounded disabled:opacity-50 font-medium hover:bg-indigo-700 transition-colors cursor-pointer"
                 >
-                    Аяқтау
+                    {t('complete_button')}
                 </button>
             </div>
         </form>

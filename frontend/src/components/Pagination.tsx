@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 interface PaginationProps {
     currentPage: number;
@@ -13,6 +14,7 @@ const Pagination: React.FC<PaginationProps> = ({
     onPageChanged,
     className = '',
 }) => {
+    const t = useTranslations('Common');
     if (totalPages <= 1) return null;
 
     const goToPage = (page: number) => {
@@ -32,7 +34,7 @@ const Pagination: React.FC<PaginationProps> = ({
                             : 'bg-theme-primary text-white hover:bg-white hover:text-theme-primary border-2 border-transparent hover:border-theme-primary'
                             }`}
                     >
-                        Артқа
+                        {t('back')}
                     </button>
                 </li>
                 <li>
@@ -44,7 +46,7 @@ const Pagination: React.FC<PaginationProps> = ({
                             : 'bg-theme-primary text-white hover:bg-white hover:text-theme-primary border-2 border-transparent hover:border-theme-primary'
                             }`}
                     >
-                        Келесі
+                        {t('next')}
                     </button>
                 </li>
             </ul>
@@ -53,3 +55,4 @@ const Pagination: React.FC<PaginationProps> = ({
 };
 
 export default Pagination;
+
