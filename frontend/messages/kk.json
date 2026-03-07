@@ -10,6 +10,8 @@
         "example_link": "Мысал",
         "social_invite_title": "Әлеуметтік желілер арқылы қонақтарды шақыру",
         "guest_info_title": "Келетін қонақтар туралы ақпарт алу",
+        "aria_label_instagram": "toi-invite.kz Instagram парақшасы",
+        "aria_label_whatsapp": "WhatsApp арқылы байланысу",
         "features_title": "Сайт шақыртуыңызға шаблон таңдаңыз!",
         "features_subtitle": "Әр түрлі іс-шараларға арналған шаблондар дайындап қойдық. Онлайн шақырту жасау енді оңай",
         "select_button": "Таңдау",
@@ -190,6 +192,7 @@
         "register": "Тіркелу",
         "my_invites": "Менің шақыруларым",
         "feedback": "Кері байланыс",
+        "language_select_label": "Тілді таңдаңыз",
         "logout": "Аккаунттан шығу"
     }
 }

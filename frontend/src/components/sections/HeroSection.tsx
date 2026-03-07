@@ -3,11 +3,24 @@ import { Link } from '@/i18n/routing';
 import HeroActions from './HeroActions';
 import { useTranslations } from 'next-intl';
 
+import Image from 'next/image';
+
 const HeroSection: React.FC = () => {
     const t = useTranslations('Index');
 
     return (
-        <section className="bg-white w-full bg-left bg-contain overflow-hidden bg-no-repeat h-[600px] md:h-[550px] relative">
+        <section className="bg-white w-full overflow-hidden h-[600px] md:h-[550px] relative">
+            <Image
+                src="/images/left.jpg"
+                alt="Background Decoration"
+                fill
+                priority
+                fetchPriority="high"
+                unoptimized
+                decoding="sync"
+                className="object-contain object-left pointer-events-none"
+                sizes="(max-width: 768px) 100vw, 50vw"
+            />
             <div className="container mx-auto relative h-full">
                 <div className="absolute top-7 z-20 flex w-full">
                     <div className="w-full lg:w-[740px] flex flex-col items-start text-center px-5">

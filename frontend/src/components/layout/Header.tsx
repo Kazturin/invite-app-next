@@ -53,14 +53,24 @@ const Header: React.FC = () => {
                             <LanguageSwitcher />
                         </div>
 
-                        <button onClick={toggleMobileNav} type="button" className="flex md:hidden focus:outline-none">
+                        <button
+                            onClick={toggleMobileNav}
+                            type="button"
+                            className="flex md:hidden focus:outline-none"
+                            aria-label={t('home')} // Or a more specific label if available
+                        >
                             <Bars3Icon className="h-6 w-6 fill-current" />
                         </button>
 
                         {/* Desktop Menu */}
                         <ul className="space-x-5 font-medium text-sm items-center hidden md:flex flex-col space-y-7 md:space-y-0 md:flex-row">
                             <li className="uppercase hover:text-theme-secondary transition duration-200">
-                                <a href="https://www.instagram.com/toi_invite.kz" target="_blank" rel="noopener noreferrer">
+                                <a
+                                    href="https://www.instagram.com/toi_invite.kz"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="Instagram toi-invite.kz"
+                                >
                                     <Image src="/icons/_insta.svg" alt="insta-icon" width={24} height={24} className="w-6 my-4" />
                                 </a>
                             </li>

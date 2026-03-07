@@ -38,7 +38,7 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ initialCategories }) =>
                     <h2 className="text-3xl md:text-4xl font-semibold text-center text-gray-900">
                         {t('features_title')}
                     </h2>
-                    <p className="text-gray-500 text-center mt-7 text-lg">
+                    <p className="text-gray-600 text-center mt-7 text-lg">
                         {t('features_subtitle')}
                     </p>
                 </div>

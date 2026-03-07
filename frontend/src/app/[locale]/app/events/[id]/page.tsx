@@ -117,7 +117,7 @@ const MyEventPage = ({ params }: PageProps) => {
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all ${activeTab === tab.id
+                            className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-bold transition-all ${activeTab === tab.id
                                 ? 'bg-theme-primary text-white shadow-lg shadow-indigo-100 scale-105'
                                 : 'text-gray-500 hover:bg-gray-50'
                                 }`}
