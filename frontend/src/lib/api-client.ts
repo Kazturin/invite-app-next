@@ -2,16 +2,15 @@ import axios from 'axios';
 import { useUserStore } from '@/store/useUserStore';
 
 const getBaseURL = () => {
-    // If not in a browser, use the internal Docker network URL or public URL
-    // In NextJS 15 + App Router (Node.js runtime), 'window' is undefined for server components.
+    // If not in a browser (SSR), use the internal Docker network URL or public URL
     if (typeof window === 'undefined') {
         const internalUrl = process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
         return `${internalUrl.replace(/\/+$/, '')}/api`;
     }
 
-    // In browser, use the public URL
-    const publicUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    return `${publicUrl.replace(/\/+$/, '')}/api`;
+    // In browser, use the local proxy to avoid CORS issues
+    // This will be handled by proxy.ts
+    return '/api';
 };
 
 const apiClient = axios.create({
