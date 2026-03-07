@@ -14,7 +14,7 @@ interface PageProps {
 const InvitationCreatePage = ({ params }: PageProps) => {
     const { id } = use(params);
     const router = useRouter();
-    const { template, getTemplate, setContent, setBgImg, setImage, invitation } = useAppStore();
+    const { template, getTemplate, setContent, setBgImg, setImage, setInInvitationImage, invitation } = useAppStore();
 
     const [loading, setLoading] = useState(true);
     const captureRef = useRef<InvitationTemplateRef>(null);
@@ -72,6 +72,10 @@ const InvitationCreatePage = ({ params }: PageProps) => {
         setBgImg(newBgImg);
     };
 
+    const updateInInvitationImage = (url: string | null) => {
+        setInInvitationImage(url);
+    };
+
     if (loading && !template.data) {
         return (
             <div className="min-h-screen flex items-center justify-center">
@@ -103,6 +107,7 @@ const InvitationCreatePage = ({ params }: PageProps) => {
                             bg_img={null}
                             onUpdateContent={updateContent}
                             onUpdateBgImg={updateBgImg}
+                            onUpdateInInvitationImage={updateInInvitationImage}
                         />
                     </div>
                 ) : (

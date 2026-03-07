@@ -52,9 +52,6 @@ class ImageService
         $file = Str::random() . '.' . $type;
         $relativePath = $dir . $file;
 
-        Log::info('save image relative path');
-        Log::info($relativePath);
-
         Storage::disk('public')->put($relativePath, $imageData);
 
         $path = storage_path('app/public/images/invitations/620x640/');
@@ -63,34 +60,23 @@ class ImageService
             mkdir($path, 0755, true);
         }
 
-        Log::info('create canvas');
         $canvas = $this->manager->create(620, 640)->fill('#f3f3f3');
-
-        Log::info('read envelope image '.$envelope_img);
         
-        // Resolve the envelope image path
         $resolvedEnvelopePath = $envelope_img;
         
-        // If it's a URL or a path containing '/storage/', extract the relative path from the last occurrence
         if (str_contains($envelope_img, '/storage/')) {
             $parts = explode('/storage/', $envelope_img);
             // Take the last part which should be the relative path after the last /storage/
             $envelope_relativePath = ltrim(end($parts), '/');
             $resolvedEnvelopePath = storage_path('app/public/' . $envelope_relativePath);
-            Log::info('envelope_relativePath: ' . $envelope_relativePath);
-            Log::info('resolvedEnvelopePath: ' . $resolvedEnvelopePath);
         } elseif (!file_exists($resolvedEnvelopePath) && !str_starts_with($resolvedEnvelopePath, 'http')) {
             // Try prefixing with public storage path if it's just a relative path
             $resolvedEnvelopePath = storage_path('app/public/' . ltrim($envelope_img, '/'));
         }
 
-        Log::info('Resolved envelope path: ' . $resolvedEnvelopePath);
-
         $env = $this->manager->read($resolvedEnvelopePath)
             ->resize(487, 550)
-            ->rotate(10);
-
-        Log::info('envelope image read');
+            ->rotate(10, '#f3f3f3');
 
         $inv = $this->manager->read($imageData)
             ->resize(352, 500);
@@ -98,11 +84,8 @@ class ImageService
         $canvas->place($env, 'top-left', 4, 0);
         $canvas->place($inv, 'center');
 
-        Log::info('save image 620x640');
-        Log::info($path . $file);
         $canvas->save($path . $file);
 
-        Log::info('return relative path');
         return $relativePath;
     }
 

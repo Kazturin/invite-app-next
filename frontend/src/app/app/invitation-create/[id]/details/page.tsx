@@ -28,7 +28,7 @@ const EventCreatePage = ({ params }: PageProps) => {
         formData.append('invitation[envelope_img]', invitation.envelope_img || '');
         formData.append('invitation[template_id]', invitation.template_id || '');
         formData.append('invitation[price]', String(invitation.price || 0));
-        formData.append('invitation[bg_img]', invitation.inInvitationImage || '');
+        formData.append('invitation[bg_img]', invitation.bg_img || '');
         formData.append('status', '1');
 
         try {

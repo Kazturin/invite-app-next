@@ -25,6 +25,7 @@ interface UseFabricProps {
 
 interface UseFabricEmit {
     onUpdateContent: (content: any) => void;
+    onUpdateInInvitationImage?: (url: string | null) => void;
 }
 
 const isSameImageSrc = (src1: string | null | undefined, src2: string | null | undefined) => {
@@ -46,14 +47,27 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
     const [selectedObject, setSelectedObject] = useState<fabric.Object | null>(null);
 
     const isLoadingRef = useRef(false);
+    const isRestoringRef = useRef(false);
     const propsRef = useRef(props);
+
+    // Undo/Redo history
+    const MAX_HISTORY = 30;
+    const historyRef = useRef<string[]>([]);
+    const historyIndexRef = useRef(-1);
+    const [canUndo, setCanUndo] = useState(false);
+    const [canRedo, setCanRedo] = useState(false);
+
+    const updateUndoRedoState = useCallback(() => {
+        setCanUndo(historyIndexRef.current > 0);
+        setCanRedo(historyIndexRef.current < historyRef.current.length - 1);
+    }, []);
 
     useEffect(() => {
         propsRef.current = props;
     }, [props]);
 
     const saveCanvasState = useCallback(() => {
-        if (isLoadingRef.current) return;
+        if (isLoadingRef.current || isRestoringRef.current) return;
         const canvas = canvasRef.current;
         if (canvas) {
             const canvasData = (canvas as any).toJSON(['isTemplateFrame', 'isUserImage', 'src']);
@@ -67,8 +81,20 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
                 return true;
             });
             emit.onUpdateContent(canvasData);
+
+            // Push to undo history
+            const snapshot = JSON.stringify(canvasData);
+            // Truncate any redo states ahead of current position
+            historyRef.current = historyRef.current.slice(0, historyIndexRef.current + 1);
+            historyRef.current.push(snapshot);
+            // Enforce max history limit
+            if (historyRef.current.length > MAX_HISTORY) {
+                historyRef.current.shift();
+            }
+            historyIndexRef.current = historyRef.current.length - 1;
+            updateUndoRedoState();
         }
-    }, [emit]);
+    }, [emit, updateUndoRedoState]);
 
     const loadFonts = useCallback(async (fontFamilies: string[]) => {
         try {
@@ -204,7 +230,6 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
 
             manageLayers();
             canvas.requestRenderAll();
-            saveCanvasState();
             lastLoadedTemplateIdRef.current = props.template?.id;
         } catch (error) {
             console.error('CRITICAL: Error in loadCanvasState:', error);
@@ -303,22 +328,20 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
     const addText = async () => {
         const canvas = canvasRef.current;
         if (!canvas) return;
-        if (confirm('Текст енгізесіз бе?')) {
-            await loadFonts(['Academy']);
-            const text = new fabric.IText('Новый текст', {
-                left: 10,
-                top: 10,
-                width: 500,
-                fontSize: 60,
-                fill: '#000000',
-                fontFamily: 'Academy',
-                textAlign: 'center',
-            });
-            canvas.add(text);
-            canvas.setActiveObject(text);
-            canvas.requestRenderAll();
-            saveCanvasState();
-        }
+        await loadFonts(['Academy']);
+        const text = new fabric.IText('Новый текст', {
+            left: 200,
+            top: 50,
+            width: 500,
+            fontSize: 60,
+            fill: '#000000',
+            fontFamily: 'Academy',
+            textAlign: 'center',
+        });
+        canvas.add(text);
+        canvas.setActiveObject(text);
+        canvas.requestRenderAll();
+        saveCanvasState();
     };
 
     const changeFontSize = (delta: number) => {
@@ -421,12 +444,13 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
         if (!canvas) return;
         const activeObject = canvas.getActiveObject();
         if (activeObject) {
-            if (confirm('Удалить выбранный объект?')) {
+            if (confirm('Таңдалған объектіні жоясыз ба?')) {
                 canvas.remove(activeObject);
                 // @ts-ignore
                 if (activeObject.isUserImage) {
-                    saveCanvasState();
+                    emit.onUpdateInInvitationImage?.(null);
                 }
+                saveCanvasState();
             }
         }
     };
@@ -490,6 +514,7 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
             canvas.setActiveObject(imgEl);
             manageLayers();
             saveCanvasState();
+            emit.onUpdateInInvitationImage?.(imageUrl);
         } catch (error) {
             console.error('Error adding image:', error);
         }
@@ -587,6 +612,74 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
         });
     };
 
+    const restoreFromHistory = useCallback(async (index: number) => {
+        const canvas = canvasRef.current;
+        if (!canvas || index < 0 || index >= historyRef.current.length) return;
+
+        isRestoringRef.current = true;
+        try {
+            const snapshot = historyRef.current[index];
+            const canvasData = JSON.parse(snapshot);
+
+            // Load fonts from the snapshot
+            if (canvasData.objects) {
+                const fontsToLoad = [
+                    ...new Set(
+                        canvasData.objects
+                            .filter((obj: any) => ['i-text', 'IText'].includes(obj.type) && obj.fontFamily)
+                            .map((obj: any) => obj.fontFamily)
+                    ),
+                ] as string[];
+                if (fontsToLoad.length > 0) {
+                    await loadFonts(fontsToLoad);
+                }
+            }
+
+            // Save template frame before clearing
+            const objects = canvas.getObjects();
+            const templateFrame = objects.find((o: any) => o.isTemplateFrame === true);
+
+            const currentBg = canvas.backgroundColor;
+            canvas.clear();
+            canvas.backgroundColor = currentBg;
+
+            if (canvasData && Object.keys(canvasData).length > 0) {
+                await canvas.loadFromJSON(canvasData);
+            }
+
+            // Re-add template frame if it was present
+            if (templateFrame) {
+                canvas.add(templateFrame);
+                canvas.sendObjectToBack(templateFrame);
+            }
+
+            manageLayers();
+            canvas.requestRenderAll();
+
+            // Update store content
+            emit.onUpdateContent(canvasData);
+
+            historyIndexRef.current = index;
+            updateUndoRedoState();
+        } catch (error) {
+            console.error('Error restoring canvas from history:', error);
+        } finally {
+            isRestoringRef.current = false;
+        }
+    }, [loadFonts, manageLayers, emit, updateUndoRedoState]);
+
+    const undo = useCallback(async () => {
+        if (historyIndexRef.current > 0) {
+            await restoreFromHistory(historyIndexRef.current - 1);
+        }
+    }, [restoreFromHistory]);
+
+    const redo = useCallback(async () => {
+        if (historyIndexRef.current < historyRef.current.length - 1) {
+            await restoreFromHistory(historyIndexRef.current + 1);
+        }
+    }, [restoreFromHistory]);
+
     return {
         fabricCanvasRef,
         canvasWrapperRef,
@@ -603,5 +696,9 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
         deleteSelected,
         addImage,
         exportAsImage,
+        undo,
+        redo,
+        canUndo,
+        canRedo,
     };
 }

@@ -10,6 +10,7 @@ interface AppState {
         price: number | null;
         envelope_img: string | null;
         inInvitationImage: string | null;
+        bg_img: string | null;
     };
     events: {
         loading: boolean;
@@ -37,6 +38,7 @@ interface AppState {
     setContent: (payload: any) => void;
     setImage: (payload: string | null) => void;
     setBgImg: (payload: string | null) => void;
+    setInInvitationImage: (payload: string | null) => void;
     setCanvasData: (payload: any) => void;
 
     // API Actions (thunks equivalent)
@@ -69,6 +71,7 @@ export const useAppStore = create<AppState>()(
                 price: null,
                 envelope_img: null,
                 inInvitationImage: null,
+                bg_img: null,
             },
             events: {
                 loading: false,
@@ -105,6 +108,7 @@ export const useAppStore = create<AppState>()(
             setContent: (content) => set((state) => ({ invitation: { ...state.invitation, content } })),
             setImage: (invitation_img) => set((state) => ({ invitation: { ...state.invitation, invitation_img } })),
             setBgImg: (bg_img) => set((state) => ({ invitation: { ...state.invitation, bg_img } })),
+            setInInvitationImage: (inInvitationImage) => set((state) => ({ invitation: { ...state.invitation, inInvitationImage } })),
             setCanvasData: (canvasData) => set({ canvasData }),
 
             getEvents: async () => {

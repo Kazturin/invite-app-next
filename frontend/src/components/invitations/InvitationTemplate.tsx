@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
-import { PhotoIcon } from '@heroicons/react/24/outline';
+import React, { useState, useEffect, useImperativeHandle, forwardRef, useCallback } from 'react';
+import { PhotoIcon, ArrowUturnLeftIcon, ArrowUturnRightIcon } from '@heroicons/react/24/outline';
 import { useFabric } from '@/hooks/useFabric';
 import { FONTS, BACKGROUND_IMAGES } from '@/data/invitation-constants';
 import { cn } from '@/lib/utils';
@@ -14,6 +14,7 @@ interface InvitationTemplateProps {
     bg_img?: string | null;
     onUpdateContent: (content: any) => void;
     onUpdateBgImg: (bgImg: string) => void;
+    onUpdateInInvitationImage?: (url: string | null) => void;
 }
 
 export interface InvitationTemplateRef {
@@ -27,12 +28,13 @@ const InvitationTemplate = forwardRef<InvitationTemplateRef, InvitationTemplateP
     bg_img,
     onUpdateContent,
     onUpdateBgImg,
+    onUpdateInInvitationImage,
 }, ref) => {
     const [editBlock, setEditBlock] = useState<'text' | 'bg' | 'image'>('text');
     const [currentBgImg, setCurrentBgImg] = useState<string | null>(bg_img || null);
 
     const fabricProps = React.useMemo(() => ({ template, content, bg_img: currentBgImg }), [template, content, currentBgImg]);
-    const fabricEmit = React.useMemo(() => ({ onUpdateContent }), [onUpdateContent]);
+    const fabricEmit = React.useMemo(() => ({ onUpdateContent, onUpdateInInvitationImage }), [onUpdateContent, onUpdateInInvitationImage]);
 
     const {
         fabricCanvasRef,
@@ -50,6 +52,10 @@ const InvitationTemplate = forwardRef<InvitationTemplateRef, InvitationTemplateP
         deleteSelected,
         addImage,
         exportAsImage,
+        undo,
+        redo,
+        canUndo,
+        canRedo,
     } = useFabric(fabricProps, fabricEmit);
 
     useImperativeHandle(ref, () => ({
@@ -79,6 +85,26 @@ const InvitationTemplate = forwardRef<InvitationTemplateRef, InvitationTemplateP
         }
     }, []);
 
+    // Keyboard shortcuts for Undo/Redo
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+                e.preventDefault();
+                if (e.shiftKey) {
+                    redo();
+                } else {
+                    undo();
+                }
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'y') {
+                e.preventDefault();
+                redo();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [undo, redo]);
+
     return (
         <div className="relative">
             <div className="flex space-x-4 justify-center items-center py-4">
@@ -107,6 +133,25 @@ const InvitationTemplate = forwardRef<InvitationTemplateRef, InvitationTemplateP
                     <PhotoIcon className="w-7 h-7 mx-auto" />
                     <p>Фон</p>
                 </div>
+
+                <div className="border-l border-gray-300 h-10 mx-2" />
+
+                <button
+                    onClick={undo}
+                    disabled={!canUndo}
+                    className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                    title="Артқа қайтару (Ctrl+Z)"
+                >
+                    <ArrowUturnLeftIcon className="w-5 h-5" />
+                </button>
+                <button
+                    onClick={redo}
+                    disabled={!canRedo}
+                    className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                    title="Қайта орындау (Ctrl+Shift+Z)"
+                >
+                    <ArrowUturnRightIcon className="w-5 h-5" />
+                </button>
             </div>
 
             <div className="w-full max-w-lg mx-auto mb-4">

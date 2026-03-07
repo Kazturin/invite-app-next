@@ -14,7 +14,7 @@ interface PageProps {
 const InvitationEditPage = ({ params }: PageProps) => {
     const { id } = use(params);
     const router = useRouter();
-    const { invitation, getInvitation, setContent, setBgImg, setImage, saveInvitation } = useAppStore();
+    const { invitation, getInvitation, setContent, setBgImg, setImage, setInInvitationImage, saveInvitation } = useAppStore();
 
     const [loading, setLoading] = useState(true);
     const captureRef = useRef<InvitationTemplateRef>(null);
@@ -48,8 +48,8 @@ const InvitationEditPage = ({ params }: PageProps) => {
                 formData.set('content', JSON.stringify(invitation.content));
                 formData.set('template_id', (invitation as any).template_id);
                 formData.set('invitation_img', imageString);
-                formData.set('bg_img', (invitation as any).bg_img || '');
-                formData.set('inInvitationImage', (invitation as any).inInvitationImage || '');
+                formData.set('bg_img', invitation.bg_img || '');
+                formData.set('inInvitationImage', invitation.inInvitationImage || '');
 
                 await saveInvitation(id, formData);
 
@@ -77,6 +77,10 @@ const InvitationEditPage = ({ params }: PageProps) => {
 
     const updateBgImg = (newBgImg: string | null) => {
         setBgImg(newBgImg);
+    };
+
+    const updateInInvitationImage = (url: string | null) => {
+        setInInvitationImage(url);
     };
 
     if (loading && !invitation.content) {
@@ -110,6 +114,7 @@ const InvitationEditPage = ({ params }: PageProps) => {
                             bg_img={(invitation as any).bg_img}
                             onUpdateContent={updateContent}
                             onUpdateBgImg={updateBgImg}
+                            onUpdateInInvitationImage={updateInInvitationImage}
                         />
                     </div>
                 ) : (

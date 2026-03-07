@@ -31,6 +31,8 @@ const PreviewPage = ({ params }: PageProps) => {
     const [isPaused, setIsPaused] = useState(true);
     const audioRef = useRef<HTMLAudioElement>(null);
 
+    const [isEventPast, setIsEventPast] = useState(false);
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
@@ -40,6 +42,7 @@ const PreviewPage = ({ params }: PageProps) => {
                     const watermarkData = await getWatermarkInvitation(eventData.invitation.invitation_img_path);
                     setWatermarkInvitation(watermarkData);
                 }
+                setIsEventPast(eventData.date ? new Date(eventData.date) < new Date(new Date().setHours(0, 0, 0, 0)) : true);
             } catch (err) {
                 console.error('Failed to fetch event data', err);
             } finally {
@@ -186,7 +189,7 @@ const PreviewPage = ({ params }: PageProps) => {
                         />
 
                         {/* Decorative Divider & Countdown */}
-                        <div className="relative space-y-8 pt-8">
+                        <div className="relative space-y-8">
                             <div className="flex items-center justify-center gap-4">
                                 <div className="h-px w-24 bg-gradient-to-r from-transparent to-amber-200"></div>
                                 <div className="text-yellow-500">
@@ -199,7 +202,7 @@ const PreviewPage = ({ params }: PageProps) => {
 
                             <div className="space-y-4">
                                 <span className="text-xs font-bold text-amber-800 uppercase tracking-[0.3em]">
-                                    {eventDetails
+                                    {isEventPast
                                         ? (eventDetails.type === 'party' ? 'Мереке өтті' : 'Той өтті')
                                         : (eventDetails.type === 'party' ? 'Мерекеге дейін қалды' : 'Тойға дейін қалды')}
                                 </span>
