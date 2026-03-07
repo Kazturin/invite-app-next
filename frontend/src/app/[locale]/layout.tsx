@@ -23,13 +23,13 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   };
 }
 
-export default async function RootLayout({
-  children,
-  params: { locale }
-}: Readonly<{
+export default async function RootLayout(props: {
   children: React.ReactNode;
-  params: { locale: string };
-}>) {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await props.params;
+  const children = props.children;
+
   // Providing all messages to the client
   // side is the easiest way to get started
   const messages = await getMessages();
