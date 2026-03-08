@@ -5,6 +5,7 @@ interface UserData {
     id?: string;
     name?: string;
     email?: string;
+    created_at?: string;
     // Add other user fields as needed
 }
 

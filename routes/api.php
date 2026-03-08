@@ -40,6 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/guest/invite', [GuestInviteController::class, 'save']);
     Route::put('/guest/invite/{guestInvite}', [GuestInviteController::class, 'update']);
     Route::delete('/event-image/{eventImage}', [\App\Http\Controllers\Api\EventController::class, 'deleteImage']);
+    Route::delete('/user', [AuthController::class, 'deleteAccount']);
 });
 
 Route::post('/feedback',[\App\Http\Controllers\Api\FeedbackController::class,'store']);

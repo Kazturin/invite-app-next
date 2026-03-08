@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { Link, usePathname, useRouter } from '@/i18n/routing';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
 import { useUserStore } from '@/store/useUserStore';
 import { UserCircleIcon, ArrowRightStartOnRectangleIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import LanguageSwitcher from '../LanguageSwitcher';
 import { useTranslations } from 'next-intl';
+import apiClient from '@/lib/api-client';
 
 const Header: React.FC = () => {
     const [mobileNav, setMobileNav] = useState(false);
@@ -19,10 +19,17 @@ const Header: React.FC = () => {
 
     const toggleMobileNav = () => setMobileNav(!mobileNav);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         setMobileNav(false);
-        logout();
-        router.push('/');
+        setDropDownNav(false);
+        try {
+            await apiClient.post('/logout');
+        } catch (err) {
+            console.error('Logout error:', err);
+        } finally {
+            logout();
+            router.push('/');
+        }
     };
 
     const toWhatsapp = () => {
@@ -95,14 +102,20 @@ const Header: React.FC = () => {
                                     {dropDownNav && (
                                         <>
                                             <button
-                                                className="fixed inset-0 h-full w-full cursor-default focus:outline-none"
+                                                className="fixed inset-0 h-full w-full cursor-default focus:outline-none z-40"
                                                 onClick={() => setDropDownNav(false)}
                                                 tabIndex={-1}
                                             />
-                                            <div className="absolute shadow-lg border w-48 rounded py-1 px-2 text-sm mt-4 bg-white z-10 right-0">
-                                                <a onClick={handleLogout} className="block px-4 py-2 text-sm text-gray-700 cursor-pointer">
+                                            <div className="absolute shadow-lg border w-48 rounded py-1 px-2 text-sm mt-4 bg-white z-50 right-0">
+                                                <Link href="/app/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                                                    {t('profile')}
+                                                </Link>
+                                                <button
+                                                    onClick={handleLogout}
+                                                    className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer border-t"
+                                                >
                                                     {t('logout')}
-                                                </a>
+                                                </button>
                                             </div>
                                         </>
                                     )}
@@ -140,9 +153,14 @@ const Header: React.FC = () => {
                                 <Link href="/feedback" onClick={toggleMobileNav}>Кері байланыс</Link>
                             </li> */}
                             {token ? (
-                                <li className="hover:text-amber-500 transition duration-200 py-4 border-b border-gray-700 w-full text-center">
-                                    <a onClick={handleLogout} className="cursor-pointer">{t('logout')}</a>
-                                </li>
+                                <>
+                                    <li className="hover:text-amber-500 transition duration-200 py-4 border-b border-gray-700 w-full text-center">
+                                        <Link href="/app/profile" onClick={toggleMobileNav}>{t('profile')}</Link>
+                                    </li>
+                                    <li className="hover:text-amber-500 transition duration-200 py-4 border-b border-gray-700 w-full text-center">
+                                        <button onClick={handleLogout} className="cursor-pointer uppercase w-full">{t('logout')}</button>
+                                    </li>
+                                </>
                             ) : (
                                 <li className="bg-transparent border-2 rounded px-6 py-2 mt-6 w-full text-center cursor-pointer hover:text-amber-500 transition duration-200">
                                     <Link href="/login" onClick={toggleMobileNav}>{t('login')}</Link>

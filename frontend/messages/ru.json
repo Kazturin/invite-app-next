@@ -191,8 +191,21 @@
         "login": "Войти",
         "register": "Регистрация",
         "my_invites": "Мои приглашения",
+        "profile": "Профиль",
         "feedback": "Обратная связь",
         "language_select_label": "Выберите язык",
         "logout": "Выйти"
+    },
+    "Profile": {
+        "title": "Профиль",
+        "personal_data": "Личные данные",
+        "email": "Email",
+        "name": "Имя",
+        "register_date": "Дата регистрации",
+        "delete_account": "Удалить аккаунт",
+        "delete_confirm": "Вы уверены, что хотите удалить свой аккаунт? Все ваши приглашения и данные будут безвозвратно удалены.",
+        "delete_button": "Удалить навсегда",
+        "cancel_button": "Отмена",
+        "account_deleted": "Ваш аккаунт успешно удален"
     }
 }

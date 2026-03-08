@@ -162,4 +162,19 @@ class AuthController extends Controller
             : ['status'=>false,'message' => __($status)];
     }
 
+    public function deleteAccount(Request $request)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        // Revoke all tokens...
+        $user->tokens()->delete();
+
+        // Delete the user
+        $user->delete();
+
+        return response([
+            'success' => true
+        ]);
+    }
 }

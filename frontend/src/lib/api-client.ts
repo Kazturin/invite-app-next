@@ -55,7 +55,9 @@ apiClient.interceptors.response.use(
             useUserStore.getState().logout();
 
             if (typeof window !== 'undefined') {
-                window.location.href = '/login';
+                const locale = window.location.pathname.split('/')[1];
+                const loginPath = (locale === 'kk' || locale === 'ru') ? `/${locale}/login` : '/login';
+                window.location.href = loginPath;
             }
         }
         return Promise.reject(error);
