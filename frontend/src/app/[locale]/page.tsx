@@ -65,11 +65,6 @@ export default async function Home({ params }: Props) {
       "@type": "Offer",
       "price": "1850",
       "priceCurrency": "KZT"
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": "1250"
     }
   };
 

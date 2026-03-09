@@ -33,15 +33,7 @@ const HeroActions: React.FC<HeroActionsProps> = ({ screenshot2Url, guestsScreenU
                     </svg>
                 </div>
                 <div className="text-gray-800">
-                    {t('hero_title')} (
-                    <a
-                        className="underline text-sm text-gray-600 hover:text-blue-500 transition-colors"
-                        href="https://toi-invite.kz/toi/aslan-men-erkezannyn-toiy"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        {t('example_link')}
-                    </a>)
+                    {t('invitation_website')}
                 </div>
             </li>
 
