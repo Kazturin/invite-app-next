@@ -63,7 +63,7 @@ export default async function Home({ params }: Props) {
     "description": t('description'),
     "offers": {
       "@type": "Offer",
-      "price": "1990",
+      "price": "1850",
       "priceCurrency": "KZT"
     },
     "aggregateRating": {

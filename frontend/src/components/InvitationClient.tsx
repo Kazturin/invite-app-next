@@ -90,10 +90,10 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
 
                 {/* Invitation Hero */}
                 <div
-                    className="bg-no-repeat bg-cover bg-center w-full drop-shadow-md pb-12"
+                    className="bg-no-repeat bg-cover bg-center w-full drop-shadow-md"
                     style={{ backgroundImage: `url(${event.invitation?.data?.bg_img || '/images/bg/1.jpg'})` }}
                 >
-                    <div className="max-w-[650px] mx-auto h-[550px] relative">
+                    <div className="max-w-[650px] mx-auto h-[530px] md:h-[550px] relative">
                         {event.invitation?.template?.envelope_img && (
                             <Image
                                 className="w-96 hidden mx-auto absolute top-8 left-[10px] -rotate-12 sm:block animate-fade-in-up"
