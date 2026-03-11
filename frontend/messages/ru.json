@@ -126,10 +126,12 @@
         "seconds": "секунд"
     },
     "Questionnaire": {
-        "fullname_label": "Ваше имя и фамилия",
-        "relative_label": "Кто вы для организатора?",
-        "relative_placeholder": "Например: Друг, Коллега",
-        "add_child": "Добавить еще человека",
+        "fullname_label": "Ваше имя",
+        "fullname_placeholder": "Введите полное имя",
+        "relative_label": "Кем приходитесь?",
+        "relative_placeholder": "Например: Друг семьи, Коллега",
+        "guests_title": "С кем вы придете?",
+        "add_child": "Добавить гостя",
         "child_name_placeholder": "Полное имя",
         "save_button": "Сохранить",
         "error_message": "Произошла ошибка"

@@ -6,7 +6,7 @@ import Alert from './Alert';
 import ChildEditor from './ChildEditor';
 import { useAppStore } from '@/store/useAppStore';
 import { PlusIcon } from '@heroicons/react/24/outline';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 interface Child {
     key: string;
@@ -35,6 +35,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({
     const saveGuest = useAppStore((state) => state.saveGuest);
     const t = useTranslations('Questionnaire');
     const tp = useTranslations('InvitationPreview');
+    const locale = useLocale();
 
     const [model, setModel] = useState({
         fullname: '',
@@ -106,87 +107,109 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({
     };
 
     return (
-        <>
+        <div className="max-w-md mx-auto">
             {errorMsg && (
-                <Alert className="flex-col items-stretch text-sm mx-4 mt-4">
-                    <div>{errorMsg}</div>
-                </Alert>
+                <div className="mb-6">
+                    <Alert className="bg-rose-50 border-rose-200 text-rose-700 rounded-2xl shadow-sm">
+                        <div className="text-sm font-medium">{errorMsg}</div>
+                    </Alert>
+                </div>
             )}
-            <form onSubmit={save} className="mt-2 w-full">
-                <div className="px-5 pb-5 pt-1">
-                    <div className="mt-2 text-left">
-                        <label htmlFor="fullname" className="block text-sm font-medium leading-6 text-gray-900 mb-2">
-                            {labels.fullname || t('fullname_label')}
-                        </label>
-                        <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-amber-600">
-                            <input
-                                value={model.fullname}
-                                onChange={(e) => setModel({ ...model, fullname: e.target.value })}
-                                type="text"
-                                id="fullname"
-                                className="block flex-1 border-0 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                                required
-                            />
-                        </div>
-                    </div>
 
-                    <div className="mt-2 text-left">
-                        <label htmlFor="relative" className="block text-sm font-medium leading-6 text-gray-900 mb-2">
-                            {labels.relative || t('relative_label')}
-                        </label>
-                        <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-amber-600">
+            <form onSubmit={save} className="space-y-6">
+                {/* Main Guest Information Section */}
+                <div className="bg-stone-50/50 p-6 rounded-3xl border border-stone-100">
+                    <div className="space-y-5">
+                        <div className="text-left">
+                            <label htmlFor="fullname" className="block text-xs font-bold text-stone-500 uppercase tracking-widest mb-2 ml-1">
+                                {labels.fullname || t('fullname_label')}
+                            </label>
+                            <div className="relative group">
+                                <input
+                                    value={model.fullname}
+                                    onChange={(e) => setModel({ ...model, fullname: e.target.value })}
+                                    type="text"
+                                    id="fullname"
+                                    className="block w-full px-5 py-3.5 bg-white border border-stone-200 rounded-2xl text-stone-900 placeholder:text-stone-400 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 focus:outline-none transition-all duration-200 shadow-sm"
+                                    placeholder={t('fullname_placeholder') || 'Аты-жөніңіз'}
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div className="text-left">
+                            <label htmlFor="relative" className="block text-xs font-bold text-stone-500 uppercase tracking-widest mb-2 ml-1">
+                                {labels.relative || t('relative_label')}
+                            </label>
                             <input
                                 value={model.relative}
                                 onChange={(e) => setModel({ ...model, relative: e.target.value })}
                                 type="text"
                                 id="relative"
-                                className="block flex-1 border-0 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                                className="block w-full px-5 py-3.5 bg-white border border-stone-200 rounded-2xl text-stone-900 placeholder:text-stone-400 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 focus:outline-none transition-all duration-200 shadow-sm"
                                 placeholder={placeholders.relative || t('relative_placeholder')}
                             />
                         </div>
                     </div>
+                </div>
 
-                    {(status === 1 || status === 2) && (
-                        <div className="bg-white my-4 border-t border-gray-300">
-                            <div className="text-md font-semibold mb-2">
-                                <button
-                                    type="button"
-                                    onClick={addChild}
-                                    className="flex items-center text-sm mt-2 py-1 px-4 rounded-sm text-white bg-gray-600 hover:bg-gray-700 transition-colors"
-                                >
-                                    {labels.addChild || t('add_child')}
-                                    <PlusIcon className="h-4 w-4 ml-1" />
-                                </button>
-                            </div>
-                            <div>
-                                {model.child.map((child, index) => (
+                {/* Additional Guests Section */}
+                {(status === 1 || status === 2) && (
+                    <div className="space-y-4 pt-2">
+                        <div className="flex items-center gap-4 px-2">
+                            <div className="h-px flex-1 bg-stone-200"></div>
+                            <span className="text-xs font-bold text-stone-400 uppercase tracking-[0.2em]">
+                                {t('guests_title')}
+                            </span>
+                            <div className="h-px flex-1 bg-stone-200"></div>
+                        </div>
+
+                        <div className="space-y-3">
+                            {model.child.map((child, index) => (
+                                <div key={child.key} className="animate-in fade-in slide-in-from-top-2 duration-300">
                                     <ChildEditor
-                                        key={child.key}
                                         child={child}
                                         index={index}
                                         onChange={handleChildChange}
                                         deleteChild={deleteChild}
                                     />
-                                ))}
-                            </div>
+                                </div>
+                            ))}
                         </div>
-                    )}
-                </div>
 
-                <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                        <button
+                            type="button"
+                            onClick={addChild}
+                            className="group flex flex-col items-center justify-center w-full py-5 px-4 border-2 border-dashed border-stone-200 rounded-2xl text-stone-400 hover:border-amber-400 hover:text-amber-600 hover:bg-amber-50/30 transition-all duration-300 active:scale-[0.98]"
+                        >
+                            <div className="bg-stone-100 group-hover:bg-amber-100 p-2 rounded-full mb-1.5 transition-colors">
+                                <PlusIcon className="h-5 w-5 text-stone-400 group-hover:text-amber-600" />
+                            </div>
+                            <span className="text-sm font-semibold tracking-wide uppercase">
+                                {labels.addChild || t('add_child')}
+                            </span>
+                        </button>
+                    </div>
+                )}
+
+                <div className="pt-4 px-2">
                     <button
                         disabled={loadingPost}
                         type="submit"
-                        className="inline-flex w-full justify-center rounded-md bg-amber-500 px-6 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed shadow-sm sm:ml-3 sm:w-auto hover:bg-amber-600 transition-colors"
+                        className="relative w-full overflow-hidden group flex items-center justify-center rounded-2xl bg-amber-500 px-8 py-4 text-sm font-bold text-white shadow-xl shadow-amber-500/10 hover:bg-amber-600 hover:shadow-amber-500/20 active:scale-95 disabled:opacity-50 disabled:active:scale-100 transition-all duration-200"
                     >
-                        {loadingPost && (
-                            <span className="w-5 h-5 mr-2 rounded-full animate-spin border-2 border-solid border-white border-t-transparent"></span>
+                        {loadingPost ? (
+                            <span className="w-5 h-5 mr-3 rounded-full animate-spin border-2 border-solid border-white border-t-transparent"></span>
+                        ) : (
+                            <span className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-[-20deg]"></span>
                         )}
-                        {renderSubmitButtonText()}
+                        <span className="relative tracking-widest uppercase">
+                            {renderSubmitButtonText()}
+                        </span>
                     </button>
                 </div>
             </form>
-        </>
+        </div>
     );
 };
 

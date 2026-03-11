@@ -27,31 +27,27 @@ const ChildEditor: React.FC<ChildEditorProps> = ({ child, index, onChange, delet
     };
 
     return (
-        <>
-            <div className="flex items-center">
-                <div className="grow">
-                    <div className="flex items-center space-x-2">
-                        <input
-                            type="text"
-                            name={`child_${index}`}
-                            value={fullname}
-                            onChange={handleNameChange}
-                            placeholder={t('child_name_placeholder')}
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md py-1.5 px-3 border outline-none"
-                            required
-                        />
-                        <button
-                            type="button"
-                            onClick={() => deleteChild(child)}
-                            className="text-red-500 hover:text-red-700 p-1"
-                        >
-                            <TrashIcon className="h-5 w-5" />
-                        </button>
-                    </div>
-                </div>
+        <div className="group flex items-center gap-2 p-1 bg-white border border-stone-200 rounded-2xl shadow-sm hover:border-amber-200 hover:shadow-md transition-all duration-300">
+            <div className="flex-1 pl-4">
+                <input
+                    type="text"
+                    name={`child_${index}`}
+                    value={fullname}
+                    onChange={handleNameChange}
+                    placeholder={t('child_name_placeholder')}
+                    className="w-full py-2.5 bg-transparent border-none text-stone-900 placeholder:text-stone-400 focus:ring-0 text-sm font-medium"
+                    required
+                />
             </div>
-            <hr className="my-4 border-gray-200" />
-        </>
+            <button
+                type="button"
+                onClick={() => deleteChild(child)}
+                className="p-2.5 text-stone-300 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all duration-200"
+                title={t('delete_child') || 'Удалить'}
+            >
+                <TrashIcon className="h-5 w-5" />
+            </button>
+        </div>
     );
 };
 

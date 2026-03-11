@@ -126,10 +126,12 @@
         "seconds": "секунд"
     },
     "Questionnaire": {
-        "fullname_label": "Сіздің аты-жөніңіз",
+        "fullname_label": "Есіміңіз",
+        "fullname_placeholder": "Аты-жөніңізді енгізіңіз",
         "relative_label": "Туыстық қатынас",
-        "relative_placeholder": "Мысалы: Досы, Әріптесі",
-        "add_child": "Тағы адам қосу",
+        "relative_placeholder": "Мысалы: Досы, Нағашысы",
+        "guests_title": "Бірге келетін қонақтар",
+        "add_child": "Қонақ қосу",
         "child_name_placeholder": "Толық аты-жөні",
         "save_button": "Сақтау",
         "error_message": "Қате орын алды"
