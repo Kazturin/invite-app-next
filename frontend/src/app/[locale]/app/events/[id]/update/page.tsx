@@ -55,7 +55,12 @@ const EventUpdatePage = ({ params }: PageProps) => {
             }
         } catch (err: any) {
             console.error('Failed to update event', err);
-            setError(err.response?.data?.message || 'Серверде қате орын алды');
+            // If server returns validation errors (usually 422), pass the whole data
+            if (err.response?.data?.errors) {
+                setError(err.response.data);
+            } else {
+                setError(err.response?.data?.message || 'Серверде қате орын алды');
+            }
         } finally {
             setSaveLoading(false);
         }
@@ -91,7 +96,7 @@ const EventUpdatePage = ({ params }: PageProps) => {
                     initialData={event.data}
                     onSubmit={handleSubmit}
                     onDeleteImage={deleteEventImage}
-                    onPreview={() => router.push(`/app/events/${id}/preview`)}
+                    onPreview={() => window.location.href = `/app/events/${id}/preview`}
                     loading={saveLoading}
                     errors={error}
                 />

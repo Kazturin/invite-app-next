@@ -20,7 +20,7 @@ interface EventFormProps {
     onDeleteImage?: (imageId: number) => Promise<void>;
     onPreview?: () => void;
     loading: boolean;
-    errors?: string | null;
+    errors?: any | null;
 }
 
 const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData, onSubmit, onDeleteImage, onPreview, loading, errors }, ref) => {
@@ -31,7 +31,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
     const [model, setModel] = useState({
         title: initialData?.title || '',
         type: initialData?.type || 'wedding',
-        description: initialData?.description || `<p><span class="ql-font-Mon" style="color: rgb(178, 107, 0);">${t('additional_info_placeholder')}</span></p>`,
+        description: initialData?.description || t.raw('additional_info_placeholder'),
         photos_link: initialData?.photos_link || '',
         place: initialData?.place || '',
         address_link: initialData?.address?.address || initialData?.address_link || '',
@@ -54,6 +54,40 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
             })));
         }
     }, [initialData]);
+
+    useEffect(() => {
+        if (errors && typeof errors === 'object' && errors.errors) {
+            const serverErrors: any = {};
+            Object.keys(errors.errors).forEach(key => {
+                const errorValue = Array.isArray(errors.errors[key]) ? errors.errors[key][0] : errors.errors[key];
+
+                // Map server keys to form field IDs if they differ
+                let fieldKey = key;
+                if (key === 'address.address') fieldKey = 'address_link';
+                // Add other mappings if necessary
+
+                serverErrors[fieldKey] = errorValue;
+            });
+            setValidationErrors(serverErrors);
+
+            // Scroll to first server error
+            const firstErrorField = Object.keys(serverErrors)[0];
+            const element = document.getElementById(firstErrorField);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+    }, [errors]);
+
+    const scrollToFirstError = (errorsObj: any) => {
+        const firstErrorField = Object.keys(errorsObj)[0];
+        const element = document.getElementById(firstErrorField);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+            window.scrollTo(0, 0);
+        }
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -127,7 +161,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
 
         if (Object.keys(errors).length > 0) {
             setValidationErrors(errors);
-            window.scrollTo(0, 0);
+            scrollToFirstError(errors);
             return;
         }
 
@@ -171,7 +205,8 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
                 <div className="border-b border-gray-900/10 pb-6">
                     <h2 className="text-base font-semibold leading-7 text-gray-900">{t('event_info')}</h2>
 
-                    {errors && <Alert className="mb-4">{errors}</Alert>}
+                    {errors && typeof errors === 'string' && <Alert className="mb-4">{errors}</Alert>}
+                    {errors && typeof errors === 'object' && errors.message && <Alert className="mb-4">{errors.message}</Alert>}
 
                     <div className="mt-10">
                         <div>
@@ -192,7 +227,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
                             </div>
                         </div>
 
-                        <div className="mt-4">
+                        <div className="mt-4" id="type">
                             <label className="text-left block text-sm font-medium leading-6 text-gray-900">
                                 {t('event_type')} <span className="text-red-500">*</span>
                             </label>
@@ -220,21 +255,22 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
                                     <span className="ml-2 block text-sm text-gray-900">{t('party')}</span>
                                 </label>
                             </div>
+                            {validationErrors.type && <p className="mt-1 text-sm text-red-600">{validationErrors.type}</p>}
                         </div>
 
                         <div className="mt-4">
                             <label htmlFor="description" className="text-left block text-sm font-medium leading-6 text-gray-900">
                                 {t('additional_info')}
                             </label>
-                            <div className="mt-2 text-black">
+                            <div className="mt-2 text-black" id="description">
                                 <ReactQuill
                                     theme="snow"
                                     value={model.description}
                                     onChange={(content) => setModel(prev => ({ ...prev, description: content }))}
                                     modules={{ toolbar: toolbarOptions }}
                                     className="min-h-[10rem] mb-12"
-                                    placeholder={t('additional_info_placeholder')}
                                 />
+                                {validationErrors.description && <p className="mt-[-2.5rem] mb-4 text-sm text-red-600">{validationErrors.description}</p>}
                             </div>
                         </div>
 

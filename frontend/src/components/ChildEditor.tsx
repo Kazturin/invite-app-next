@@ -28,14 +28,14 @@ const ChildEditor: React.FC<ChildEditorProps> = ({ child, index, onChange, delet
 
     return (
         <div className="group flex items-center gap-2 p-1 bg-white border border-stone-200 rounded-2xl shadow-sm hover:border-amber-200 hover:shadow-md transition-all duration-300">
-            <div className="flex-1 pl-4">
+            <div className="flex-1">
                 <input
                     type="text"
                     name={`child_${index}`}
                     value={fullname}
                     onChange={handleNameChange}
                     placeholder={t('child_name_placeholder')}
-                    className="w-full py-2.5 bg-transparent border-none text-stone-900 placeholder:text-stone-400 focus:ring-0 text-sm font-medium"
+                    className="w-full py-2.5 bg-transparent border-none text-stone-900 placeholder:text-stone-400 placeholder:pl-4 pl-4 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 rounded-2xl focus:outline-none transition-all duration-200 shadow-sm text-sm font-medium"
                     required
                 />
             </div>

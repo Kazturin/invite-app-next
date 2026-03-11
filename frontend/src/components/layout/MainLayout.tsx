@@ -8,7 +8,7 @@ import Footer from './Footer';
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const pathname = usePathname();
-    const isInvitationPage = pathname?.startsWith('/toi/') || pathname?.startsWith('/ru/toi/');
+    const isInvitationPage = pathname?.includes('/toi/') || pathname?.includes('/preview');
 
     return (
         <GoogleOAuthProvider clientId="292704683290-uqm9jjau6r4vcbi5kn7upc7go9k8mebf.apps.googleusercontent.com">

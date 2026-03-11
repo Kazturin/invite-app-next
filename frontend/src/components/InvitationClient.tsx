@@ -62,202 +62,269 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
     const videoId = event.video_link ? event.video_link.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|&v=|shorts\/))([^#&?]*)/)?.[1] : null;
 
     return (
-        <div className="bg-[#fdfbf7] min-h-screen">
-            {/* Action Buttons */}
-            <div className="max-w-screen-xl mx-auto fixed top-0 left-0 right-0 z-50 bg-white backdrop-blur-sm border-b border-stone-100 px-4 py-4 sm:static sm:border-none">
-                <div className="flex justify-center items-center gap-3 sm:gap-6 max-w-2xl mx-auto">
+        <div className="bg-[#FAF9F6] min-h-screen relative selection:bg-amber-100 italic-fonts pb-12 sm:pb-0">
+            {/* Action Buttons - Floating at the top for mobile as requested */}
+            <div className="fixed top-4 left-0 right-0 z-[60] px-4 pointer-events-none">
+                <div className="max-w-md mx-auto pointer-events-auto bg-white/90 backdrop-blur-xl border border-stone-200/60 p-1.5 rounded-full shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] flex justify-center items-center gap-2">
                     <button
                         disabled={isEventPast}
                         onClick={() => openModal(1)}
-                        className="group relative flex-1 max-w-[200px] py-2.5 px-4 rounded-full bg-emerald-700 text-white font-semibold text-sm uppercase tracking-wider shadow-md transition-all hover:bg-emerald-800 hover:shadow-lg active:scale-95 disabled:opacity-50"
+                        className="group relative flex-1 py-3 px-6 rounded-full bg-emerald-800 text-white font-bold text-xs uppercase tracking-widest shadow-lg transition-all hover:bg-emerald-900 hover:shadow-emerald-900/20 active:scale-95 disabled:opacity-50 cursor-pointer overflow-hidden"
                     >
-                        {t('yes_going')}
+                        <span className="relative z-10">{t('yes_going')}</span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
                     </button>
                     <button
                         disabled={isEventPast}
                         onClick={() => openModal(0)}
-                        className="group relative flex-1 max-w-[200px] py-2.5 px-4 rounded-full border border-stone-300 text-stone-500 font-semibold text-sm uppercase tracking-wider hover:border-rose-300 hover:text-rose-500 hover:bg-rose-50 transition-all active:scale-95 disabled:opacity-50"
+                        className="group relative flex-1 py-3 px-6 rounded-full border border-stone-200 bg-white text-stone-600 font-bold text-xs uppercase tracking-widest hover:bg-stone-50 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
                     >
                         {t('no_going')}
                     </button>
                 </div>
             </div>
-            <div className="sm:hidden h-[74px]"></div>
+            <div className="h-20 sm:hidden"></div> {/* Spacer for fixed header */}
 
-            <div className="max-w-screen-xl mx-auto bg-white shadow-2xl relative overflow-hidden font-baltica pb-20 min-h-screen">
-                {/* Subtle Paper Texture Overlay */}
-                <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]"></div>
+            <div className="max-w-[850px] mx-auto bg-white shadow-[0_30px_100px_-20px_rgba(0,0,0,0.15)] relative overflow-hidden font-baltica pb-20 min-h-screen border-x border-stone-100">
+                {/* Subtle Textures & Overlays */}
+                <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]"></div>
 
-                {/* Invitation Hero */}
+                {/* Top Flourish */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-32 opacity-20 pointer-events-none">
+                    <svg viewBox="0 0 200 100" className="w-full h-full text-amber-600 fill-current">
+                        <path d="M100 20 C80 20 70 40 100 60 C130 40 120 20 100 20 Z" />
+                    </svg>
+                </div>
+
+                {/* Invitation Hero Area */}
                 <div
-                    className="bg-no-repeat bg-cover bg-center w-full drop-shadow-md"
+                    className="bg-no-repeat bg-cover bg-center w-full relative z-10 group"
                     style={{ backgroundImage: `url(${event.invitation?.data?.bg_img || '/images/bg/1.jpg'})` }}
                 >
-                    <div className="max-w-[650px] mx-auto h-[530px] md:h-[550px] relative">
+                    <div className="absolute inset-0 bg-stone-900/10 pointer-events-none"></div>
+                    <div className="max-w-[550px] mx-auto h-[500px] md:h-[600px] relative flex items-center justify-center p-8">
                         {event.invitation?.template?.envelope_img && (
-                            <Image
-                                className="w-96 hidden mx-auto absolute top-8 left-[10px] -rotate-12 sm:block animate-fade-in-up"
-                                src={event.invitation.template.envelope_img}
-                                alt="Envelope"
-                                width={384}
-                                height={384}
-                                unoptimized={event.invitation.template.envelope_img.includes('localhost:8000')}
-                            />
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[450px] aspect-square transition-transform duration-700 group-hover:scale-105">
+                                <Image
+                                    className="w-full h-full opacity-40 blur-[2px] -rotate-6 sm:block"
+                                    src={event.invitation.template.envelope_img}
+                                    alt="Background Theme"
+                                    width={500}
+                                    height={500}
+                                    unoptimized={event.invitation.template.envelope_img.includes('localhost:8000')}
+                                />
+                            </div>
                         )}
-                        <Image
-                            className="w-80 mx-auto absolute top-8 left-0 right-0 drop-shadow-2xl animate-invitation-float z-10"
-                            src={invitation_img}
-                            alt="Invitation"
-                            width={400}
-                            height={570}
-                            priority
-                            unoptimized={invitation_img.includes('localhost:8000')}
-                        />
+                        <div className="relative z-20 transition-all duration-1000 transform scale-95 group-hover:scale-100 group-hover:-translate-y-2">
+                            <Image
+                                className="w-[320px] md:w-[380px] mx-auto drop-shadow-[0_25px_50px_rgba(0,0,0,0.3)] animate-invitation-float"
+                                src={invitation_img}
+                                alt="Invitation Card"
+                                width={450}
+                                height={650}
+                                priority
+                                unoptimized={invitation_img.includes('localhost:8000')}
+                            />
+                        </div>
                     </div>
                 </div>
 
-                <div className="px-4 text-center mt-10 space-y-12">
-                    <div className="px-6 md:px-20 text-xl md:text-2xl font-medium leading-relaxed text-gray-800 break-words animate-fade-in-down"
-                        dangerouslySetInnerHTML={{ __html: guestInvite?.invite_text || event.description || '' }}
-                    />
+                <div className="px-6 md:px-12 text-center mt-12 space-y-16 relative z-20">
+                    {/* Welcome Text Section */}
+                    <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
+                        <div className="px-2 md:px-10 text-xl md:text-2xl font-serif leading-[1.7] text-stone-800 break-words rich-text-content ql-editor border-none"
+                            dangerouslySetInnerHTML={{ __html: guestInvite?.invite_text || event.description || '' }}
+                        />
+                    </div>
 
-                    <div className="relative max-w-[500px] mx-auto px-4">
-                        <div className="flex items-center justify-center gap-4 mb-8">
-                            <div className="h-px flex-1 bg-gradient-to-r from-transparent to-yellow-300"></div>
-                            <div className="text-yellow-500">
-                                <svg className="w-8 h-8 fill-current" viewBox="0 0 24 24">
-                                    <path d="M12,2L14.5,9H22L15.5,13.5L18,21L12,16.5L6,21L8.5,13.5L2,9H9.5L12,2Z" />
-                                </svg>
-                            </div>
-                            <div className="h-px flex-1 bg-gradient-to-l from-transparent to-yellow-300"></div>
+                    {/* Gold Divider - Dynamically Animated */}
+                    <div className="flex items-center justify-center gap-8 py-6 group/divider">
+                        <div className="relative h-[1px] flex-1 max-w-[120px] overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-500 to-transparent"></div>
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer-fast"></div>
                         </div>
-                        <span className="bg-white px-6 py-1 text-sm font-bold text-yellow-700 uppercase tracking-[0.2em] relative z-10 text-center">
-                            {isEventPast
-                                ? (event.type === 'party' ? t('event_past_party') : t('event_past_wedding'))
-                                : (event.type === 'party' ? t('left_until_party') : t('left_until_wedding'))}
-                        </span>
-                        <div className="mt-6">
+
+                        <div className="relative flex items-center justify-center">
+                            {/* Animated Glow Aura */}
+                            <div className="absolute inset-0 bg-amber-400 blur-xl opacity-20 animate-pulse-slow"></div>
+
+                            {/* Spinning Diamond */}
+                            <div className="w-3.5 h-3.5 rounded-sm border-2 border-amber-600 animate-spin-slow relative z-10 shadow-[0_0_15px_rgba(217,119,6,0.6)] bg-white/50 backdrop-blur-[2px]"></div>
+
+                            {/* Concentric circles (Subtle detail) */}
+                            <div className="absolute w-8 h-8 rounded-full border border-amber-200/30 scale-150 animate-pulse-slow"></div>
+                        </div>
+
+                        <div className="relative h-[1px] flex-1 max-w-[120px] overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-l from-transparent via-amber-500 to-transparent"></div>
+                            <div className="absolute inset-0 bg-gradient-to-l from-transparent via-white/40 to-transparent animate-shimmer-fast"></div>
+                        </div>
+                    </div>
+
+                    {/* Countdown Card */}
+                    <div className="relative max-w-[550px] mx-auto">
+                        <div className="absolute inset-0 bg-amber-50/50 blur-2xl -z-10 rounded-full scale-110"></div>
+                        <div className="bg-white/40 backdrop-blur-sm border border-stone-100 rounded-[2.5rem] p-8 shadow-sm">
+                            <span className="inline-block px-8 py-1.5 text-[10px] font-black text-amber-700 uppercase tracking-[0.4em] mb-8 bg-amber-50 rounded-full border border-amber-100/50">
+                                {isEventPast
+                                    ? (event.type === 'party' ? t('event_past_party') : t('event_past_wedding'))
+                                    : (event.type === 'party' ? t('left_until_party') : t('left_until_wedding'))}
+                            </span>
                             <Countdown deadline={event.date} />
                         </div>
                     </div>
 
-                    <div className="max-w-md mx-auto px-4">
-                        <Calendar date={event.date} locale={locale} />
+                    {/* Information Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-1 gap-12">
+                        {/* Calendar Card */}
+                        <div className="bg-white rounded-[2.5rem] p-1 border border-stone-100 shadow-xl shadow-stone-200/20 group hover:shadow-2xl transition-all duration-500">
+                            <div className="p-4 md:p-8">
+                                <Calendar date={event.date} locale={locale} />
+                            </div>
+                        </div>
+
+                        {/* Event Details Section */}
+                        <div className="space-y-6">
+                            {/* Address Card */}
+                            <div className="bg-white border border-stone-100 rounded-[2.5rem] p-8 shadow-lg shadow-stone-100/50 transition-all hover:border-amber-200">
+                                <div className="flex flex-col items-center">
+                                    <div className="bg-stone-50 p-4 rounded-3xl mb-6 text-amber-600 border border-stone-100">
+                                        <MapPinIcon className="w-8 h-8" />
+                                    </div>
+                                    <h2 className="text-sm font-black text-stone-400 uppercase tracking-[0.3em] mb-2">{t('our_address')}</h2>
+                                    <p className="text-2xl font-serif italic text-stone-800 text-center mb-8 max-w-sm leading-snug">{event.place}</p>
+
+                                    {event.address?.address && (
+                                        <div className="w-full text-center">
+                                            <a href={event.address.address.startsWith('http') ? event.address.address : `https://maps.google.com/?q=${encodeURIComponent(event.address.address)}`}
+                                                target="_blank"
+                                                className="group inline-flex items-center px-10 py-4 bg-stone-900 hover:bg-black text-white text-xs font-bold uppercase tracking-[0.2em] rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl gap-3"
+                                            >
+                                                <span>{t('open_map')}</span>
+                                                <ArrowTopRightOnSquareIcon className="w-5 h-5 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                                            </a>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {/* Photo Link Card */}
+                                {event.photos_link && (
+                                    <a href={event.photos_link} target="_blank" className="group flex items-center justify-between p-6 bg-white border border-stone-100 rounded-[2rem] shadow-sm hover:shadow-xl hover:border-amber-100 transition-all duration-500">
+                                        <div className="flex items-center gap-4 text-left">
+                                            <div className="bg-amber-50 p-4 rounded-2xl group-hover:bg-amber-100 transition-colors duration-500">
+                                                <PhotoIcon className="w-6 h-6 text-amber-600" />
+                                            </div>
+                                            <div>
+                                                <span className="block text-[10px] font-black text-stone-400 uppercase tracking-widest">{t('photo_gallery')}</span>
+                                                <span className="block text-md font-bold text-stone-800">{t('view_photos')}</span>
+                                            </div>
+                                        </div>
+                                        <ArrowTopRightOnSquareIcon className="w-5 h-5 text-stone-300 group-hover:text-amber-500 transition-colors" />
+                                    </a>
+                                )}
+
+                                {/* Video Link Button-style Card */}
+                                {videoId && (
+                                    <div className="bg-white border border-stone-100 rounded-[2rem] p-6 shadow-sm flex items-center gap-4 text-left group">
+                                        <div className="bg-rose-50 p-4 rounded-2xl group-hover:bg-rose-100 transition-colors duration-500">
+                                            <VideoCameraIcon className="w-6 h-6 text-rose-600" />
+                                        </div>
+                                        <div>
+                                            <span className="block text-[10px] font-black text-stone-400 uppercase tracking-widest">{t('video')}</span>
+                                            <span className="block text-md font-bold text-stone-800">YouTube</span>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Video Player Modal/Embed Area */}
+                        {videoId && (
+                            <div className="relative group p-4 border border-stone-100 bg-white shadow-2xl rounded-[3rem] overflow-hidden">
+                                <div className="absolute inset-0 bg-stone-50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                                <div className="rounded-[2rem] overflow-hidden shadow-inner bg-black aspect-video relative z-10 transition-transform duration-700 group-hover:scale-[1.01]">
+                                    <iframe
+                                        src={`https://www.youtube.com/embed/${videoId}`}
+                                        className="w-full h-full"
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    ></iframe>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
-                    {event.photos_link && (
-                        <div className="max-w-md mx-auto px-4">
-                            <a href={event.photos_link} target="_blank" className="group relative flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-white border border-gray-100 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 active:scale-95">
-                                <div className="flex items-center gap-4">
-                                    <div className="bg-amber-50 p-3 rounded-xl group-hover:scale-110 transition-transform duration-300">
-                                        <PhotoIcon className="w-7 h-7 text-amber-600" />
-                                    </div>
-                                    <div className="text-left">
-                                        <span className="block text-sm font-semibold text-gray-400 uppercase tracking-wider">{t('photo_gallery')}</span>
-                                        <span className="block text-lg font-bold text-gray-800">{t('view_photos')}</span>
-                                    </div>
-                                </div>
-                                <div className="bg-gray-50 p-2 rounded-full group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
-                                    <ArrowTopRightOnSquareIcon className="w-5 h-5" />
-                                </div>
-                            </a>
-                        </div>
-                    )}
-
-                    {videoId && (
-                        <div className="max-w-[750px] mx-auto border border-gray-100 bg-white p-2 sm:p-4 shadow-2xl rounded-2xl overflow-hidden">
-                            <div className="flex items-center gap-3 mb-4 px-4 pt-2">
-                                <div className="bg-red-50 p-2 rounded-lg">
-                                    <VideoCameraIcon className="w-6 h-6 text-red-600" />
-                                </div>
-                                <h3 className="text-xl font-bold text-gray-800 text-left">{t('video')}</h3>
-                            </div>
-                            <div className="rounded-xl overflow-hidden shadow-inner bg-black aspect-video">
-                                <iframe
-                                    src={`https://www.youtube.com/embed/${videoId}`}
-                                    className="w-full h-full"
-                                    frameBorder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                ></iframe>
-                            </div>
-                        </div>
-                    )}
-
-                    <div className="max-w-[750px] mx-auto border border-gray-100 bg-white p-6 shadow-2xl rounded-2xl overflow-hidden text-gray-800">
-                        <div className="flex flex-col items-center">
-                            <div className="bg-blue-50 p-3 rounded-full mb-4">
-                                <MapPinIcon className="w-8 h-8 text-blue-600" />
-                            </div>
-                            <h2 className="text-2xl font-bold text-center mb-1">{t('our_address')}</h2>
-                            <p className="text-xl text-gray-600 text-center mb-4 font-medium italic">{event.place}</p>
-
-                            {event.address?.address && (
-                                <div className="w-full">
-                                    <div className="w-full h-px bg-gray-100 my-4"></div>
-                                    <div className="text-center">
-                                        <a href={event.address.address.startsWith('http') ? event.address.address : `https://maps.google.com/?q=${encodeURIComponent(event.address.address)}`}
-                                            target="_blank"
-                                            className="inline-flex items-center px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg gap-2 group"
-                                        >
-                                            <span>{t('open_map')}</span>
-                                            <ArrowTopRightOnSquareIcon className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                                        </a>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
+                    {/* Image Gallery */}
                     {event.images && event.images.length > 0 && (
-                        <div className="mb-8">
+                        <div className="pt-8">
+                            <div className="flex items-center gap-4 px-2 mb-10 opacity-30">
+                                <div className="h-px flex-1 bg-stone-300"></div>
+                                <span className="text-[10px] font-black text-stone-500 uppercase tracking-[0.4em]">Memory Gallery</span>
+                                <div className="h-px flex-1 bg-stone-300"></div>
+                            </div>
                             <Gallery images={event.images} />
                         </div>
                     )}
                 </div>
 
-                {/* Footer */}
-                <div className="mt-20 h-20 text-center p-4 border-yellow-700 border-t bg-white">
-                    <a href="/" className="flex flex-col items-center justify-center">
-                        <img className="w-32 inline mb-1" src="/logo.png" alt="logo" />
-                        <span className="text-xs font-taurus text-yellow-700 uppercase tracking-widest opacity-60">
-                            {t('service_footer')}
-                        </span>
-                    </a>
+                {/* Footer Section */}
+                <div className="mt-20 pt-5 pb-12 text-center border-t border-stone-100">
+                    <div className="max-w-[120px] mx-auto opacity-30 hover:opacity-100 transition-opacity duration-500 grayscale hover:grayscale-0">
+                        <a href="/" className="flex flex-col items-center">
+                            <img className="w-full mb-3" src="/logo.png" alt="logo" />
+                            <span className="text-[8px] font-black text-stone-400 uppercase tracking-[0.5em]">
+                                {t('service_footer')}
+                            </span>
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            {/* Audio */}
+            {/* Background Decorations (Fixed) */}
+            <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-amber-100/10 blur-[120px] rounded-full animate-pulse-slow"></div>
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-emerald-100/10 blur-[120px] rounded-full animate-pulse-slow-reverse"></div>
+            </div>
+
+            {/* Audio Toggle */}
             {music && <AudioPlayer src={music} />}
 
-            {/* Modals */}
+            {/* Modals Structure - Keep Logic Same */}
             <Modal modal={modalOpen} title={t('guest_questionnaire')} onClose={closeModal}>
-                <Questionnaire
-                    event_id={event.id}
-                    status={questionnaireStatus}
-                    guest={guestInvite?.guest}
-                    onSaved={handleSaved}
-                />
+                <div className="py-4">
+                    <Questionnaire
+                        event_id={event.id}
+                        status={questionnaireStatus}
+                        guest={guestInvite?.guest}
+                        onSaved={handleSaved}
+                    />
+                </div>
             </Modal>
 
             <Modal modal={messageModalOpen} onClose={closeModal}>
-                <div className="text-center p-4">
-                    <div className="bg-blue-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <InformationCircleIcon className="text-blue-500 w-12 h-12" />
+                <div className="text-center p-6 md:p-10 bg-white/50 backdrop-blur-xl">
+                    <div className="bg-stone-50 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-10 border border-stone-100 shadow-inner">
+                        <InformationCircleIcon className="text-amber-600 w-12 h-12 animate-bounce-slow" />
                     </div>
-                    <p className="text-xl text-amber-800 font-roboto font-semibold mb-4">
+                    <h3 className="text-2xl md:text-3xl font-serif italic text-stone-900 mb-4 px-4">
                         {t('dear_guest', { name: guestInvite?.guest?.fullname || t('guest') })}
-                    </p>
-                    <p className="text-gray-600 mb-8 max-w-xs mx-auto">
+                    </h3>
+                    <p className="text-stone-500 mb-10 max-w-xs mx-auto text-sm leading-relaxed">
                         {t('please_respond', { type: event.type === 'party' ? t('party') : t('wedding') })}
                     </p>
                     <button
                         onClick={closeModal}
-                        className="w-full sm:w-auto flex mx-auto items-center justify-center rounded-full shadow-lg text-white py-4 px-12 bg-emerald-600 hover:bg-emerald-700 transition-all font-bold text-lg active:scale-95"
+                        className="group w-full max-w-[280px] flex mx-auto items-center justify-center rounded-full shadow-2xl text-white py-5 px-12 bg-emerald-800 hover:bg-emerald-900 transition-all font-bold text-xs uppercase tracking-[0.2em] active:scale-95"
                     >
-                        <HandThumbUpIcon className="w-6 h-6 mr-2" />
+                        <HandThumbUpIcon className="w-5 h-5 mr-3 group-hover:scale-125 transition-transform" />
                         {t('ok_button')}
                     </button>
+                    <div className="mt-8">
+                        <span className="text-[10px] font-black text-stone-300 uppercase tracking-[0.3em]">Toi-Invite</span>
+                    </div>
                 </div>
             </Modal>
         </div>

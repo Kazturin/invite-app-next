@@ -117,63 +117,69 @@ const PreviewPage = ({ params }: PageProps) => {
     const eventDetails = event.data;
 
     return (
-        <div className="bg-[#fcf8f5] min-h-screen mt-4">
-            <div className="container mx-auto bg-white pb-10 shadow-2xl relative overflow-hidden ring-1 ring-gray-100">
-                {/* Subtle Paper Texture Overlay */}
-                <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]"></div>
+        <div className="bg-[#FAF9F6] min-h-screen relative selection:bg-amber-100 italic-fonts pb-20">
+            {/* Background Decorations (Fixed) */}
+            <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-amber-100/10 blur-[120px] rounded-full animate-pulse-slow"></div>
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-emerald-100/10 blur-[120px] rounded-full animate-pulse-slow-reverse"></div>
+            </div>
 
-                {/* Sticky Header */}
-                <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 px-4 sm:px-6 py-4 flex justify-between items-center shadow-sm">
+            <div className="max-w-[850px] mx-auto bg-white shadow-[0_30px_100px_-20px_rgba(0,0,0,0.15)] relative overflow-hidden font-baltica min-h-screen border-x border-stone-100">
+                {/* Subtle Textures & Overlays */}
+                <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]"></div>
+
+                {/* Preview Navigation Header */}
+                <div className="sticky top-0 z-[60] bg-white/80 backdrop-blur-xl border-b border-stone-200/50 px-4 py-4 flex justify-between items-center shadow-sm">
                     <div className="flex items-center gap-3">
-                        <div className="relative flex h-3 w-3">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                        <div className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
                         </div>
-                        <span className="text-xs sm:text-sm font-bold text-gray-400 uppercase tracking-widest">{t('preview_mode')}</span>
+                        <span className="text-[10px] font-black text-stone-400 uppercase tracking-[0.3em]">{t('preview_mode')}</span>
                     </div>
-                    <div className="flex gap-2 sm:gap-4">
+                    <div className="flex gap-2 sm:gap-3">
                         <Link
                             href={`/app/events/${id}/update`}
-                            className="group relative inline-flex items-center px-4 sm:px-6 py-2 border-2 border-gray-100 text-gray-600 text-sm font-bold rounded-lg transition-all duration-300 hover:border-theme-secondary/20 hover:text-theme-secondary active:scale-95 gap-2 cursor-pointer"
+                            className="inline-flex items-center px-4 py-2 bg-white border border-stone-200 text-stone-600 text-[10px] font-black uppercase tracking-widest rounded-full transition-all hover:bg-stone-50 hover:border-stone-300 active:scale-95 gap-2 cursor-pointer"
                         >
-                            <PencilSquareIcon className="w-4 h-4 transition-transform group-hover:rotate-12" />
+                            <PencilSquareIcon className="w-4 h-4" />
                             <span className="hidden sm:inline">{t('edit_button')}</span>
                         </Link>
                         <button
                             onClick={finishBtn}
-                            className="group relative inline-flex items-center px-6 sm:px-8 py-2 bg-theme-secondary text-white text-sm font-bold rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-theme-secondary/20 active:scale-95 gap-2 cursor-pointer"
+                            className="inline-flex items-center px-6 py-2 bg-emerald-800 text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-emerald-800/20 transition-all hover:bg-emerald-900 active:scale-95 gap-2 cursor-pointer"
                         >
-                            <CheckCircleIcon className="w-4 h-4 relative z-10" />
-                            <span className="relative z-10">{t('finish_button')}</span>
+                            <CheckCircleIcon className="w-4 h-4" />
+                            <span>{t('finish_button')}</span>
                         </button>
                     </div>
                 </div>
 
-                {/* Hero Section with Invitation Preview */}
+                {/* Invitation Hero Area */}
                 <div
-                    style={{ backgroundImage: `url(${eventDetails.invitation?.bg_img})` }}
-                    className="bg-no-repeat bg-cover bg-center w-full sm:h-[600px] flex items-center justify-center relative overflow-hidden"
+                    className="bg-no-repeat bg-cover bg-center w-full relative z-10 group"
+                    style={{ backgroundImage: `url(${eventDetails.invitation?.bg_img || '/images/bg/1.jpg'})` }}
                 >
-                    {/* Glass Overlay for depth */}
-                    <div className="absolute inset-0 bg-black/5 backdrop-blur-[2px]"></div>
-
-                    <div className="relative w-full max-w-[650px] h-full flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-stone-900/10 pointer-events-none"></div>
+                    <div className="max-w-[550px] mx-auto h-[500px] md:h-[600px] relative flex items-center justify-center p-8">
                         {eventDetails.invitation?.template?.envelope_img && (
-                            <img
-                                className="hidden md:block w-[80%] max-w-[384px] absolute top-[10%] left-[5%] -rotate-12 opacity-90 transition-all duration-1000 animate-in fade-in slide-in-from-left-8"
-                                src={eventDetails.invitation.template.envelope_img}
-                                alt="Envelope"
-                            />
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[450px] aspect-square transition-transform duration-700 group-hover:scale-105">
+                                <img
+                                    className="w-full h-full opacity-40 blur-[2px] -rotate-6 sm:block"
+                                    src={eventDetails.invitation.template.envelope_img}
+                                    alt="Background Theme"
+                                />
+                            </div>
                         )}
-                        <div className="relative w-[70%] max-w-[320px] z-10 drop-shadow-2xl animate-invitation-float">
+                        <div className="relative z-20 transition-all duration-1000 transform scale-95 group-hover:scale-100 group-hover:-translate-y-2">
                             {watermarkInvitation ? (
                                 <img
-                                    className="w-full h-auto rounded-sm shadow-2xl ring-1 ring-white/20"
+                                    className="w-[320px] md:w-[380px] mx-auto drop-shadow-[0_25px_50px_rgba(0,0,0,0.3)] animate-invitation-float"
                                     src={watermarkInvitation}
-                                    alt="Invitation"
+                                    alt="Invitation Card"
                                 />
                             ) : (
-                                <div className="aspect-[3/4] bg-white/20 backdrop-blur-md rounded-sm flex items-center justify-center border border-white/30">
+                                <div className="w-[320px] aspect-[1/1.4] bg-white/20 backdrop-blur-md rounded-lg flex items-center justify-center border border-white/30">
                                     <Spinner />
                                 </div>
                             )}
@@ -181,189 +187,188 @@ const PreviewPage = ({ params }: PageProps) => {
                     </div>
                 </div>
 
-                {/* Content Section */}
-                <div className="px-4 py-12 max-w-4xl mx-auto space-y-16">
-                    {/* Description Section */}
-                    <div className="text-center space-y-8">
-                        <div
-                            className="text-lg sm:text-2xl font-medium leading-relaxed text-gray-800 break-words"
+                <div className="px-6 md:px-12 text-center mt-12 space-y-16 relative z-20">
+                    {/* Welcome Text Section */}
+                    <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
+                        <div className="px-2 md:px-10 text-xl md:text-2xl font-serif leading-[1.7] text-stone-800 break-words rich-text-content ql-editor border-none"
                             dangerouslySetInnerHTML={{ __html: eventDetails.description }}
                         />
+                    </div>
 
-                        {/* Decorative Divider & Countdown */}
-                        <div className="relative space-y-8">
-                            <div className="flex items-center justify-center gap-4">
-                                <div className="h-px w-24 bg-gradient-to-r from-transparent to-amber-200"></div>
-                                <div className="text-yellow-500">
-                                    <svg className="w-8 h-8 fill-current" viewBox="0 0 24 24">
-                                        <path d="M12,2L14.5,9H22L15.5,13.5L18,21L12,16.5L6,21L8.5,13.5L2,9H9.5L12,2Z" />
-                                    </svg>
-                                </div>
-                                <div className="h-px w-24 bg-gradient-to-l from-transparent to-amber-200"></div>
-                            </div>
+                    {/* Gold Divider - Dynamically Animated */}
+                    <div className="flex items-center justify-center gap-8 py-6 group/divider">
+                        <div className="relative h-[1px] flex-1 max-w-[120px] overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-500 to-transparent"></div>
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer-fast"></div>
+                        </div>
 
-                            <div className="space-y-4">
-                                <span className="text-xs font-bold text-amber-800 uppercase tracking-[0.3em]">
-                                    {isEventPast
-                                        ? (eventDetails.type === 'party' ? t('event_past_party') : t('event_past_wedding'))
-                                        : (eventDetails.type === 'party' ? t('left_until_party') : t('left_until_wedding'))}
-                                </span>
-                                <Countdown deadline={eventDetails.date} />
-                            </div>
+                        <div className="relative flex items-center justify-center">
+                            <div className="absolute inset-0 bg-amber-400 blur-xl opacity-20 animate-pulse-slow"></div>
+                            <div className="w-3.5 h-3.5 rounded-sm border-2 border-amber-600 animate-spin-slow relative z-10 shadow-[0_0_15px_rgba(217,119,6,0.6)] bg-white/50 backdrop-blur-[2px]"></div>
+                            <div className="absolute w-8 h-8 rounded-full border border-amber-200/30 scale-150 animate-pulse-slow"></div>
+                        </div>
+
+                        <div className="relative h-[1px] flex-1 max-w-[120px] overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-l from-transparent via-amber-500 to-transparent"></div>
+                            <div className="absolute inset-0 bg-gradient-to-l from-transparent via-white/40 to-transparent animate-shimmer-fast"></div>
                         </div>
                     </div>
 
-                    {/* Calendar Section */}
-                    <div className="max-w-md mx-auto transform hover:scale-[1.02] transition-transform duration-500">
-                        <Calendar date={eventDetails.date} />
+                    {/* Countdown Card */}
+                    <div className="relative max-w-[550px] mx-auto">
+                        <div className="absolute inset-0 bg-amber-50/50 blur-2xl -z-10 rounded-full scale-110"></div>
+                        <div className="bg-white/40 backdrop-blur-sm border border-stone-100 rounded-[2.5rem] p-8 shadow-sm">
+                            <span className="inline-block px-8 py-1.5 text-[10px] font-black text-amber-700 uppercase tracking-[0.4em] mb-8 bg-amber-50 rounded-full border border-amber-100/50">
+                                {isEventPast
+                                    ? (eventDetails.type === 'party' ? t('event_past_party') : t('event_past_wedding'))
+                                    : (eventDetails.type === 'party' ? t('left_until_party') : t('left_until_wedding'))}
+                            </span>
+                            <Countdown deadline={eventDetails.date} />
+                        </div>
                     </div>
 
-                    {/* Photo Gallery Link Section */}
-                    {eventDetails.photos_link && (
-                        <div className="max-w-md mx-auto">
-                            <a
-                                href={eventDetails.photos_link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="group flex items-center justify-between p-5 bg-gradient-to-br from-white to-gray-50 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300"
-                            >
-                                <div className="flex items-center gap-4">
-                                    <div className="bg-amber-50 p-3 rounded-xl group-hover:bg-amber-100 transition-colors">
-                                        <PhotoIcon className="w-7 h-7 text-amber-600" />
-                                    </div>
-                                    <div>
-                                        <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{t('photo_gallery')}</span>
-                                        <span className="block text-lg font-bold text-gray-800">{t('view_photos')}</span>
-                                    </div>
-                                </div>
-                                <div className="bg-gray-100 p-2 rounded-full group-hover:bg-amber-600 group-hover:text-white transition-all">
-                                    <ArrowTopRightOnSquareIcon className="w-5 h-5" />
-                                </div>
-                            </a>
+                    {/* Information Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-1 gap-12">
+                        {/* Calendar Card */}
+                        <div className="bg-white rounded-[2.5rem] p-1 border border-stone-100 shadow-xl shadow-stone-200/20">
+                            <div className="p-4 md:p-8">
+                                <Calendar date={eventDetails.date} />
+                            </div>
                         </div>
-                    )}
 
-                    {/* Video Link Section */}
-                    {eventDetails.video_link && (
+                        {/* Event Details Section */}
                         <div className="space-y-6">
-                            <div className="flex items-center gap-3 px-2">
-                                <div className="bg-red-50 p-2 rounded-lg">
-                                    <VideoCameraIcon className="w-6 h-6 text-red-600" />
-                                </div>
-                                <h3 className="text-xl font-bold text-gray-800">{t('video')}</h3>
-                            </div>
-                            <div className="aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl ring-1 ring-gray-200">
-                                <iframe
-                                    src={`https://www.youtube.com/embed/${getVideoId(eventDetails.video_link)}`}
-                                    className="w-full h-full"
-                                    frameBorder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                ></iframe>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Address & Map Section */}
-                    <div className="bg-white p-8 sm:p-12 border border-gray-50 shadow-2xl rounded-[2.5rem] text-gray-800 space-y-8 text-center relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-700">
-                            <MapPinIcon className="w-32 h-32 text-indigo-600" />
-                        </div>
-
-                        <div className="relative space-y-4">
-                            <div className="bg-indigo-50 w-16 h-16 rounded-3xl flex items-center justify-center mx-auto mb-6 transform rotate-3">
-                                <MapPinIcon className="w-8 h-8 text-indigo-600" />
-                            </div>
-                            <h2 className="text-3xl font-black text-gray-900 tracking-tight">{t('our_address')}</h2>
-                            <p className="text-xl text-gray-500 font-medium">
-                                {eventDetails.place}
-                            </p>
-                        </div>
-
-                        {eventDetails.address?.address && (
-                            <div className="relative pt-8 border-t border-gray-50 space-y-6">
-                                {eventDetails.address.address.startsWith('http') ? (
-                                    <div className="space-y-6">
-                                        <a
-                                            href={eventDetails.address.address}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="inline-flex items-center px-10 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl transition-all duration-300 shadow-xl shadow-indigo-100 hover:shadow-indigo-200 active:scale-95 gap-3 group"
-                                        >
-                                            <span>{t('open_map')}</span>
-                                            <ArrowTopRightOnSquareIcon className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                                        </a>
+                            {/* Address Card */}
+                            <div className="bg-white border border-stone-100 rounded-[2.5rem] p-8 shadow-lg shadow-stone-100/50 transition-all hover:border-amber-200">
+                                <div className="flex flex-col items-center">
+                                    <div className="bg-stone-50 p-4 rounded-3xl mb-6 text-amber-600 border border-stone-100">
+                                        <MapPinIcon className="w-8 h-8" />
                                     </div>
-                                ) : (
-                                    <p className="text-lg text-gray-700 bg-gray-50 px-8 py-4 rounded-2xl border border-gray-100 italic">
-                                        {eventDetails.address.address}
-                                    </p>
+                                    <h2 className="text-sm font-black text-stone-400 uppercase tracking-[0.3em] mb-2">{t('our_address')}</h2>
+                                    <p className="text-2xl font-serif italic text-stone-800 text-center mb-8 max-w-sm leading-snug">{eventDetails.place}</p>
+
+                                    {eventDetails.address?.address && (
+                                        <div className="w-full text-center">
+                                            <a href={eventDetails.address.address.startsWith('http') ? eventDetails.address.address : `https://maps.google.com/?q=${encodeURIComponent(eventDetails.address.address)}`}
+                                                target="_blank"
+                                                className="group inline-flex items-center px-10 py-4 bg-stone-900 hover:bg-black text-white text-xs font-bold uppercase tracking-[0.2em] rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl gap-3"
+                                            >
+                                                <span>{t('open_map')}</span>
+                                                <ArrowTopRightOnSquareIcon className="w-5 h-5 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                                            </a>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {/* Photo Link Card */}
+                                {eventDetails.photos_link && (
+                                    <a href={eventDetails.photos_link} target="_blank" className="group flex items-center justify-between p-6 bg-white border border-stone-100 rounded-[2rem] shadow-sm hover:shadow-xl hover:border-amber-100 transition-all duration-500">
+                                        <div className="flex items-center gap-4 text-left">
+                                            <div className="bg-amber-50 p-4 rounded-2xl group-hover:bg-amber-100 transition-colors duration-500">
+                                                <PhotoIcon className="w-6 h-6 text-amber-600" />
+                                            </div>
+                                            <div>
+                                                <span className="block text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-1">{t('photo_gallery')}</span>
+                                                <span className="block text-md font-bold text-stone-800">{t('view_photos')}</span>
+                                            </div>
+                                        </div>
+                                        <ArrowTopRightOnSquareIcon className="w-5 h-5 text-stone-300 group-hover:text-amber-500 transition-colors" />
+                                    </a>
                                 )}
+
+                                {/* Video Link Button-style Card */}
+                                {eventDetails.video_link && (
+                                    <div className="bg-white border border-stone-100 rounded-[2rem] p-6 shadow-sm flex items-center gap-4 text-left group">
+                                        <div className="bg-rose-50 p-4 rounded-2xl group-hover:bg-rose-100 transition-colors duration-500">
+                                            <VideoCameraIcon className="w-6 h-6 text-rose-600" />
+                                        </div>
+                                        <div>
+                                            <span className="block text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-1">{t('video')}</span>
+                                            <span className="block text-md font-bold text-stone-800">YouTube</span>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Video Player Modal/Embed Area */}
+                        {eventDetails.video_link && (
+                            <div className="relative group p-4 border border-stone-100 bg-white shadow-2xl rounded-[3rem] overflow-hidden">
+                                <div className="absolute inset-0 bg-stone-50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                                <div className="rounded-[2rem] overflow-hidden shadow-inner bg-black aspect-video relative z-10 transition-transform duration-700 group-hover:scale-[1.01]">
+                                    <iframe
+                                        src={`https://www.youtube.com/embed/${getVideoId(eventDetails.video_link)}`}
+                                        className="w-full h-full"
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    ></iframe>
+                                </div>
                             </div>
                         )}
                     </div>
 
-                    {/* Gallery Section */}
+                    {/* Image Gallery */}
                     {eventDetails.images && eventDetails.images.length > 0 && (
                         <div className="pt-8">
+                            <div className="flex items-center gap-4 px-2 mb-10 opacity-30">
+                                <div className="h-px flex-1 bg-stone-300"></div>
+                                <span className="text-[10px] font-black text-stone-500 uppercase tracking-[0.4em]">Memory Gallery</span>
+                                <div className="h-px flex-1 bg-stone-300"></div>
+                            </div>
                             <Gallery images={eventDetails.images} />
                         </div>
                     )}
                 </div>
 
-                {/* Floating Music Toggle */}
-                {eventDetails.audio && (
-                    <>
-                        <audio src={eventDetails.audio} ref={audioRef} loop className="hidden" />
-                        <div className="fixed bottom-8 right-8 z-40">
-                            <button
-                                onClick={toggleAudio}
-                                className={`
-                                    relative w-16 h-16 rounded-2xl flex justify-center items-center cursor-pointer 
-                                    transition-all duration-500 shadow-2xl ring-4 ring-white active:scale-95
-                                    ${isPaused ? 'bg-gray-400' : 'bg-gradient-to-br from-indigo-500 to-indigo-700'}
-                                `}
-                            >
-                                {/* Pulse waves when playing */}
-                                {!isPaused && (
-                                    <>
-                                        <div className="absolute inset-0 rounded-2xl animate-ping bg-indigo-400 opacity-20"></div>
-                                        <div className="absolute inset-0 rounded-2xl animate-ping bg-indigo-400 opacity-10 [animation-delay:0.5s]"></div>
-                                    </>
-                                )}
-
-                                {isPaused ? (
-                                    <MusicalNoteIcon className="w-8 h-8 text-white" />
-                                ) : (
-                                    <div className="flex items-end gap-1 h-6">
-                                        <div className="w-1 bg-white animate-[music-bar_0.8s_ease-in-out_infinite] h-3"></div>
-                                        <div className="w-1 bg-white animate-[music-bar_0.6s_ease-in-out_infinite_0.1s] h-5"></div>
-                                        <div className="w-1 bg-white animate-[music-bar_1s_ease-in-out_infinite_0.2s] h-4"></div>
-                                        <div className="w-1 bg-white animate-[music-bar_0.8s_ease-in-out_infinite] h-6"></div>
-                                    </div>
-                                )}
-                            </button>
-                        </div>
-                    </>
-                )}
+                {/* Footer Section */}
+                <div className="mt-20 pt-5 pb-12 text-center border-t border-stone-100">
+                    <div className="max-w-[120px] mx-auto opacity-30 hover:opacity-100 transition-opacity duration-500 grayscale hover:grayscale-0">
+                        <a href="/" className="flex flex-col items-center">
+                            <img className="w-full mb-3" src="/logo.png" alt="logo" />
+                            <span className="text-[8px] font-black text-stone-400 uppercase tracking-[0.5em]">
+                                Toi-Invite
+                            </span>
+                        </a>
+                    </div>
+                </div>
             </div>
 
-            {/* Global Music Bar Animations */}
-            <style jsx global>{`
-                @keyframes music-bar {
-                    0%, 100% { height: 8px; }
-                    50% { height: 20px; }
-                }
-                
-                @keyframes invitation-float {
-                    0%, 100% { transform: translateY(0) rotate(0); }
-                    50% { transform: translateY(-10px) rotate(1deg); }
-                }
-                
-                .animate-invitation-float {
-                    animation: invitation-float 6s ease-in-out infinite;
-                }
-            `}</style>
+            {/* Audio Toggle */}
+            {eventDetails.audio && (
+                <>
+                    <audio src={eventDetails.audio} ref={audioRef} loop className="hidden" />
+                    <div className="fixed bottom-8 right-8 z-[60]">
+                        <button
+                            onClick={toggleAudio}
+                            className={`
+                                relative w-14 h-14 rounded-2xl flex justify-center items-center cursor-pointer 
+                                transition-all duration-500 shadow-2xl ring-4 ring-white active:scale-95
+                                ${isPaused ? 'bg-stone-300' : 'bg-emerald-800'}
+                            `}
+                        >
+                            {!isPaused && (
+                                <>
+                                    <div className="absolute inset-0 rounded-2xl animate-ping bg-emerald-400 opacity-20"></div>
+                                </>
+                            )}
+
+                            {isPaused ? (
+                                <MusicalNoteIcon className="w-6 h-6 text-stone-600" />
+                            ) : (
+                                <div className="flex items-end gap-1 h-5">
+                                    <div className="w-0.5 bg-white animate-music-bar-1 h-2"></div>
+                                    <div className="w-0.5 bg-white animate-music-bar-2 h-4"></div>
+                                    <div className="w-0.5 bg-white animate-music-bar-3 h-3"></div>
+                                    <div className="w-0.5 bg-white animate-music-bar-1 h-4"></div>
+                                </div>
+                            )}
+                        </button>
+                    </div>
+                </>
+            )}
         </div>
     );
 };

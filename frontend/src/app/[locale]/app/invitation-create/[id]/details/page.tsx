@@ -49,7 +49,11 @@ const EventCreatePage = ({ params }: PageProps) => {
             }
         } catch (err: any) {
             console.error('Failed to save event', err);
-            setError(err.response?.data?.message || t('server_error'));
+            if (err.response?.data?.errors) {
+                setError(err.response.data);
+            } else {
+                setError(err.response?.data?.message || t('server_error'));
+            }
         } finally {
             setLoading(false);
         }

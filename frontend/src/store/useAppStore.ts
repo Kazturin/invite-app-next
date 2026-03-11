@@ -220,7 +220,6 @@ export const useAppStore = create<AppState>()(
                 set((state) => ({ templateCategories: { ...state.templateCategories, loading: true } }));
                 try {
                     const res = await apiClient.get('/template-categories');
-                    console.log(res.data.data);
                     set({ templateCategories: { data: res.data.data, loading: false } });
                     return res.data;
                 } catch (err) {

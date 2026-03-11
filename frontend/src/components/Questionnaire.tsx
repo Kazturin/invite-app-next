@@ -180,7 +180,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({
                         <button
                             type="button"
                             onClick={addChild}
-                            className="group flex flex-col items-center justify-center w-full py-5 px-4 border-2 border-dashed border-stone-200 rounded-2xl text-stone-400 hover:border-amber-400 hover:text-amber-600 hover:bg-amber-50/30 transition-all duration-300 active:scale-[0.98]"
+                            className="group flex flex-col items-center justify-center w-full py-5 px-4 border-2 border-dashed border-stone-200 rounded-2xl text-stone-400 hover:border-amber-400 hover:text-amber-600 hover:bg-amber-50/30 transition-all duration-300 active:scale-[0.98] cursor-pointer"
                         >
                             <div className="bg-stone-100 group-hover:bg-amber-100 p-2 rounded-full mb-1.5 transition-colors">
                                 <PlusIcon className="h-5 w-5 text-stone-400 group-hover:text-amber-600" />
@@ -196,7 +196,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({
                     <button
                         disabled={loadingPost}
                         type="submit"
-                        className="relative w-full overflow-hidden group flex items-center justify-center rounded-2xl bg-amber-500 px-8 py-4 text-sm font-bold text-white shadow-xl shadow-amber-500/10 hover:bg-amber-600 hover:shadow-amber-500/20 active:scale-95 disabled:opacity-50 disabled:active:scale-100 transition-all duration-200"
+                        className="relative w-full overflow-hidden group flex items-center justify-center rounded-2xl bg-amber-500 px-8 py-4 text-sm font-bold text-white shadow-xl shadow-amber-500/10 hover:bg-amber-600 hover:shadow-amber-500/20 active:scale-95 disabled:opacity-50 disabled:active:scale-100 transition-all duration-200 cursor-pointer"
                     >
                         {loadingPost ? (
                             <span className="w-5 h-5 mr-3 rounded-full animate-spin border-2 border-solid border-white border-t-transparent"></span>
