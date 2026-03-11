@@ -2,7 +2,7 @@
 
 import "@/app/editor-fonts.css";
 import React, { useEffect, useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname } from '@/i18n/routing';
 import { useUserStore } from '@/store/useUserStore';
 import Spinner from '@/components/Spinner';
 

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 import { LockClosedIcon } from '@heroicons/react/24/solid';
 import { useUserStore } from '@/store/useUserStore';
 import Alert from '@/components/Alert';

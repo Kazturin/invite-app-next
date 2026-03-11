@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname } from '@/i18n/routing';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Header from './Header';
 import Footer from './Footer';
