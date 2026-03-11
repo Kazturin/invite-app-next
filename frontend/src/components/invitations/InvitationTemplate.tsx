@@ -57,6 +57,7 @@ const InvitationTemplate = forwardRef<InvitationTemplateRef, InvitationTemplateP
         redo,
         canUndo,
         canRedo,
+        duplicateSelected,
     } = useFabric(fabricProps, fabricEmit);
 
     useImperativeHandle(ref, () => ({
@@ -174,6 +175,7 @@ const InvitationTemplate = forwardRef<InvitationTemplateRef, InvitationTemplateP
                                 onChangeFont={changeFont}
                                 onDeleteSelected={deleteSelected}
                                 onChangeTextCase={changeTextCase}
+                                onDuplicate={duplicateSelected}
                             />
                         )}
 

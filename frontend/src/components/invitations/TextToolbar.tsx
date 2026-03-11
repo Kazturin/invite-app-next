@@ -19,6 +19,7 @@ interface TextToolbarProps {
     onChangeFont: (font: string) => void;
     onDeleteSelected: () => void;
     onChangeTextCase: (type: 'uppercase' | 'lowercase') => void;
+    onDuplicate: () => void;
 }
 
 const TextToolbar: React.FC<TextToolbarProps> = ({
@@ -34,6 +35,7 @@ const TextToolbar: React.FC<TextToolbarProps> = ({
     onChangeFont,
     onDeleteSelected,
     onChangeTextCase,
+    onDuplicate,
 }) => {
     const t = useTranslations('InvitationCreate');
     const isTextSelected = selectedObject && (selectedObject.type === 'i-text' || selectedObject.type === 'IText');
@@ -77,6 +79,16 @@ const TextToolbar: React.FC<TextToolbarProps> = ({
                         title="Lowercase"
                     >
                         aa
+                    </button>
+
+                    <button
+                        onClick={onDuplicate}
+                        className="border-2 border-gray-400 text-gray-400 w-7 h-7 md:w-10 md:h-10 p-1 flex items-center justify-center hover:bg-gray-100"
+                        title={t('duplicate_text')}
+                    >
+                        <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                        </svg>
                     </button>
 
                     <div className="text-center flex items-center space-x-4 border-gray-600 pr-3 border-r">

@@ -55,6 +55,7 @@
         "add_text": "Добавить текст",
         "center_text": "Центрировать",
         "change_image": "Изменить изображение",
+        "duplicate_text": "Дублировать",
         "server_error": "Произошла ошибка на сервере"
     },
     "EventForm": {

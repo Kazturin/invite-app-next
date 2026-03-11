@@ -455,6 +455,23 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
         }
     };
 
+    const duplicateSelected = async () => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const activeObject = canvas.getActiveObject();
+        if (activeObject) {
+            const cloned = await activeObject.clone(['isUserImage', 'src', 'isTemplateFrame']);
+            cloned.set({
+                left: (activeObject.left || 0) + 20,
+                top: (activeObject.top || 0) + 20,
+            });
+            canvas.add(cloned);
+            canvas.setActiveObject(cloned);
+            canvas.requestRenderAll();
+            saveCanvasState();
+        }
+    };
+
     const uploadImageToServer = async (file: File) => {
         const formData = new FormData();
         formData.append('image', file);
@@ -700,5 +717,6 @@ export function useFabric(props: UseFabricProps, emit: UseFabricEmit) {
         redo,
         canUndo,
         canRedo,
+        duplicateSelected,
     };
 }

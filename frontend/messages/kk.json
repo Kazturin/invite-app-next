@@ -55,6 +55,7 @@
         "add_text": "Текст қосу",
         "center_text": "Ортаға қою",
         "change_image": "Суретті өзгерту",
+        "duplicate_text": "Дубликат",
         "server_error": "Серверде қате орын алды"
     },
     "EventForm": {
