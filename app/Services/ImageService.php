@@ -28,12 +28,9 @@ class ImageService
      */
     public function saveImage($image, $envelope_img)
     {
-        Log::info('image save');
         if (preg_match('/^data:image\/(\w+);base64,/', $image, $type)) {
             $imageData = substr($image, strpos($image, ',') + 1);
             $type = strtolower($type[1]);
-
-            Log::info($type);
 
             if (!in_array($type, ['jpg', 'jpeg', 'png', 'gif'])) {
                 throw new \Exception('invalid image type');
@@ -66,11 +63,9 @@ class ImageService
         
         if (str_contains($envelope_img, '/storage/')) {
             $parts = explode('/storage/', $envelope_img);
-            // Take the last part which should be the relative path after the last /storage/
             $envelope_relativePath = ltrim(end($parts), '/');
             $resolvedEnvelopePath = storage_path('app/public/' . $envelope_relativePath);
         } elseif (!file_exists($resolvedEnvelopePath) && !str_starts_with($resolvedEnvelopePath, 'http')) {
-            // Try prefixing with public storage path if it's just a relative path
             $resolvedEnvelopePath = storage_path('app/public/' . ltrim($envelope_img, '/'));
         }
 

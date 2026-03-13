@@ -11,17 +11,6 @@ use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Api\PostController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
@@ -59,17 +48,3 @@ Route::get('/blog', [PostController::class, 'home']);
 Route::get('/blog/search', [PostController::class, 'search']);
 Route::get('/blog/category/{category:slug}', [PostController::class, 'byCategory']);
 Route::get('/blog/{post:slug}', [PostController::class, 'show']);
-
-Route::get('/nominatim/search', function (Request $request) {
-    // Получаем все параметры запроса от Vue (q, format, email и т.д.)
-    $queryParams = $request->all();
-
-    // Отправляем запрос к Nominatim, добавив КЛЮЧЕВОЙ заголовок User-Agent
-    $response = Http::withHeaders([
-        // Это ОБЯЗАТЕЛЬНО. Укажите название своего проекта и email.
-        'User-Agent' => 'toi-invite/1.0 (kazturin.a@gmail.com)' 
-    ])->get('https://nominatim.openstreetmap.org/search', $queryParams);
-
-    // Возвращаем ответ от Nominatim (JSON) обратно в Vue
-    return $response->json();
-});

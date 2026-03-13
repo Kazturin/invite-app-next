@@ -22,8 +22,6 @@ class EventController extends Controller
     public function __construct(EventService $eventService)
     {
         $this->eventService = $eventService;
-        // Authorization is handled via policies, but we can also use authorizeResource if we want standard mapping.
-        // For now, I will use explicit authorize calls in methods as per the plan to keep it clear.
     }
 
     public function index(Request $request)
@@ -37,14 +35,12 @@ class EventController extends Controller
 
     public function show(Request $request, Event $event)
     {
-        Log::info('show event '.$event->id);
         $this->authorize('view', $event);
         return new EventResource($event);
     }
 
     public function edit(Request $request, Event $event)
     {
-        Log::info('edit event '.$event->id);
         $this->authorize('update', $event);
         return new EventResource($event);
     }
@@ -72,7 +68,6 @@ class EventController extends Controller
 
     public function update(EventRequest $request, Event $event)
     {
-        Log::info('update event '.$event->id);
         $this->authorize('update', $event);
 
         $data = $request->validated();
@@ -90,10 +85,6 @@ class EventController extends Controller
 
     public function showForGuest(Event $event)
     {
-        Log::info('showForGuest event '.$event->id);
-        // if ($event->order->status === Order::STATUS_NOT_PAID) {
-        //     return response("", 404);
-        // }
         $inviteCode = request()->query('invite_code');
         $guestInvite = null;
         if ($inviteCode) {
@@ -103,9 +94,6 @@ class EventController extends Controller
                 })->first();
         }
 
-        // $event = Cache::remember('event' . $event->id, 120, function () use ($event) {
-        //     return new EventResource($event);
-        // });
         return response()->json([
             'event' => new EventResource($event),
             'guestInvite' => $guestInvite ? new GuestInviteResource($guestInvite) : null,

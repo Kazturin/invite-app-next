@@ -44,9 +44,6 @@ class InvitationController extends Controller
      */
     public function invitationWithWatermark($url)
     {
-        // Note: This method seems to be used as an API endpoint or internal helper.
-        // If it's an API endpoint, it should probably be protected by some authorization or validation.
-        // For now, we delegate to ImageService.
         return $this->imageService->addWatermark($url);
     }
 }

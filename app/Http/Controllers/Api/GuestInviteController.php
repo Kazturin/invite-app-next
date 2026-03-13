@@ -17,12 +17,6 @@ use Illuminate\Http\Request;
 
 class GuestInviteController extends Controller
 {
-    // public function index($id){
-
-    //     $guests = Guest::where('event_id',$id)->get();
-
-    //     return GuestResource::collection($guests);
-    // }
 
     public function save(Request $request)
 {
@@ -73,12 +67,5 @@ class GuestInviteController extends Controller
 
         return response("", 200);
     }
-
-    // public function destroy(Guest $guest){
-
-    //     $guest->delete();
-
-    //     return response('', 204);
-    // }
 
 }

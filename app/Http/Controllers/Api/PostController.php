@@ -22,7 +22,6 @@ class PostController extends Controller
                 ->limit(1)
                 ->first();
 
-            // Show the most popular 3 posts based on upvotes
             $popularPosts = Post::query()
                 ->leftJoin('post_views', 'posts.id', '=', 'post_views.post_id')
                 ->select('posts.*', DB::raw('COUNT(post_views.id) as view_count'))
@@ -45,14 +44,12 @@ class PostController extends Controller
                 ->limit(3)
                 ->get();
 
-            // Show recent categories with their latest posts
             $categories = Category::query()
                 ->whereHas('posts', function ($query) {
                     $query
                         ->where('active', '=', 1);
                 })
                 ->with(['posts' => function ($query) {
-                    // Limit to 5 posts per category to optimize payload
                     $query->where('active', '=', 1);
                 }])
                 ->select('categories.*')
@@ -102,12 +99,9 @@ class PostController extends Controller
             ->limit(1)
             ->first();
 
-        // user('sanctum') could be null if not authenticated
         $user = $request->user('sanctum');
         $ip = $request->ip();
         $userAgent = $request->userAgent();
-
-        // Check if there's a recent view (e.g., within the last 24 hours) from this user or IP+UserAgent
         $recentView = PostView::where('post_id', $post->id)
             ->where(function ($query) use ($user, $ip, $userAgent) {
                 if ($user) {
@@ -129,7 +123,6 @@ class PostController extends Controller
             ]);
         }
 
-        // Load categories or any other relations for the post
         $post->load('categories');
 
         return response()->json([

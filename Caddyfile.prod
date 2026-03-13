@@ -18,7 +18,6 @@
 	# --- БЭКЕНД (API) ---
 	@backend host admin.toi-invite.kz app
 	handle @backend {
-		# Используем абсолютный путь для надежности
 		root * /app/public
 		encode zstd gzip
 		
@@ -38,8 +37,6 @@
 		file_server
 	}
 
-	# --- ЛОВУШКА ДЛЯ ДЕБАГА ---
-	# Если Nginx передает неправильный хост, мы увидим этот текст:
 	handle {
 		respond "Caddy debug: получен запрос к хосту [{host}], но маршрут не найден!" 404
 	}

@@ -21,23 +21,18 @@ class SurveyController extends Controller
         return response()->json(['message' => 'Опрос не найден'], 404);
     }
 
-    // Используем один запрос для получения статистики и проверки ответа пользователя
     $answers = SurveyAnswer::where('survey_id', $survey->id)
         ->select('answer', 'user_id')
         ->get();
-
-    // Подготавливаем статистику
     $answersStats = $answers->groupBy('answer')
         ->map(function ($group) {
             return $group->count();
         })
         ->toArray();
 
-    // Проверяем ответ пользователя
     $userId = auth()->id();
     $userHasAnswered = $answers->contains('user_id', $userId);
 
-    // Формируем статистику для всех опций
     $stats = collect($survey->options)->mapWithKeys(function ($option) use ($answersStats) {
         return [$option['option'] => $answersStats[$option['option']] ?? 0];
     });
@@ -62,7 +57,6 @@ class SurveyController extends Controller
     
         $user = auth()->user();
     
-        // Проверяем, голосовал ли уже пользователь
         if (SurveyAnswer::where('survey_id', $validated['survey_id'])->where('user_id', $user->id)->exists()) {
             return response()->json(['message' => 'Вы уже голосовали в этом опросе.'], 403);
         }

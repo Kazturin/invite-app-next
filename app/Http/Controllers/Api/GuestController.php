@@ -27,10 +27,6 @@ class GuestController extends Controller
 
         $data = $request->validated();
 
-    //     if ($data->fails()) {
-    //     return response()->json(['message' => $data->errors()->first()], 422);
-    // }
-
         if(isset($data['id'])){
            $guest = Guest::findOrFail($data['id']);
            $guest->update($data);

@@ -49,7 +49,6 @@ class EventService
             ]);
             $invitationValidated = $validator->validated();
 
-            Log::info('envelope_img: ' . $invitationValidated['envelope_img']);
             if (preg_match('/^data:image\/(\w+);base64,/', $invitationValidated['invitation_img'], $type)) {
                 $relativePath = $this->imageService->saveImage($invitationValidated['invitation_img'], $invitationValidated['envelope_img']);
                 $invitationValidated['invitation_img'] = $relativePath;
@@ -140,11 +139,7 @@ class EventService
         }
 
         if (isset($data['gallery']) && is_array($data['gallery'])) {
-            // Check if we need to remove existing images (if logic requires replacing all or specific ones)
-            // For now, let's assume appending new ones, or user might need a way to delete specific ones.
-            // The requirement says "upload multiple images", usually implies adding.
-            // But if there is a limit of 5, we should check count.
-            
+                
             $currentCount = $event->images()->count();
             foreach ($data['gallery'] as $image) {
                 if ($currentCount >= 5) break; 
