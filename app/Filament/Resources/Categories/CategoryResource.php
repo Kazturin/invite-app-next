@@ -24,7 +24,7 @@ class CategoryResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('Блог');
+        return 'Блог';
     }
 
 

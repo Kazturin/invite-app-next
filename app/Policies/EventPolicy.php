@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\Order;
 use App\Models\User;
@@ -10,6 +11,11 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 class EventPolicy
 {
     use HandlesAuthorization;
+
+    public function viewAny(User $user)
+    {
+        return $user->hasAnyRole([RolesEnum::ADMIN->value, RolesEnum::MANAGER->value]);
+    }
 
     /**
      * Determine whether the user can view the model.
@@ -20,6 +26,10 @@ class EventPolicy
      */
     public function view(User $user, Event $event)
     {
+        if($user->hasAnyRole([RolesEnum::ADMIN->value, RolesEnum::MANAGER->value])) {
+            return true;
+        }
+        
         return $user->id === $event->created_by;
     }
 
@@ -32,7 +42,7 @@ class EventPolicy
      */
     public function update(User $user, Event $event)
     {
-        if($user->hasRole('Admin')) {
+        if($user->hasAnyRole([RolesEnum::ADMIN->value, RolesEnum::MANAGER->value])) {
             return true;
         }
         
@@ -48,6 +58,10 @@ class EventPolicy
      */
     public function delete(User $user, Event $event)
     {
+        if($user->hasAnyRole([RolesEnum::ADMIN->value, RolesEnum::MANAGER->value])) {
+            return true;
+        }
+        
         return $user->id === $event->created_by;
     }
 }

@@ -25,7 +25,7 @@ class PostResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('Блог');
+        return 'Блог';
     }
 
     protected static ?string $navigationLabel = 'Посттар';

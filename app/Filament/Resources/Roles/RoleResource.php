@@ -22,6 +22,17 @@ class RoleResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Админ';
+    }
+
+    protected static ?string $navigationLabel = 'Рөлдер';
+
+    protected static ?string $modelLabel = 'Рөл';
+
+    protected static ?string $pluralModelLabel = 'Рөлдер';
+
     public static function form(Schema $schema): Schema
     {
         return $schema

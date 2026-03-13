@@ -20,6 +20,12 @@ class TemplateResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static ?string $navigationLabel = 'Шаблон';
+
+    protected static ?string $modelLabel = 'Шаблон';
+
+    protected static ?string $pluralModelLabel = 'Шаблондар';
+
     public static function form(Schema $schema): Schema
     {
         return TemplateForm::configure($schema);

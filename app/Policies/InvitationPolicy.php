@@ -19,7 +19,6 @@ class InvitationPolicy
      */
     public function view(User $user, Invitation $invitation)
     {
-        // Allow if user is the creator of the event associated with the invitation
         return $user->id === $invitation->event->created_by;
     }
 
@@ -32,7 +31,6 @@ class InvitationPolicy
      */
     public function update(User $user, Invitation $invitation)
     {
-        // Allow if user is the creator of the event associated with the invitation
         return $user->id === $invitation->event->created_by;
     }
 }

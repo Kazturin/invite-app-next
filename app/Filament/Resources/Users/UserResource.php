@@ -19,9 +19,17 @@ use Filament\Tables\Table;
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
     protected static ?string $navigationLabel = 'Қолданушылар';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?string $modelLabel = 'Қолданушы';
+
+    protected static ?string $pluralModelLabel = 'Қолданушылар';
+    
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Админ';
+    }
 
     public static function form(Schema $schema): Schema
     {

@@ -3,6 +3,7 @@
 
 namespace App\Policies;
 
+use App\Enums\RolesEnum;
 use App\Models\User;
 use \Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -16,6 +17,6 @@ class OrderPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->hasRole('Admin');
+        return $user->hasAnyRole([RolesEnum::ADMIN->value, RolesEnum::MANAGER->value]);
     }
 }
