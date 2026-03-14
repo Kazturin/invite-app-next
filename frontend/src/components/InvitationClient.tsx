@@ -17,6 +17,7 @@ import Questionnaire from '@/components/Questionnaire';
 import AudioPlayer from '@/components/AudioPlayer';
 import Image from 'next/image';
 import { useTranslations, useLocale } from 'next-intl';
+import { toast } from 'sonner';
 
 interface InvitationClientProps {
     event: any;
@@ -30,6 +31,7 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
     const [messageModalOpen, setMessageModalOpen] = useState(false);
     const [questionnaireStatus, setQuestionnaireStatus] = useState<number>(1);
     const t = useTranslations('InvitationPreview');
+    const q = useTranslations('Questionnaire');
     const locale = useLocale();
 
     const isEventPast = event.date ? new Date(event.date) < new Date(new Date().setHours(0, 0, 0, 0)) : true;
@@ -51,12 +53,15 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
 
     const closeModal = () => {
         setModalOpen(false);
+    };
+
+    const closeMessageModal = () => {
         setMessageModalOpen(false);
     };
 
     const handleSaved = () => {
         setModalOpen(false);
-        alert(t('response_accepted'));
+        toast.success(q('success_send'));
     };
 
     const videoId = event.video_link ? event.video_link.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|&v=|shorts\/))([^#&?]*)/)?.[1] : null;
@@ -305,7 +310,7 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                 </div>
             </Modal>
 
-            <Modal modal={messageModalOpen} onClose={closeModal}>
+            <Modal modal={messageModalOpen} onClose={closeMessageModal}>
                 <div className="text-center p-6 md:p-10 bg-white/50 backdrop-blur-xl">
                     <div className="bg-stone-50 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-10 border border-stone-100 shadow-inner">
                         <InformationCircleIcon className="text-amber-600 w-12 h-12 animate-bounce-slow" />
@@ -317,8 +322,8 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                         {t('please_respond', { type: event.type === 'party' ? t('party') : t('wedding') })}
                     </p>
                     <button
-                        onClick={closeModal}
-                        className="group w-full max-w-[280px] flex mx-auto items-center justify-center rounded-full shadow-2xl text-white py-5 px-12 bg-emerald-800 hover:bg-emerald-900 transition-all font-bold text-xs uppercase tracking-[0.2em] active:scale-95"
+                        onClick={closeMessageModal}
+                        className="group w-full max-w-[280px] flex mx-auto items-center justify-center rounded-full shadow-2xl text-white py-5 px-12 bg-emerald-800 hover:bg-emerald-900 transition-all font-bold text-xs uppercase tracking-[0.2em] active:scale-95 cursor-pointer"
                     >
                         <HandThumbUpIcon className="w-5 h-5 mr-3 group-hover:scale-125 transition-transform" />
                         {t('ok_button')}

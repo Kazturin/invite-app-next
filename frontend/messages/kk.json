@@ -141,7 +141,8 @@
         "add_child": "Қонақ қосу",
         "child_name_placeholder": "Толық аты-жөні",
         "save_button": "Сақтау",
-        "error_message": "Қате орын алды"
+        "error_message": "Қате орын алды",
+        "success_send": "Сәтті жіберілді!"
     },
     "SuccessPage": {
         "confirm_delete": "Өшіруге сенімдісіз бе?",

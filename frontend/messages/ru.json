@@ -141,7 +141,8 @@
         "add_child": "Добавить гостя",
         "child_name_placeholder": "Полное имя",
         "save_button": "Сохранить",
-        "error_message": "Произошла ошибка"
+        "error_message": "Произошла ошибка",
+        "success_send": "Успешно!"
     },
     "SuccessPage": {
         "confirm_delete": "Вы уверены, что хотите удалить?",
