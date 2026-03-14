@@ -44,7 +44,7 @@ export default async function RootLayout(props: {
       <body className={`antialiased font-roboto`}>
         <NextIntlClientProvider messages={messages}>
           <Toaster position="top-right" richColors />
-          {/* <Script id="yandex-metrika" strategy="lazyOnload">
+          <Script id="yandex-metrika" strategy="lazyOnload">
             {`
               (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
               m[i].l=1*new Date();
@@ -64,7 +64,7 @@ export default async function RootLayout(props: {
             <div>
               <img src="https://mc.yandex.ru/watch/96119899" style={{ position: 'absolute', left: '-9999px' }} alt="" />
             </div>
-          </noscript> */}
+          </noscript>
           <MainLayout>{children}</MainLayout>
         </NextIntlClientProvider>
       </body>
