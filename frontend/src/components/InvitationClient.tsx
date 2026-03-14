@@ -62,7 +62,7 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
     const videoId = event.video_link ? event.video_link.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|&v=|shorts\/))([^#&?]*)/)?.[1] : null;
 
     return (
-        <div className="bg-[#FAF9F6] min-h-screen relative selection:bg-amber-100 italic-fonts pb-12 sm:pb-0">
+        <div className="bg-[#FAF9F6] min-h-screen relative selection:bg-amber-100 italic-fonts">
             {/* Action Buttons - Floating at the top for mobile as requested */}
             <div className="fixed top-4 left-0 right-0 z-[60] px-4 pointer-events-none">
                 <div className="max-w-md mx-auto pointer-events-auto bg-white/90 backdrop-blur-xl border border-stone-200/60 p-1.5 rounded-full shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] flex justify-center items-center gap-2">

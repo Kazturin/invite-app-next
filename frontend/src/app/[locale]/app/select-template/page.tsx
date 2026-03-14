@@ -3,13 +3,14 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter } from '@/i18n/routing';
 import { useSearchParams } from 'next/navigation';
-import { useAppStore } from '@/store/useAppStore';
 import Stepper from '@/components/Stepper';
 import Spinner from '@/components/Spinner';
 import Pagination from '@/components/Pagination';
 import Modal from '@/components/Modal';
 import { PlayIcon } from '@heroicons/react/24/outline';
 import { useTranslations, useLocale } from 'next-intl';
+import useSWR from 'swr';
+import { fetcher } from '@/lib/fetcher';
 
 const SelectTemplateContent = () => {
     const router = useRouter();
@@ -17,7 +18,6 @@ const SelectTemplateContent = () => {
     const t = useTranslations('SelectTemplate');
     const tCommon = useTranslations('Common');
     const locale = useLocale();
-    const { templateCategories, getTemplateCategories } = useAppStore();
 
     const [selectedCategory, setSelectedCategory] = useState<number>(1);
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -27,9 +27,7 @@ const SelectTemplateContent = () => {
 
     const itemsPerPage = 6;
 
-    useEffect(() => {
-        getTemplateCategories();
-    }, [getTemplateCategories]);
+    const { data: categories = [], isLoading: loading } = useSWR('/template-categories', fetcher);
 
     useEffect(() => {
         const categoryFromUrl = searchParams.get('category');
@@ -42,9 +40,6 @@ const SelectTemplateContent = () => {
             setCurrentPage(parseInt(pageFromUrl, 10));
         }
     }, [searchParams]);
-
-    const categories = templateCategories.data || [];
-    const loading = templateCategories.loading;
 
     const activeCategory = categories.find((cat: any) => cat.id === selectedCategory);
     const filteredTemplates = activeCategory?.templates || [];

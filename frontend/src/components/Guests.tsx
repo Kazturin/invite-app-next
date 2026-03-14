@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { TrashIcon, PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import Modal from '@/components/Modal';
 import Questionnaire from '@/components/Questionnaire';
-import { useAppStore } from '@/store/useAppStore';
 
 interface GuestChild {
     id: number;
@@ -23,10 +22,10 @@ interface GuestsProps {
     guests: Guest[];
     eventId: string;
     onDelete: (id: number) => void;
+    onSaved: () => void;
 }
 
-const Guests: React.FC<GuestsProps> = ({ guests, eventId, onDelete }) => {
-    const { getGuests } = useAppStore();
+const Guests: React.FC<GuestsProps> = ({ guests, eventId, onDelete, onSaved }) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [guestStatusFilter, setGuestStatusFilter] = useState<number>(-1);
     const [searchTerm, setSearchTerm] = useState('');
@@ -46,7 +45,7 @@ const Guests: React.FC<GuestsProps> = ({ guests, eventId, onDelete }) => {
 
     const handleGuestSaved = async () => {
         setModalOpen(false);
-        await getGuests(eventId);
+        onSaved();
     };
 
     return (

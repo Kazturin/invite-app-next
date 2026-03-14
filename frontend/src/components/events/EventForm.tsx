@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { BuildingLibraryIcon, GlobeAltIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import Alert from '@/components/Alert';
-import { useAppStore } from '@/store/useAppStore';
 import { useUserStore } from '@/store/useUserStore';
 import dynamic from 'next/dynamic';
 import 'react-quill-new/dist/quill.snow.css';

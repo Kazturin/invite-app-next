@@ -5,6 +5,7 @@ import { useAppStore } from '@/store/useAppStore';
 import Stepper from '@/components/Stepper';
 import EventForm, { EventFormRef } from '@/components/events/EventForm';
 import { useTranslations } from 'next-intl';
+import apiClient from '@/lib/api-client';
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -14,7 +15,7 @@ const EventCreatePage = ({ params }: PageProps) => {
     const { id } = use(params);
     const router = useRouter();
     const t = useTranslations('InvitationCreate');
-    const { saveEvent, invitation, deleteEventImage } = useAppStore();
+    const { invitation } = useAppStore();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const formRef = useRef<EventFormRef>(null);
@@ -33,19 +34,23 @@ const EventCreatePage = ({ params }: PageProps) => {
         formData.append('status', '1');
 
         try {
-            const res = await saveEvent(formData);
+            const res = await apiClient.post('/event', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
             if (isComplete) {
                 // Если статус оплаты 0 (или не оплачено/в ожидании), редирект на success
                 // Иначе редирект на саму страницу ивента
-                const paymentStatus = res.data?.order?.status ?? res.data?.payment_status;
+                const eventData = res.data.data;
+                const paymentStatus = eventData?.order?.status ?? eventData?.payment_status;
 
                 if (paymentStatus === 0 || paymentStatus === undefined) {
-                    router.push(`/app/events/${res.data.id}/success`);
+                    router.push(`/app/events/${eventData.id}/success`);
                 } else {
-                    router.push(`/app/events/${res.data.id}`);
+                    router.push(`/app/events/${eventData.id}`);
                 }
             } else {
-                router.push(`/app/events/${res.data.id}/update`);
+                const eventData = res.data.data;
+                router.push(`/app/events/${eventData.id}/update`);
             }
         } catch (err: any) {
             console.error('Failed to save event', err);
@@ -74,7 +79,9 @@ const EventCreatePage = ({ params }: PageProps) => {
                 <EventForm
                     ref={formRef}
                     onSubmit={handleSubmit}
-                    onDeleteImage={deleteEventImage}
+                    onDeleteImage={async (imageId: number) => {
+                        await apiClient.delete(`/event-image/${imageId}`);
+                    }}
                     loading={loading}
                     errors={error}
                 />

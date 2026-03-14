@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link } from '@/i18n/routing';
-import { useAppStore } from '@/store/useAppStore';
 import { useTranslations, useLocale } from 'next-intl';
+import useSWR from 'swr';
+import { fetcher } from '@/lib/fetcher';
 
 interface FeatureSectionProps {
     initialCategories?: any[];
@@ -12,18 +13,16 @@ interface FeatureSectionProps {
 const FeatureSection: React.FC<FeatureSectionProps> = ({ initialCategories }) => {
     const t = useTranslations('Index');
     const locale = useLocale();
-    const { templateCategories, getTemplateCategories } = useAppStore();
     const [activeCategoryId, setActiveCategoryId] = useState<number | null>(null);
 
-    useEffect(() => {
-        if (!initialCategories || initialCategories.length === 0) {
-            getTemplateCategories();
-        }
-    }, [getTemplateCategories, initialCategories]);
+    const { data: fetchedCategories = [], isLoading } = useSWR(
+        (!initialCategories || initialCategories.length === 0) ? '/template-categories' : null,
+        fetcher
+    );
 
     const categories = (initialCategories && initialCategories.length > 0)
         ? initialCategories
-        : (templateCategories?.data || []);
+        : fetchedCategories;
 
     useEffect(() => {
         if (categories && categories.length > 0 && activeCategoryId === null) {

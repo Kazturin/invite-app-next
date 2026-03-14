@@ -2,18 +2,19 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
 interface UserData {
-    id?: string;
-    name?: string;
-    email?: string;
+    id: string;
+    name: string;
+    email: string;
     created_at?: string;
-    // Add other user fields as needed
+    google_id?: string | null;
+    roles?: any[];
 }
 
 interface UserState {
-    user: UserData;
+    user: UserData | null;
     token: string | null;
     _hasHydrated: boolean;
-    setUser: (user: UserData) => void;
+    setUser: (user: UserData | null) => void;
     setToken: (token: string | null) => void;
     logout: () => void;
     setHasHydrated: (state: boolean) => void;
@@ -22,13 +23,13 @@ interface UserState {
 export const useUserStore = create<UserState>()(
     persist(
         (set) => ({
-            user: {},
+            user: null,
             token: null,
             _hasHydrated: false,
             setUser: (user) => set({ user }),
             setToken: (token) => set({ token }),
             logout: () => {
-                set({ user: {}, token: null });
+                set({ user: null, token: null });
             },
             setHasHydrated: (state) => set({ _hasHydrated: state }),
         }),

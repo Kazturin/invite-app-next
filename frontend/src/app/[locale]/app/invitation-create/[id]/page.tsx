@@ -6,6 +6,7 @@ import { useAppStore } from '@/store/useAppStore';
 import Stepper from '@/components/Stepper';
 import Spinner from '@/components/Spinner';
 import InvitationTemplate, { InvitationTemplateRef } from '@/components/invitations/InvitationTemplate';
+import apiClient from '@/lib/api-client';
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -14,9 +15,10 @@ interface PageProps {
 const InvitationCreatePage = ({ params }: PageProps) => {
     const { id } = use(params);
     const router = useRouter();
-    const { template, getTemplate, setContent, setBgImg, setImage, setInInvitationImage, invitation } = useAppStore();
+    const { updateInvitationMeta, setContent, setBgImg, setImage, setInInvitationImage, invitation } = useAppStore();
 
     const [loading, setLoading] = useState(true);
+    const [templateData, setTemplateData] = useState<any>(null);
     const captureRef = useRef<InvitationTemplateRef>(null);
 
     useEffect(() => {
@@ -24,10 +26,17 @@ const InvitationCreatePage = ({ params }: PageProps) => {
 
             setLoading(true);
             try {
-                const templateData = await getTemplate(id);
-                if (templateData.content) {
-                    setContent(templateData.content);
+                const res = await apiClient.get(`/template/${id}`);
+                const data = res.data.data;
+                setTemplateData(data);
+                if (data.content) {
+                    setContent(data.content);
                 }
+                updateInvitationMeta({
+                    template_id: data.id,
+                    price: data.price,
+                    envelope_img: data.envelope_img,
+                });
             } catch (error) {
                 console.error('Failed to fetch template', error);
             } finally {
@@ -36,7 +45,7 @@ const InvitationCreatePage = ({ params }: PageProps) => {
         };
 
         fetchTemplate();
-    }, [id, getTemplate, setContent]);
+    }, [id, setContent, updateInvitationMeta]);
 
     const incrementStep = async () => {
         if (!captureRef.current) return;
@@ -76,7 +85,7 @@ const InvitationCreatePage = ({ params }: PageProps) => {
         setInInvitationImage(url);
     };
 
-    if (loading && !template.data) {
+    if (loading && !templateData) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <Spinner />
@@ -92,7 +101,7 @@ const InvitationCreatePage = ({ params }: PageProps) => {
                 onBack={decrementStep}
                 loading={loading}
             >
-                {template.data && template.data.content ? (
+                {templateData && templateData.content ? (
                     <div className="relative">
                         {loading && (
                             <div className="absolute inset-0 bg-white/60 z-50 flex items-center justify-center rounded-2xl">
@@ -100,10 +109,10 @@ const InvitationCreatePage = ({ params }: PageProps) => {
                             </div>
                         )}
                         <InvitationTemplate
-                            key={template.data.id}
+                            key={templateData.id}
                             ref={captureRef}
-                            template={template.data}
-                            content={template.data.content}
+                            template={templateData}
+                            content={templateData.content}
                             bg_img={null}
                             onUpdateContent={updateContent}
                             onUpdateBgImg={updateBgImg}

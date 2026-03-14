@@ -43,7 +43,7 @@ const ChildEditor: React.FC<ChildEditorProps> = ({ child, index, onChange, delet
                 type="button"
                 onClick={() => deleteChild(child)}
                 className="p-2.5 text-stone-300 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all duration-200"
-                title={t('delete_child') || 'Удалить'}
+                title={'Удалить'}
             >
                 <TrashIcon className="h-5 w-5" />
             </button>

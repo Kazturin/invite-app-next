@@ -3,7 +3,9 @@
 import React, { useState, useEffect, useRef, use } from 'react';
 import { useRouter } from '@/i18n/routing';
 import Link from 'next/link';
-import { useAppStore } from '@/store/useAppStore';
+import useSWR from 'swr';
+import { fetcher } from '@/lib/fetcher';
+import apiClient from '@/lib/api-client';
 import {
     MusicalNoteIcon,
     PhotoIcon,
@@ -27,32 +29,20 @@ const PreviewPage = ({ params }: PageProps) => {
     const { id } = use(params);
     const router = useRouter();
     const t = useTranslations('InvitationPreview');
-    const { getEvent, getWatermarkInvitation, event } = useAppStore();
-    const [loading, setLoading] = useState(true);
-    const [watermarkInvitation, setWatermarkInvitation] = useState<string | null>(null);
     const [isPaused, setIsPaused] = useState(true);
     const audioRef = useRef<HTMLAudioElement>(null);
 
-    const [isEventPast, setIsEventPast] = useState(false);
+    const { data: myEvent, isLoading } = useSWR(`/event/${id}`, fetcher);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                const eventData = await getEvent(id);
-                if (eventData.invitation?.invitation_img_path) {
-                    const watermarkData = await getWatermarkInvitation(eventData.invitation.invitation_img_path);
-                    setWatermarkInvitation(watermarkData);
-                }
-                setIsEventPast(eventData.date ? new Date(eventData.date) < new Date(new Date().setHours(0, 0, 0, 0)) : true);
-            } catch (err) {
-                console.error('Failed to fetch event data', err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, [id, getEvent, getWatermarkInvitation]);
+    const { data: watermarkData } = useSWR(
+        myEvent?.invitation?.invitation_img_path ? `/invitation-watermark/${myEvent.invitation.invitation_img_path}` : null,
+        async (url) => {
+            const res = await apiClient.get(url);
+            return res.data;
+        }
+    );
+
+    const isEventPast = myEvent?.date ? new Date(myEvent.date) < new Date(new Date().setHours(0, 0, 0, 0)) : true;
 
     const initializeAudio = () => {
         if (audioRef.current) {
@@ -100,13 +90,13 @@ const PreviewPage = ({ params }: PageProps) => {
     };
 
     const finishBtn = () => {
-        const routeUrl = event.data?.order?.status === 0
+        const routeUrl = myEvent?.order?.status === 0
             ? `/app/events/${id}/success`
             : `/app/events/${id}`;
-        router.push(routeUrl);
+        router.push(routeUrl as any);
     };
 
-    if (loading || !event.data) {
+    if (isLoading || !myEvent) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <Spinner />
@@ -114,10 +104,10 @@ const PreviewPage = ({ params }: PageProps) => {
         );
     }
 
-    const eventDetails = event.data;
+    const eventDetails = myEvent;
 
     return (
-        <div className="bg-[#FAF9F6] min-h-screen relative selection:bg-amber-100 italic-fonts pb-20">
+        <div className="bg-[#FAF9F6] min-h-screen relative selection:bg-amber-100 italic-fonts">
             {/* Background Decorations (Fixed) */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-amber-100/10 blur-[120px] rounded-full animate-pulse-slow"></div>
@@ -172,10 +162,10 @@ const PreviewPage = ({ params }: PageProps) => {
                             </div>
                         )}
                         <div className="relative z-20 transition-all duration-1000 transform scale-95 group-hover:scale-100 group-hover:-translate-y-2">
-                            {watermarkInvitation ? (
+                            {watermarkData ? (
                                 <img
                                     className="w-[320px] md:w-[380px] mx-auto drop-shadow-[0_25px_50px_rgba(0,0,0,0.3)] animate-invitation-float"
-                                    src={watermarkInvitation}
+                                    src={watermarkData}
                                     alt="Invitation Card"
                                 />
                             ) : (

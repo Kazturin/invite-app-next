@@ -54,10 +54,10 @@ export default function ProfilePage() {
                             <UserCircleIcon className="w-32 h-32 text-gray-300 bg-white rounded-full" />
                         </div>
                         <div className="mt-4 text-center sm:text-left">
-                            <h2 className="text-2xl font-bold text-gray-900">{user.name || 'User'}</h2>
+                            <h2 className="text-2xl font-bold text-gray-900">{user?.name || 'User'}</h2>
                             <p className="text-gray-500 flex items-center justify-center sm:justify-start mt-1">
                                 <EnvelopeIcon className="w-4 h-4 mr-2" />
-                                {user.email}
+                                {user?.email}
                             </p>
                         </div>
                     </div>

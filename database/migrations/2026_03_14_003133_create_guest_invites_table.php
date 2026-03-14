@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('events', function (Blueprint $table) {
-            $table->string('type')->default('wedding')->after('id');
+        Schema::create('guest_invites', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('guest_id')->index('guest_invites_guest_id_foreign');
+            $table->text('invite_text');
+            $table->string('invite_code')->unique();
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('events', function (Blueprint $table) {
-            $table->dropColumn('type');
-        });
+        Schema::dropIfExists('guest_invites');
     }
 };

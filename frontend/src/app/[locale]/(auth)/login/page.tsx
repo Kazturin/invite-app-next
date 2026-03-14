@@ -8,7 +8,7 @@ import { useUserStore } from '@/store/useUserStore';
 import Alert from '@/components/Alert';
 import apiClient from '@/lib/api-client';
 import { GoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from 'jwt-decode';
+
 
 export default function LoginPage() {
     const router = useRouter();
@@ -26,7 +26,7 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
 
-    const login = async (e: React.FormEvent) => {
+    const login = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         setLoading(true);
         setErrorMsg('');
@@ -55,11 +55,9 @@ export default function LoginPage() {
             setLoading(true);
             setErrorMsg('');
             try {
-                const decoded: any = jwtDecode(credentialResponse.credential);
+                // Теперь мы отправляем сам токен (id_token) на бэкенд для проверки, а не декодированные данные
                 const { data } = await apiClient.post('/login-google', {
-                    sub: decoded.sub,
-                    email: decoded.email,
-                    name: decoded.name,
+                    id_token: credentialResponse.credential
                 });
 
                 setToken(data.token);

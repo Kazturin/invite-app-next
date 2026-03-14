@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useAppStore } from '@/store/useAppStore';
 import { v4 as uuidv4 } from 'uuid';
 import Alert from '@/components/Alert';
+import apiClient from '@/lib/api-client';
 import {
     ChatBubbleLeftRightIcon,
     LinkIcon,
@@ -33,7 +33,6 @@ interface PersonallyInviteGuestProps {
 }
 
 const PersonallyInviteGuest: React.FC<PersonallyInviteGuestProps> = ({ guests, url }) => {
-    const { saveGuestInvite } = useAppStore();
     const [saved, setSaved] = useState(false);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [loadingPost, setLoadingPost] = useState(false);
@@ -93,7 +92,7 @@ const PersonallyInviteGuest: React.FC<PersonallyInviteGuestProps> = ({ guests, u
         setErrorMsg(null);
 
         try {
-            await saveGuestInvite(model);
+            await apiClient.post('/guest/invite', model);
             setSaved(true);
         } catch (err: any) {
             setErrorMsg(err.response?.data?.message || 'Сақтау кезінде қате орын алды');

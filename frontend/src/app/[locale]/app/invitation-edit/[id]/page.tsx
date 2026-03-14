@@ -6,6 +6,7 @@ import { useAppStore } from '@/store/useAppStore';
 import Stepper from '@/components/Stepper';
 import Spinner from '@/components/Spinner';
 import InvitationTemplate, { InvitationTemplateRef } from '@/components/invitations/InvitationTemplate';
+import apiClient from '@/lib/api-client';
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -14,7 +15,7 @@ interface PageProps {
 const InvitationEditPage = ({ params }: PageProps) => {
     const { id } = use(params);
     const router = useRouter();
-    const { invitation, getInvitation, setContent, setBgImg, setImage, setInInvitationImage, saveInvitation } = useAppStore();
+    const { invitation, setInvitation, setContent, setBgImg, setImage, setInInvitationImage } = useAppStore();
 
     const [loading, setLoading] = useState(true);
     const captureRef = useRef<InvitationTemplateRef>(null);
@@ -23,7 +24,8 @@ const InvitationEditPage = ({ params }: PageProps) => {
         const fetchInvitation = async () => {
             setLoading(true);
             try {
-                await getInvitation(id);
+                const res = await apiClient.get(`/invitation/${id}`);
+                setInvitation(res.data.data);
             } catch (error) {
                 console.error('Failed to fetch invitation', error);
             } finally {
@@ -32,7 +34,7 @@ const InvitationEditPage = ({ params }: PageProps) => {
         };
 
         fetchInvitation();
-    }, [id, getInvitation]);
+    }, [id, setInvitation]);
 
     const incrementStep = async () => {
         if (!captureRef.current) return;
@@ -51,7 +53,8 @@ const InvitationEditPage = ({ params }: PageProps) => {
                 formData.set('bg_img', invitation.bg_img || '');
                 formData.set('inInvitationImage', invitation.inInvitationImage || '');
 
-                await saveInvitation(id, formData);
+                const res = await apiClient.post(`/invitation/${id}?_method=PUT`, formData);
+                setInvitation(res.data.data);
 
                 const eventId = (invitation as any).event_id;
                 router.push(`/app/events/${eventId}/update`);

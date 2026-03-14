@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import Alert from './Alert';
 import ChildEditor from './ChildEditor';
-import { useAppStore } from '@/store/useAppStore';
+import apiClient from '@/lib/api-client';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { useTranslations, useLocale } from 'next-intl';
 
@@ -32,7 +32,6 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({
 }) => {
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [loadingPost, setLoadingPost] = useState(false);
-    const saveGuest = useAppStore((state) => state.saveGuest);
     const t = useTranslations('Questionnaire');
     const tp = useTranslations('InvitationPreview');
     const locale = useLocale();
@@ -90,7 +89,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({
         setLoadingPost(true);
         setErrorMsg(null);
         try {
-            await saveGuest(model);
+            await apiClient.post('/guest', model);
             setLoadingPost(false);
             if (onSaved) onSaved();
         } catch (err: any) {

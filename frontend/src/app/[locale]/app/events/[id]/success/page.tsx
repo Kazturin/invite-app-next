@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, use } from 'react';
 import { useRouter } from '@/i18n/routing';
-import { useAppStore } from '@/store/useAppStore';
 import {
     CheckIcon,
     ClockIcon,
@@ -15,6 +14,9 @@ import {
 import Spinner from '@/components/Spinner';
 import Modal from '@/components/Modal';
 import { useTranslations } from 'next-intl';
+import useSWR from 'swr';
+import { fetcher } from '@/lib/fetcher';
+import apiClient from '@/lib/api-client';
 
 
 interface PageProps {
@@ -25,31 +27,19 @@ const SuccessPage = ({ params }: PageProps) => {
     const { id } = use(params);
     const router = useRouter();
     const t = useTranslations('SuccessPage');
-    const { getEvent, getWatermarkInvitation, deleteEvent, event } = useAppStore();
-    const [loading, setLoading] = useState(true);
-    const [watermarkInvitation, setWatermarkInvitation] = useState<string | null>(null);
     const [modal, setModal] = useState(false);
     const [modalTitle, setModalTitle] = useState('');
     const [modalImgUrl, setModalImgUrl] = useState<string | null>(null);
 
+    const { data: myEvent, isLoading: loading } = useSWR(`/event/${id}`, fetcher);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                const eventData = await getEvent(id);
-                if (eventData.invitation?.invitation_img_path) {
-                    const watermarkData = await getWatermarkInvitation(eventData.invitation.invitation_img_path);
-                    setWatermarkInvitation(watermarkData);
-                }
-            } catch (error) {
-                console.error('Failed to fetch event or watermark', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, [id, getEvent, getWatermarkInvitation]);
+    const { data: watermarkData } = useSWR(
+        myEvent?.invitation?.invitation_img_path ? `/invitation-watermark/${myEvent.invitation.invitation_img_path}` : null,
+        async (url: string) => {
+            const res = await apiClient.get(url);
+            return res.data;
+        }
+    );
 
     const toWhatsapp = (text: string) => {
         const phone = '+77005742909';
@@ -61,7 +51,7 @@ const SuccessPage = ({ params }: PageProps) => {
     const handleDelete = async () => {
         if (confirm(t('confirm_delete'))) {
             try {
-                await deleteEvent(id);
+                await apiClient.post(`/event/${id}/delete`);
                 router.push('/app/events');
             } catch (error) {
                 console.error('Failed to delete event', error);
@@ -79,7 +69,7 @@ const SuccessPage = ({ params }: PageProps) => {
         setModal(false);
     };
 
-    if (loading || !event.data) {
+    if (loading || !myEvent) {
 
         return (
             <div className="min-h-screen flex items-center justify-center">
@@ -88,7 +78,7 @@ const SuccessPage = ({ params }: PageProps) => {
         );
     }
 
-    const eventDetails = event.data;
+    const eventDetails = myEvent;
 
     return (
         <div className="container mx-auto mt-6 px-4">
@@ -102,10 +92,10 @@ const SuccessPage = ({ params }: PageProps) => {
                             alt="Envelope"
                         />
                     )}
-                    {watermarkInvitation && (
+                    {watermarkData && (
                         <img
                             className="w-48 absolute drop-shadow-2xl transition-all duration-700 hover:scale-105"
-                            src={watermarkInvitation}
+                            src={watermarkData}
                             alt="Invitation Preview"
                         />
                     )}

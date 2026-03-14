@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState, useEffect, use } from 'react';
+import React, { useState, use } from 'react';
 import { useRouter } from '@/i18n/routing';
-import { useAppStore } from '@/store/useAppStore';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import Spinner from '@/components/Spinner';
 import Guests from '@/components/Guests';
 import PersonallyInviteGuest from '@/components/PersonallyInviteGuest';
+import useSWR from 'swr';
+import { fetcher } from '@/lib/fetcher';
 import {
     ClockIcon,
     PencilIcon,
@@ -21,6 +22,7 @@ import {
     ShareIcon
 } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
+import apiClient from '@/lib/api-client';
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -31,30 +33,17 @@ const MyEventPage = ({ params }: PageProps) => {
     const router = useRouter();
     const t = useTranslations('EventDetails');
     const tm = useTranslations('MyEvents');
-    const { getEvent, getGuests, event, guests, deleteEvent, deleteGuest } = useAppStore();
-    const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState(1);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                await Promise.all([
-                    getEvent(id),
-                    getGuests(id)
-                ]);
-            } catch (error) {
-                console.error('Failed to fetch event data', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, [id, getEvent, getGuests]);
+    const { data: myEvent, isLoading: isEventLoading } = useSWR(`/event/${id}`, fetcher);
+    const { data: guestsData, isLoading: isGuestsLoading, mutate: mutateGuests } = useSWR(`/guests/${id}`, fetcher);
 
-    const acceptedCount = guests.filter(g => g.status === 1).length;
-    const rejectedCount = guests.filter(g => g.status === 0).length;
-    const totalCount = guests.reduce((acc, curr) => {
+    const guests = guestsData || [];
+    const loading = isEventLoading || isGuestsLoading;
+
+    const acceptedCount = guests.filter((g: any) => g.status === 1).length;
+    const rejectedCount = guests.filter((g: any) => g.status === 0).length;
+    const totalCount = guests.reduce((acc: number, curr: any) => {
         if (curr.status === 1) {
             return acc + 1 + (curr.child?.length || 0);
         }
@@ -64,7 +53,7 @@ const MyEventPage = ({ params }: PageProps) => {
     const handleDeleteEvent = async () => {
         if (confirm(t('confirm_delete_event'))) {
             try {
-                await deleteEvent(id);
+                await apiClient.post(`/event/${id}/delete`);
                 router.push('/app/events');
             } catch (error) {
                 console.error('Failed to delete event', error);
@@ -75,15 +64,15 @@ const MyEventPage = ({ params }: PageProps) => {
     const handleDeleteGuest = async (guestId: number) => {
         if (confirm(t('confirm_delete_guest'))) {
             try {
-                await deleteGuest(guestId);
-                await getGuests(id);
+                await apiClient.delete(`/guest/${guestId}`);
+                await mutateGuests();
             } catch (error) {
                 console.error('Failed to delete guest', error);
             }
         }
     };
 
-    if (loading && !event.data) {
+    if (loading && !myEvent) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <Spinner />
@@ -91,7 +80,6 @@ const MyEventPage = ({ params }: PageProps) => {
         );
     }
 
-    const myEvent = event.data;
     const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
     const shareUrl = myEvent ? `${baseUrl}/toi/${myEvent.slug}` : '';
 
@@ -117,7 +105,7 @@ const MyEventPage = ({ params }: PageProps) => {
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-bold transition-all ${activeTab === tab.id
+                            className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-bold cursor-pointer transition-all ${activeTab === tab.id
                                 ? 'bg-theme-primary text-white shadow-lg shadow-indigo-100 scale-105'
                                 : 'text-gray-500 hover:bg-gray-50'
                                 }`}
@@ -185,9 +173,9 @@ const MyEventPage = ({ params }: PageProps) => {
 
                                 {/* Status Badge */}
                                 <div className="mb-8">
-                                    <span className={`inline-flex items-center px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest ${myEvent.order?.status === 2 ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                                    <span className={`inline-flex items-center px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest ${myEvent.order?.status === 1 ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
                                         }`}>
-                                        {myEvent.order?.statusLabel || (myEvent.order?.status === 2 ? tm('status_paid') : tm('status_pending'))}
+                                        {myEvent.order?.statusLabel || (myEvent.order?.status === 1 ? tm('status_paid') : tm('status_pending'))}
                                     </span>
                                 </div>
 
@@ -250,6 +238,7 @@ const MyEventPage = ({ params }: PageProps) => {
                             guests={guests}
                             eventId={id}
                             onDelete={handleDeleteGuest}
+                            onSaved={mutateGuests}
                         />
                     </div>
                 )}

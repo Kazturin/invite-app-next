@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from '@/i18n/routing';
-import { useAppStore } from '@/store/useAppStore';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import Spinner from '@/components/Spinner';
+import useSWR from 'swr';
+import { fetcher } from '@/lib/fetcher';
 import {
     ClockIcon,
     PencilSquareIcon,
@@ -13,39 +14,25 @@ import {
     PlusIcon
 } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
+import apiClient from '@/lib/api-client';
 
 const MyEventsPage = () => {
-    const { getEvents, events, deleteEvent } = useAppStore();
-    const [loading, setLoading] = useState(true);
     const t = useTranslations('MyEvents');
 
-    useEffect(() => {
-        const fetchEvents = async () => {
-            setLoading(true);
-            try {
-                await getEvents();
-            } catch (error) {
-                console.error('Failed to fetch events', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchEvents();
-    }, [getEvents]);
+    const { data: events, isLoading, mutate } = useSWR('/event', fetcher);
 
     const handleDelete = async (id: string) => {
         if (confirm(t('confirm_delete'))) {
             try {
-                await deleteEvent(id);
-                // Refresh events list
-                await getEvents();
+                await apiClient.post(`/event/${id}/delete`);
+                await mutate();
             } catch (error) {
                 console.error('Failed to delete event', error);
             }
         }
     };
 
-    if (loading && events.data.length === 0) {
+    if (isLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <Spinner />
@@ -59,20 +46,9 @@ const MyEventsPage = () => {
                 <Breadcrumbs links={[{ name: t('title') }]} />
             </div>
 
-            {/* <div className="flex justify-between items-center mb-8">
-                <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
-                <Link
-                    href="/app/select-template"
-                    className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150"
-                >
-                    <PlusIcon className="w-4 h-4 mr-2" />
-                    {t('new_invitation')}
-                </Link>
-            </div> */}
-
-            {events.data.length > 0 ? (
+            {events && events.length > 0 ? (
                 <div className="grid gap-6">
-                    {events.data.map((item: any) => (
+                    {events.map((item: any) => (
                         <div
                             key={item.id}
                             className="flex flex-col sm:flex-row  w-full bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow overflow-hidden"
@@ -129,7 +105,7 @@ const MyEventsPage = () => {
                                             {item.order?.status === 1 && (
                                                 <Link
                                                     href={`/app/events/${item.id}/update`}
-                                                    className="inline-flex items-center px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-bold hover:bg-gray-50 transition-colors gap-2"
+                                                    className="inline-flex items-center px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-bold hover:bg-gray-50 transition-colors cursor-pointer gap-2"
                                                 >
                                                     <PencilSquareIcon className="w-4 h-4" />
                                                     {t('edit_button')}
@@ -137,7 +113,7 @@ const MyEventsPage = () => {
                                             )}
                                             <Link
                                                 href={`/app/events/${item.id}`}
-                                                className="inline-flex items-center px-4 py-2 bg-theme-secondary text-white rounded-lg text-sm font-bold hover:bg-theme-secondary/80 transition-colors gap-2"
+                                                className="inline-flex items-center px-4 py-2 bg-theme-secondary text-white rounded-lg text-sm font-bold hover:bg-theme-secondary/80 transition-colors cursor-pointer gap-2"
                                             >
                                                 <EyeIcon className="w-4 h-4" />
                                                 {t('details_button')}
@@ -146,7 +122,7 @@ const MyEventsPage = () => {
                                     )}
                                     <button
                                         onClick={() => handleDelete(item.id)}
-                                        className="inline-flex items-center px-4 py-2 bg-white border border-red-100 text-red-600 rounded-lg text-sm font-bold hover:bg-red-50 transition-colors gap-2"
+                                        className="inline-flex items-center px-4 py-2 bg-white border border-red-100 text-red-600 rounded-lg text-sm font-bold hover:bg-red-50 transition-colors cursor-pointer cursor-pointer gap-2"
                                     >
                                         <TrashIcon className="w-4 h-4" />
                                         {t('delete_button')}
