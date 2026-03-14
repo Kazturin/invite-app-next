@@ -39,7 +39,7 @@ class EventRequest extends FormRequest
 
             // Audio
             'audio' => 'nullable|string',
-            'audioFile' => 'nullable|file|mimes:mp3',
+            'audioFile' => 'nullable|file|mimes:mp3|max:10240',
 
             // Address
             'address' => 'required|array',
