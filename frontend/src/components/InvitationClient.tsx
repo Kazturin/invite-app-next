@@ -63,8 +63,8 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
 
     return (
         <div className="bg-[#FAF9F6] min-h-screen relative selection:bg-amber-100 italic-fonts">
-            {/* Action Buttons - Floating at the top for mobile as requested */}
-            <div className="fixed top-4 left-0 right-0 z-[60] px-4 pointer-events-none">
+            {/* Action Buttons - Floating at the bottom for mobile */}
+            <div className="fixed bottom-8 left-0 right-0 z-40 px-4 pointer-events-none">
                 <div className="max-w-md mx-auto pointer-events-auto bg-white/90 backdrop-blur-xl border border-stone-200/60 p-1.5 rounded-full shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] flex justify-center items-center gap-2">
                     <button
                         disabled={isEventPast}
@@ -83,7 +83,7 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                     </button>
                 </div>
             </div>
-            <div className="h-20 sm:hidden"></div> {/* Spacer for fixed header */}
+
 
             <div className="max-w-[850px] mx-auto bg-white shadow-[0_30px_100px_-20px_rgba(0,0,0,0.15)] relative overflow-hidden font-baltica pb-20 min-h-screen border-x border-stone-100">
                 {/* Subtle Textures & Overlays */}
@@ -281,6 +281,7 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                         </a>
                     </div>
                 </div>
+                <div className="h-32 md:h-20"></div> {/* Spacer for fixed bottom buttons */}
             </div>
 
             {/* Background Decorations (Fixed) */}

@@ -70,7 +70,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src }) => {
     return (
         <>
             <audio ref={audioRef} src={src} loop className="hidden" />
-            <div className="fixed bottom-8 right-8 z-40">
+            <div className="fixed bottom-32 right-8 z-40">
                 <div
                     onClick={toggleAudio}
                     className={`relative w-16 h-16 rounded-full flex justify-center items-center cursor-pointer transition-all duration-500 shadow-xl border-4 border-white active:scale-95 ${isPaused ? 'bg-gray-400' : 'bg-gradient-to-br from-amber-400 to-amber-600'
