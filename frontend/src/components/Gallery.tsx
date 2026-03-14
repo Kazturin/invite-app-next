@@ -56,7 +56,7 @@ const Gallery: React.FC<GalleryProps> = ({ images = [], title = 'Фотогал�
 
     return (
         <div className="my-8">
-            <h2 className="text-2xl font-semibold text-center mb-6 text-gray-800 font-baltica">{title}</h2>
+            {/* <h2 className="text-2xl font-semibold text-center mb-6 text-gray-800 font-baltica">{title}</h2> */}
 
             {/* Grid Layout */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 px-4 sm:px-0">

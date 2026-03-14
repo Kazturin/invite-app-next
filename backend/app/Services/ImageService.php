@@ -61,7 +61,10 @@ class ImageService
         
         $resolvedEnvelopePath = $envelope_img;
         
-        if (str_contains($envelope_img, '/storage/')) {
+        if (empty($envelope_img)) {
+            // Fallback or handle error. For now, let's try to find a default or just log it.
+            Log::warning('ImageService: envelope_img is empty');
+        } elseif (str_contains($envelope_img, '/storage/')) {
             $parts = explode('/storage/', $envelope_img);
             $envelope_relativePath = ltrim(end($parts), '/');
             $resolvedEnvelopePath = storage_path('app/public/' . $envelope_relativePath);
@@ -69,17 +72,37 @@ class ImageService
             $resolvedEnvelopePath = storage_path('app/public/' . ltrim($envelope_img, '/'));
         }
 
-        $env = $this->manager->read($resolvedEnvelopePath)
-            ->resize(487, 550)
-            ->rotate(10, '#f3f3f3');
+        Log::info('ImageService: Resolving envelope image', [
+            'original' => $envelope_img,
+            'resolved' => $resolvedEnvelopePath,
+            'exists' => is_string($resolvedEnvelopePath) && file_exists($resolvedEnvelopePath)
+        ]);
 
-        $inv = $this->manager->read($imageData)
-            ->resize(352, 500);
+        try {
+            if (empty($resolvedEnvelopePath) || (is_string($resolvedEnvelopePath) && !str_starts_with($resolvedEnvelopePath, 'http') && !file_exists($resolvedEnvelopePath))) {
+                 // If envelope is missing, we might want to skip it or use a placeholder
+                 Log::error('ImageService: Envelope image not found at ' . $resolvedEnvelopePath);
+                 // Fallback to a blank image or throw specific exception
+            }
+            
+            $env = $this->manager->read($resolvedEnvelopePath)
+                ->resize(487, 550)
+                ->rotate(10, '#f3f3f3');
 
-        $canvas->place($env, 'top-left', 4, 0);
-        $canvas->place($inv, 'center');
+            $inv = $this->manager->read($imageData)
+                ->resize(352, 500);
 
-        $canvas->save($path . $file);
+            $canvas->place($env, 'top-left', 4, 0);
+            $canvas->place($inv, 'center');
+
+            $canvas->save($path . $file);
+        } catch (\Throwable $e) {
+            Log::error('ImageService: Failed to process images: ' . $e->getMessage(), [
+                'envelope_path' => $resolvedEnvelopePath,
+                'exception' => $e
+            ]);
+            // If we can't process the composite, we still have the original saved
+        }
 
         return $relativePath;
     }

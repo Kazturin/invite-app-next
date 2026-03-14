@@ -56,7 +56,11 @@
         "center_text": "Центрировать",
         "change_image": "Изменить изображение",
         "duplicate_text": "Дублировать",
-        "server_error": "Произошла ошибка на сервере"
+        "server_error": "Произошла ошибка на сервере",
+        "save_success": "Успешно сохранено!",
+        "draft_saved": "Черновик сохранен",
+        "image_deleted": "Изображение удалено",
+        "delete_image_error": "Ошибка при удалении изображения"
     },
     "EventForm": {
         "event_info": "Информация о мероприятии",
@@ -84,7 +88,9 @@
             "place_required": "Заполните место проведения",
             "address_required": "Укажите ссылку на карту",
             "date_required": "Укажите время начала",
-            "youtube_invalid": "Неверная ссылка YouTube"
+            "youtube_invalid": "Неверная ссылка YouTube",
+            "gallery_file_too_large": "Размер изображения \"{name}\" превышает 5 МБ. Пожалуйста, выберите файл меньшего размера.",
+            "gallery_invalid_format": "Файл \"{name}\" имеет неподдерживаемый формат. Допустимые форматы: JPEG, PNG, JPG, GIF, SVG."
         }
     },
     "InvitationPreview": {

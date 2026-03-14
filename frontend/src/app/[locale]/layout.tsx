@@ -5,6 +5,7 @@ import { roboto } from "@/app/fonts";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import Script from 'next/script';
+import { Toaster } from 'sonner';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -42,7 +43,8 @@ export default async function RootLayout(props: {
     <html lang={locale} className={`${roboto.variable}`}>
       <body className={`antialiased font-roboto`}>
         <NextIntlClientProvider messages={messages}>
-          <Script id="yandex-metrika" strategy="lazyOnload">
+          <Toaster position="top-right" richColors />
+          {/* <Script id="yandex-metrika" strategy="lazyOnload">
             {`
               (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
               m[i].l=1*new Date();
@@ -62,7 +64,7 @@ export default async function RootLayout(props: {
             <div>
               <img src="https://mc.yandex.ru/watch/96119899" style={{ position: 'absolute', left: '-9999px' }} alt="" />
             </div>
-          </noscript>
+          </noscript> */}
           <MainLayout>{children}</MainLayout>
         </NextIntlClientProvider>
       </body>

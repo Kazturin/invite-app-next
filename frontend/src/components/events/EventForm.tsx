@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import 'react-quill-new/dist/quill.snow.css';
 import { toolbarOptions } from '@/lib/quillConfig';
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 
 const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
 
@@ -63,6 +64,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
                 // Map server keys to form field IDs if they differ
                 let fieldKey = key;
                 if (key === 'address.address') fieldKey = 'address_link';
+                if (key.startsWith('gallery')) fieldKey = 'gallery';
                 // Add other mappings if necessary
 
                 serverErrors[fieldKey] = errorValue;
@@ -97,13 +99,29 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
         setModel(prev => ({ ...prev, audioToggle: e.target.checked }));
     };
 
+    const MAX_GALLERY_FILE_SIZE = 5 * 1024 * 1024; // 5 MB in bytes
+    const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/svg+xml'];
+
     const handleGalleryUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
         const files = Array.from(e.target.files);
         const remainingSlots = 5 - galleryPreviews.length;
         const filesToProcess = files.slice(0, remainingSlots);
 
+        const validFiles: File[] = [];
         filesToProcess.forEach(file => {
+            if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+                toast.error(t('errors.gallery_invalid_format', { name: file.name }));
+                return;
+            }
+            if (file.size > MAX_GALLERY_FILE_SIZE) {
+                toast.error(t('errors.gallery_file_too_large', { name: file.name }));
+                return;
+            }
+            validFiles.push(file);
+        });
+
+        validFiles.forEach(file => {
             const reader = new FileReader();
             reader.onload = () => {
                 setGalleryPreviews(prev => [...prev, { url: reader.result as string, id: null, file }]);
@@ -111,6 +129,9 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
             };
             reader.readAsDataURL(file);
         });
+
+        // Reset input value so the same file can be selected again if needed
+        e.target.value = '';
     };
 
     const removeGalleryImage = async (index: number) => {
@@ -290,7 +311,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
                             </div>
                         </div>
 
-                        <div className="mt-4">
+                        <div className="mt-4" id="gallery">
                             <label className="text-left block text-sm font-medium leading-6 text-gray-900">
                                 {t('gallery')}
                             </label>
@@ -315,6 +336,7 @@ const EventForm = React.forwardRef<EventFormRef, EventFormProps>(({ initialData,
                                         </label>
                                     )}
                                 </div>
+                                {validationErrors.gallery && <p className="mt-2 text-sm text-red-600">{validationErrors.gallery}</p>}
                             </div>
                         </div>
                     </div>

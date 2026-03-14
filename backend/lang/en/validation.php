@@ -167,6 +167,16 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'gallery' => [
+            'max_items' => 'You can upload a maximum of 5 images to the gallery.',
+            'max_size' => 'Each image must not exceed 5 MB.',
+            'image' => 'The file must be an image.',
+            'mimes' => 'Allowed image formats: jpeg, png, jpg, gif, svg.',
+            'upload_failed' => 'Failed to upload the image. The file may be too large (maximum 5 MB).',
+        ],
+        'invitation' => [
+            'step1_not_saved' => 'Step 1 was not saved. Please go back to step 1 and try again.',
+        ],
     ],
 
     /*

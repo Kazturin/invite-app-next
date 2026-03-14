@@ -76,14 +76,6 @@ class Event extends Model
         return $this->hasMany(EventImage::class);
     }
 
-    protected static function booted(): void
-    {
-        static::deleting(function (Event $event) {
-            $file = $event->invitation?->invitation_img;
-            if($file && Storage::disk('public')->exists($file)){
-                Storage::disk('public')->delete($file);
-            }
-        });
-    }
+
 
 }

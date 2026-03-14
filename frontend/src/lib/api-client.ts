@@ -19,6 +19,8 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use((config) => {
     let token = useUserStore.getState().token;
+    
+    config.headers.Accept = 'application/json';
 
     // Fallback if store is not yet hydrated
     if (!token && typeof window !== 'undefined') {

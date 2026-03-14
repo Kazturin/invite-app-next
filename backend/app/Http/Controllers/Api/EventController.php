@@ -7,17 +7,16 @@ use App\Http\Requests\EventRequest;
 use App\Http\Resources\EventResource;
 use App\Http\Resources\GuestInviteResource;
 use App\Models\Event;
+use App\Models\EventImage;
 use App\Models\GuestInvite;
-use App\Models\Order;
 use App\Services\EventService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Storage;
 
 class EventController extends Controller
 {
-    protected $eventService;
+    protected EventService $eventService;
 
     public function __construct(EventService $eventService)
     {
@@ -28,9 +27,11 @@ class EventController extends Controller
     {
         $user = $request->user();
 
-        return EventResource::collection(Event::where('created_by', $user->id)
-            ->where('status', '!=', Event::STATUS_DELETED)
-            ->get());
+        return EventResource::collection(
+            Event::where('created_by', $user->id)
+                ->where('status', '!=', Event::STATUS_DELETED)
+                ->get()
+        );
     }
 
     public function show(Request $request, Event $event)
@@ -49,20 +50,22 @@ class EventController extends Controller
     {
         try {
             $data = $request->validated();
+
             if ($request->hasFile('audioFile')) {
                 $data['audioFile'] = $request->file('audioFile');
             }
             if ($request->hasFile('gallery')) {
                 $data['gallery'] = $request->file('gallery');
             }
+
             $event = $this->eventService->createEvent($data);
+
             return new EventResource($event);
-        } catch (ValidationException $exception) {
-            return response()->json(['message' => 'Бірінші қадам сақталмады, қайтадан бірінші қадамға өтіңіз'], 422);
         } catch (\Exception $e) {
-            Log::info('test');
-            Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
-            return response()->json(['message' => 'Қате орын алды. Кейін қайталап көріңіз'], 500);
+            Log::error('Event creation failed: ' . $e->getMessage());
+            return response()->json([
+                'message' => __('validation.custom.invitation.step1_not_saved'),
+            ], 500);
         }
     }
 
@@ -71,6 +74,7 @@ class EventController extends Controller
         $this->authorize('update', $event);
 
         $data = $request->validated();
+
         if ($request->hasFile('audioFile')) {
             $data['audioFile'] = $request->file('audioFile');
         }
@@ -87,11 +91,14 @@ class EventController extends Controller
     {
         $inviteCode = request()->query('invite_code');
         $guestInvite = null;
+
         if ($inviteCode) {
-            $guestInvite = GuestInvite::where('invite_code', $inviteCode)->with('guest')
+            $guestInvite = GuestInvite::where('invite_code', $inviteCode)
+                ->with('guest')
                 ->whereHas('guest', function ($query) use ($event) {
                     $query->where('event_id', $event->id);
-                })->first();
+                })
+                ->first();
         }
 
         return response()->json([
@@ -109,13 +116,14 @@ class EventController extends Controller
         return response('', 204);
     }
 
-    public function deleteImage(\App\Models\EventImage $eventImage)
+    public function deleteImage(EventImage $eventImage)
     {
         $this->authorize('update', $eventImage->event);
-        
-        if(\Illuminate\Support\Facades\Storage::disk('public')->exists($eventImage->path)){
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($eventImage->path);
+
+        if (Storage::disk('public')->exists($eventImage->path)) {
+            Storage::disk('public')->delete($eventImage->path);
         }
+
         $eventImage->delete();
 
         return response('', 204);

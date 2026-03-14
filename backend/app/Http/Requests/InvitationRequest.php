@@ -22,12 +22,11 @@ class InvitationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'invitation_img' => 'required',
-          //  'event_id' => 'required',
-            'content' => 'nullable',
-            'template_id' => 'required',
+            'invitation_img' => 'required|string',
+            'content' => 'nullable|string',
+            'template_id' => 'required|exists:templates,id',
+            'bg_img' => 'nullable|string',
             'inInvitationImage' => 'nullable',
-            'bg_img' => 'nullable',
         ];
     }
 }

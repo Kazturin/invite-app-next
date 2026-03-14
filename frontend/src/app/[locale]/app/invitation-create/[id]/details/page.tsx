@@ -6,6 +6,7 @@ import Stepper from '@/components/Stepper';
 import EventForm, { EventFormRef } from '@/components/events/EventForm';
 import { useTranslations } from 'next-intl';
 import apiClient from '@/lib/api-client';
+import { toast } from 'sonner';
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -17,14 +18,13 @@ const EventCreatePage = ({ params }: PageProps) => {
     const t = useTranslations('InvitationCreate');
     const { invitation } = useAppStore();
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<any>(null);
     const formRef = useRef<EventFormRef>(null);
 
     const handleSubmit = async (formData: FormData, isComplete?: boolean) => {
         setLoading(true);
         setError(null);
 
-        // Add invitation details from store
         formData.append('invitation[content]', JSON.stringify(invitation.content));
         formData.append('invitation[invitation_img]', invitation.invitation_img || '');
         formData.append('invitation[envelope_img]', invitation.envelope_img || '');
@@ -37,10 +37,12 @@ const EventCreatePage = ({ params }: PageProps) => {
             const res = await apiClient.post('/event', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
+            const eventData = res.data.data;
+
             if (isComplete) {
+                toast.success(t('save_success'));
                 // Если статус оплаты 0 (или не оплачено/в ожидании), редирект на success
                 // Иначе редирект на саму страницу ивента
-                const eventData = res.data.data;
                 const paymentStatus = eventData?.order?.status ?? eventData?.payment_status;
 
                 if (paymentStatus === 0 || paymentStatus === undefined) {
@@ -49,15 +51,18 @@ const EventCreatePage = ({ params }: PageProps) => {
                     router.push(`/app/events/${eventData.id}`);
                 }
             } else {
-                const eventData = res.data.data;
+                toast.success(t('save_success'));
                 router.push(`/app/events/${eventData.id}/update`);
             }
         } catch (err: any) {
             console.error('Failed to save event', err);
+            const errorMessage = err.response?.data?.message || t('server_error') || 'Произошла ошибка при сохранении';
+            toast.error(errorMessage);
+
             if (err.response?.data?.errors) {
                 setError(err.response.data);
             } else {
-                setError(err.response?.data?.message || t('server_error'));
+                setError(errorMessage);
             }
         } finally {
             setLoading(false);
@@ -80,7 +85,13 @@ const EventCreatePage = ({ params }: PageProps) => {
                     ref={formRef}
                     onSubmit={handleSubmit}
                     onDeleteImage={async (imageId: number) => {
-                        await apiClient.delete(`/event-image/${imageId}`);
+                        try {
+                            await apiClient.delete(`/event-image/${imageId}`);
+                            toast.success(t('image_deleted') || 'Изображение удалено');
+                        } catch (error) {
+                            console.error('Failed to delete image', error);
+                            toast.error(t('delete_image_error') || 'Ошибка при удалении изображения');
+                        }
                     }}
                     loading={loading}
                     errors={error}

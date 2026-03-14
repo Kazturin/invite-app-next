@@ -56,7 +56,11 @@
         "center_text": "Ортаға қою",
         "change_image": "Суретті өзгерту",
         "duplicate_text": "Дубликат",
-        "server_error": "Серверде қате орын алды"
+        "server_error": "Серверде қате орын алды",
+        "save_success": "Сәтті сақталды!",
+        "draft_saved": "Жоба сақталды",
+        "image_deleted": "Сурет жойылды",
+        "delete_image_error": "Суретті жою кезінде қате орын алды"
     },
     "EventForm": {
         "event_info": "Іс-шара туралы ақпарат",
@@ -84,7 +88,9 @@
             "place_required": "Өтетін жерін толтырыңыз",
             "address_required": "Картаға сілтемені көрсетіңіз",
             "date_required": "Басталу уақытын көрсетіңіз",
-            "youtube_invalid": "YouTube сілтемесі қате"
+            "youtube_invalid": "YouTube сілтемесі қате",
+            "gallery_file_too_large": "\"{name}\" суретінің көлемі 5 МБ-тан асады. Кішірек файлды таңдаңыз.",
+            "gallery_invalid_format": "\"{name}\" файлының форматы қолдау көрсетілмейді. Рұқсат етілген форматтар: JPEG, PNG, JPG, GIF, SVG."
         }
     },
     "InvitationPreview": {

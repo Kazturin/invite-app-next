@@ -240,8 +240,6 @@ class AuthControllerTest extends TestCase
 
     public function test_delete_account_with_paid_orders_anonymizes_user()
     {
-        // For this test, if Event and Order models exist, we mock or create them
-        // Check if Event / Order models exist
         if (!class_exists(\App\Models\Event::class) || !class_exists(\App\Models\Order::class)) {
             $this->markTestSkipped('Event or Order models do not exist.');
             return;
