@@ -135,7 +135,7 @@
     "Questionnaire": {
         "fullname_label": "Есіміңіз",
         "fullname_placeholder": "Аты-жөніңізді енгізіңіз",
-        "relative_label": "Туыстық қатынас",
+        "relative_label": "Кім болып келесіз",
         "relative_placeholder": "Мысалы: Досы, Нағашысы",
         "guests_title": "Бірге келетін қонақтар",
         "add_child": "Қонақ қосу",
