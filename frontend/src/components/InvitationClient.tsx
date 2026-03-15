@@ -169,7 +169,7 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                     {/* Countdown Card */}
                     <div className="relative max-w-[550px] mx-auto">
                         <div className="absolute inset-0 bg-amber-50/50 blur-2xl -z-10 rounded-full scale-110"></div>
-                        <div className="bg-white/40 backdrop-blur-sm border border-stone-100 rounded-[2.5rem] p-8 shadow-sm">
+                        <div className="bg-white/40 border border-stone-100 rounded-[2.5rem] p-8 shadow-sm">
                             <span className="inline-block px-8 py-1.5 text-[10px] font-black text-amber-700 uppercase tracking-[0.4em] mb-8 bg-amber-50 rounded-full border border-amber-100/50">
                                 {isEventPast
                                     ? (event.type === 'party' ? t('event_past_party') : t('event_past_wedding'))
@@ -182,8 +182,8 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                     {/* Information Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-1 gap-12">
                         {/* Calendar Card */}
-                        <div className="bg-white rounded-[2.5rem] p-1 border border-stone-100 shadow-xl shadow-stone-200/20 group hover:shadow-2xl transition-all duration-500">
-                            <div className="p-4 md:p-8">
+                        <div className="rounded-[2.5rem] p-1 border border-stone-300 shadow-2xl shadow-amber-50/50 group hover:shadow-2xl transition-all duration-500">
+                            <div className="p-4 md:p-8 bg-white/60 rounded-[2.2rem]">
                                 <Calendar date={event.date} locale={locale} />
                             </div>
                         </div>
@@ -191,9 +191,9 @@ const InvitationClient: React.FC<InvitationClientProps> = ({ event, invitation_i
                         {/* Event Details Section */}
                         <div className="space-y-6">
                             {/* Address Card */}
-                            <div className="bg-white border border-stone-100 rounded-[2.5rem] p-8 shadow-lg shadow-stone-100/50 transition-all hover:border-amber-200">
+                            <div className="border border-stone-300 rounded-[2.5rem] p-8 shadow-2xl shadow-stone-200/10 transition-all hover:border-amber-200">
                                 <div className="flex flex-col items-center">
-                                    <div className="bg-stone-50 p-4 rounded-3xl mb-6 text-amber-600 border border-stone-100">
+                                    <div className="p-4 rounded-3xl mb-6 text-amber-600 border border-stone-100">
                                         <MapPinIcon className="w-8 h-8" />
                                     </div>
                                     <h2 className="text-sm font-black text-stone-400 uppercase tracking-[0.3em] mb-2">{t('our_address')}</h2>
